@@ -1,4 +1,9 @@
 # phpBB 3.1 Extension - Hookup
+This Extension adds the possibility of scheduling meetings with multiple people to your topics. Use this for finding the right date for a meeting very easy or for getting feedback on availability of users on certain dates.
+
+This Extension is intended to be fully backwards compatible to the existing phpBB 3.0.x Mod "Hookup" from the phpBB.de Team for Upgrades, but may include additional features.
+
+Please note that this is an early development stage which is not functional in any way, yet. 
 
 ## Installation
 
