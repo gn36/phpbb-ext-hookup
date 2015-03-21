@@ -1,0 +1,29 @@
+parameters:
+    gn36.hookup.path: %core.root_path%ext/gn36/rgn_hpdata/
+    gn36.hookup.reset.run_interval: 86400
+    tables.gn36.hookup.members: %core.table_prefix%hookup_members
+    tables.gn36.hookup.dates: %core.table_prefix%hookup_dates
+    tables.gn36.hookup.available: %core.table_prefix%hookup_available
+services:
+    gn36.hookup.functions.hookup:
+        class: gn36\hookup\functions\hookup
+        arguments:
+            - @dbal.conn
+            - %tables.gn36.hookup.members%
+            - %tables.gn36.hookup.dates%
+            - %tables.gn36.hookup.available%
+    gn36.hookup.cron.weekly_reset:
+        class: gn36\hookup\cron\weekly_reset
+        arguments:
+            - @cache
+            - @config
+            - @dbal.conn
+            - @log
+            - @gn36.rgn_hpdata.functions.inoutbot
+            - %gn36.rgn_hpdata.inoutbot.run_interval%
+            - %core.root_path%
+            - %core.php_ext%
+        calls:
+            - [set_name, [gn36.hookup.cron.weekly_reset]]
+        tags:
+            - { name: cron.task }
