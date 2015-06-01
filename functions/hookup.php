@@ -123,6 +123,10 @@ class hookup
 		return true;
 	}
 
+	/**
+	 * Adds whole groups to hookup. No notification as of yet.
+	 * @param array|integer $group_ids
+	 */
 	public function add_groups($group_ids)
 	{
 		$db = $this->db;
@@ -158,6 +162,10 @@ class hookup
 		$db->sql_freeresult($result);
 	}
 
+	/**
+	 * Add a new date to the hookup
+	 * @param int $date
+	 */
 	public function add_date($date)
 	{
 		foreach($this->hookup_dates as $key => $entry)
@@ -172,11 +180,16 @@ class hookup
 		$this->hookup_dates[] = array('date_time' => $date);
 	}
 
+	/**
+	 * Return index of given date in list. Returns Null if list is empty, false if entry not found.
+	 * @param int $date
+	 * @return NULL|int|boolean
+	 */
 	public function get_date_id($date)
 	{
 		if(!$this->hookup_dates)
 		{
-			return NULL;
+			return null;
 		}
 
 		foreach($this->hookup_dates as $key => $entry)
@@ -191,6 +204,38 @@ class hookup
 		return false;
 	}
 
+	/**
+	 * Updates the availaibility sums based upon the data in the arrays.
+	 *
+	 * This is done automatically when data is loaded from the db.
+	 */
+	public function update_available_sums()
+	{
+		$this->hookup_available_sums = array();
+
+		foreach($this->hookup_dates as $date_id => $data)
+		{
+			$this->hookup_available_sums[$date_id] = array(hookup::HOOKUP_YES=>0, hookup::HOOKUP_MAYBE=>0, hookup::HOOKUP_NO=>0);
+		}
+
+		foreach($this->hookup_availables as $user_id => $date_list)
+		{
+			foreach($date_list as $date_id => $availability)
+			{
+				$this->hookup_available_sums[$date_id][$availability]++;
+			}
+		}
+	}
+
+	/**
+	 * Update a users status
+	 *
+	 * @param int $user_id
+	 * @param int $date_id
+	 * @param int $value
+	 * @param string $comment
+	 * @return boolean
+	 */
 	public function set_user($user_id, $date_id, $value = hookup::HOOKUP_MAYBE, $comment = '')
 	{
 		$this->hookup_users[$user_id] = array('user_id' => $user_id,
@@ -208,6 +253,12 @@ class hookup
 		return true;
 	}
 
+	/**
+	 * Removes a date from the list
+	 *
+	 * @param number $date
+	 * @param number $date_id
+	 */
 	public function remove_date($date = 0, $date_id = 0)
 	{
 		if(!$this->hookup_dates || (!$date && !$date_id))
@@ -236,6 +287,10 @@ class hookup
 		}
 	}
 
+	/**
+	 * Helper for remove_date
+	 * @param unknown $date_id
+	 */
 	protected function _remove_date_from_userlist($date_id)
 	{
 		foreach($this->hookup_availables as $key => $date_array)
@@ -248,11 +303,30 @@ class hookup
 	}
 
 	/**
+	 * Remove user from hookup
+	 *
+	 * @param int $user_id
+	 */
+	public function remove_user($user_id)
+	{
+		if(!isset($this->hookup_users[$user_id]))
+		{
+			return;
+		}
+
+		unset($this->hookup_users[$user_id]);
+		unset($this->hookup_availables[$user_id]);
+	}
+
+	/**
 	 * Stores the changes made in the database. Does NOT notify any users. Returns an array of the changes made.
 	 *
-	 * @return array changes
+	 * @param string $reload_data
+	 * @param string $return_changes
+	 * @param boolean $force_run
+	 * @return boolean|array
 	 */
-	public function submit($reload_data = true, $return_changes = false)
+	public function submit($reload_data = true, $return_changes = false, $force_run = false)
 	{
 		$db = $this->db;
 		$changed = array();
@@ -284,8 +358,10 @@ class hookup
 			'hookup_autoreset' => $this->hookup_autoreset,
 			);
 		$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $row) . " WHERE topic_id = $topic_id";
+
+		// This might fail if the topic does not exist anymore
 		$db->sql_query($sql);
-		if(!$db->sql_affectedrows())
+		if(!$db->sql_affectedrows() && !$force_run)
 		{
 			//the topic does not exist?
 			$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . $topic_id;
@@ -351,6 +427,24 @@ class hookup
 
 		return $return_changes ? $changed : true;
 	}
-}
 
-?>
+	/**
+	 * Delete the hookup data (to disable only, set hookup_enabled = false)
+	 *
+	 * This is equivalent to emptying the dates, users and available arrays.
+	 */
+	public function delete()
+	{
+		$this->hookup_enabled = false;
+		$this->hookup_availables = array();
+		$this->hookup_dates = array();
+		$this->hookup_users = array();
+		$this->hookup_available_sums = array();
+		$this->hookup_autoreset = false;
+		$this->hookup_self_invite = false;
+
+		// This deletes the data (and also works if the topic does not exist anymore :)
+		return $this->submit(false, false, true);
+
+	}
+}

@@ -31,12 +31,7 @@ class weekly_reset extends \phpbb\cron\task\base
 	/** @var \phpbb\log\log_interface */
 	protected $log;
 
-	/** @var \gn36\rgn_hpdata\functions\inoutbot */
-	protected $inoutbot;
-
-	protected $inoutbot_interval;
-
-	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\rgn_hpdata\functions\inoutbot $inoutbot, $inoutbot_interval, $root_path, $php_ext)
+	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, $root_path, $php_ext)
 	{
 		$this->cache = $cache;
 		$this->config = $config;
@@ -44,8 +39,6 @@ class weekly_reset extends \phpbb\cron\task\base
 		$this->log = $log;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
-		$this->inoutbot_interval = $inoutbot_interval;
-		$this->inoutbot = $inoutbot;
 	}
 
 	/**
@@ -56,9 +49,9 @@ class weekly_reset extends \phpbb\cron\task\base
 	{
 		$now = time();
 
-		inoutbot::reset();
+		//TODO: Actually run the weekly reset stuff
 
-		$this->config->set('rgn_inoutbot_last_run', $now, true);
+		$this->config->set('gn36_hookup_reset_last_run', $now, true);
 	}
 
 	/**
@@ -68,7 +61,7 @@ class weekly_reset extends \phpbb\cron\task\base
 	 */
 	public function is_runnable()
 	{
-		return isset($this->config['rgn_inoutbot_last_run']);
+		return isset($this->config['gn36_hookup_reset_last_run']);
 	}
 
 	/**
@@ -80,20 +73,8 @@ class weekly_reset extends \phpbb\cron\task\base
 	{
 		$now = time();
 
-		// Only run in december
-		if(date('m') != 12)
-		{
-			return false;
-		}
-
-		// Run only in the first few days of december
-		if(date('d') >= 15)
-		{
-			return false;
-		}
-
-		// Run at most every 20 days (i.e. once per Year in december)
-		return $now > $this->config['rgn_inoutbot_reset_last_run'] + 86400 * 20;
+		// Run at most every day
+		return $now > $this->config['gn36_hookup_reset_last_run'] + 86400;
 	}
 
 }
