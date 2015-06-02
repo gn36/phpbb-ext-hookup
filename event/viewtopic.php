@@ -38,16 +38,46 @@ class viewtopic implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user)
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
+	/** @var \phpbb\request\request_interface */
+	protected $request;
+
+	/** @var \messenger */
+	protected $messenger;
+
+	/** @var string */
+	protected $phpbb_root_path;
+
+	/** @var string */
+	protected $phpEx;
+
+	/** @var string */
+	protected $hookup_path;
+
+	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, $phpbb_root_path, $phpEx, $hookup_path)
 	{
 		$this->hookup = $hookup;
 		$this->template = $template;
 		$this->db = $db;
 		$this->user = $user;
+		$this->auth = $auth;
+		$this->request = $request;
+		$this->messenger = null;
+		$this->phpbb_root_path = $phpbb_root_path;
+		$this->phpEx = $phpEx;
+		$this->hookup_path = $hookup_path;
 	}
 
 	public function show_hookup_viewtopic($event)
 	{
+		// Check auth
+		if(!$this->auth->acl_get('f_hookup', $event['forum_id']) && !$this->auth->acl_get('m_edit', $event['forum_id']))
+		{
+			return;
+		}
+
 		if(!$this->hookup->load_hookup($event['topic_id']))
 		{
 			// No hookup for this topic
@@ -56,6 +86,34 @@ class viewtopic implements EventSubscriberInterface
 
 		// Load Language file
 		$this->user->add_lang_ext('gn36/hookup', 'hookup');
+
+		// Now process all submits, if any
+
+		$hookup_errors = $this->process_submit($event);
+
+		// If the hookup is disabled, then return now (also if we just disabled it)
+		if(!$this->hookup->hookup_enabled)
+		{
+			return;
+		}
+
+		// Set the hookup as "viewed" for the current user:
+		$this->hookup->set_user_data($this->user->data['user_id'], 0);
+		// This will submit all changes to the db, including the ones processed in $this->process_submit();
+		$this->hookup->submit();
+
+		// TODO:
+		$viewtopic_url = '';
+
+
+		if (count($this->hookup->hookup_dates) == 0)
+		{
+			$hookup_errors[] = $this->user->lang['HOOKUP_NO_DATES'];
+		}
+		if (count($this->hookup->hookup_users) == 0)
+		{
+			$hookup_errors[] = $this->user->lang['HOOKUP_NO_USERS'];
+		}
 
 		$this->template->assign_vars(array(
 			'S_HAS_HOOKUP'		=> true,
@@ -66,37 +124,36 @@ class viewtopic implements EventSubscriberInterface
 			'S_IS_SELF_INVITE'	=> $this->hookup->hookup_self_invite,
 			'S_HOOKUP_ACTION'	=> $viewtopic_url,
 			'S_ACTIVE_DATE'		=> $this->hookup->hookup_active_date,
-			//TODO:
-			'ACTIVE_DATE_DATE'	=> isset($datelist[$topic_data['hookup_active_date']]) ? $user->format_date($datelist[$topic_data['hookup_active_date']]['date_time']) : '-',
-			'S_NUM_DATES'		=> count($datelist),
-			'S_NUM_DATES_PLUS_1'=> count($datelist)+1,
+			'ACTIVE_DATE_DATE'	=> isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]) ? $user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']) : '-',
+			'S_NUM_DATES'		=> count($this->hookup->hookup_dates),
+			'S_NUM_DATES_PLUS_1'=> count($this->hookup->hookup_dates) + 1,
 			'U_UNSET_ACTIVE'	=> $viewtopic_url . '&amp;set_active=0',
-			'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=ucp&amp;field=usernames'),
-			'UA_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&form=ucp&field=usernames', false),
+			'U_FIND_USERNAME'	=> append_sid("{$this->phpbb_root_path}memberlist.{$this->phpEx}", 'mode=searchuser&amp;form=ucp&amp;field=usernames'),
+			'UA_FIND_USERNAME'	=> append_sid("{$this->phpbb_root_path}memberlist.{$this->phpEx}", 'mode=searchuser&form=ucp&field=usernames', false),
+			'USER_COMMENT'		=> isset($this->hookup->hookup_users[$this->user->data['user_id']])? $this->hookup->hookup_users[$this->user->data['user_id']]['comment'] : '',
 			'HOOKUP_ERRORS'		=> (count($hookup_errors) > 0) ? implode('<br />', $hookup_errors) : false,
-
 			'HOOKUP_YES'		=> hookup::HOOKUP_YES,
 			'HOOKUP_MAYBE'		=> hookup::HOOKUP_MAYBE,
 			'HOOKUP_NO'			=> hookup::HOOKUP_NO,
 			'HOOKUP_UNSET'		=> hookup::HOOKUP_UNSET,
-			'L_HOOKUP_YES'		=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_YES],
-			'L_HOOKUP_NO'		=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_NO],
-			'L_HOOKUP_MAYBE'	=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_MAYBE],
-			'L_HOOKUP_UNSET'	=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_UNSET],
+			'L_HOOKUP_YES'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_YES],
+			'L_HOOKUP_NO'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_NO],
+			'L_HOOKUP_MAYBE'	=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_MAYBE],
+			'L_HOOKUP_UNSET'	=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_UNSET],
 			//one letter versions for summaries
-			'L_HOOKUP_Y'		=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_YES]{0},
-			'L_HOOKUP_N'		=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_NO]{0},
-			'L_HOOKUP_M'		=> $user->lang['HOOKUP_STATUS'][hookup::HOOKUP_MAYBE]{0},
+			'L_HOOKUP_Y'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_YES]{0},
+			'L_HOOKUP_N'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_NO]{0},
+			'L_HOOKUP_M'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_MAYBE]{0},
 		));
 
 		// Output dates
 		foreach($this->hookup->hookup_dates as $hookup_date)
 		{
-			$yes_count = $this->hookup->available_sums[$hookup_date['date_id']][hookup::HOOKUP_YES];
-			$maybe_count = $this->hookup->available_sums[$hookup_date['date_id']][hookup::HOOKUP_MAYBE];
-			$no_count = $this->hookup->available_sums[$hookup_date['date_id']][hookup::HOOKUP_NO];
+			$yes_count = $this->hookup->hookup_available_sums[$hookup_date['date_id']][hookup::HOOKUP_YES];
+			$maybe_count = $this->hookup->hookup_available_sums[$hookup_date['date_id']][hookup::HOOKUP_MAYBE];
+			$no_count = $this->hookup->hookup_available_sums[$hookup_date['date_id']][hookup::HOOKUP_NO];
 			//$total_count = $yes_count + $maybe_count + $no_count; //unset_count?
-			$total_count = count($userlist);
+			$total_count = count($this->hookup->hookup_users);
 			$unset_count = $total_count - ($yes_count + $maybe_count + $no_count);
 
 			$yes_percent = $total_count > 0 ? round(($yes_count / $total_count) * 100) : 0;
@@ -104,10 +161,10 @@ class viewtopic implements EventSubscriberInterface
 			$no_percent = $total_count > 0 ? round(($no_count / $total_count) * 100) : 0;
 			$unset_percent = 100 - ($yes_percent + $maybe_percent + $no_percent);
 
-			$template->assign_block_vars('date', array(
+			$this->template->assign_block_vars('date', array(
 				'ID'			=> $hookup_date['date_id'],
-				'DATE'			=> $user->format_date($hookup_date['date_time'], $user->lang['HOOKUP_DATEFORMAT']),
-				'FULL_DATE'		=> $user->format_date($hookup_date['date_time']),
+				'DATE'			=> $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
+				'FULL_DATE'		=> $this->user->format_date($hookup_date['date_time']),
 				//'ADDED_AT_BY'		=> sprintf($user->lang['ADDED_AT_BY'], $user->format_date($hookup_date['added_at']), $hookup_date['added_by_name']),
 				'YES_COUNT'		=> $yes_count,
 				'YES_PERCENT'	=> $yes_percent,
@@ -117,21 +174,34 @@ class viewtopic implements EventSubscriberInterface
 				'NO_PERCENT'	=> $no_percent,
 				'UNSET_COUNT'	=> $unset_count,
 				'UNSET_PERCENT'	=> $unset_percent,
-				'S_IS_ACTIVE'	=> $hookup_date['date_id'] == $topic_data['hookup_active_date'],
+				'S_IS_ACTIVE'	=> $hookup_date['date_id'] == $this->hookup->hookup_active_date,
 				'U_SET_ACTIVE'	=> $viewtopic_url . '&amp;set_active=' . $hookup_date['date_id'],
 			));
 		}
 
 		// Output details
+		if(!empty($this->hookup->hookup_users))
+		{
+			// Fetch User details
+			$sql = 'SELECT user_id, username, user_colour FROM ' . USERS_TABLE .
+				' WHERE ' . $this->db->sql_in_set('user_id', array_keys($this->hookup->hookup_users));
+			$result = $this->db->sql_query($sql);
+			$user_details = array();
+			while($row = $this->db->sql_fetchrow($result))
+			{
+				$user_details[$row['user_id']] = $row;
+			}
+
+		}
 		foreach($this->hookup->hookup_users as $hookup_user)
 		{
 			$is_self = ($hookup_user['user_id'] == $this->user->data['user_id']);
 
-			$template->assign_block_vars('user', array(
+			$this->template->assign_block_vars('user', array(
 				'ID'		=> $hookup_user['user_id'],
-				'NAME'		=> $hookup_user['username'],
-				'COMMENT'	=> isset($comments[$hookup_user['user_id']]) ? $comments[$hookup_user['user_id']] : '',
-				'USERNAME_FULL'	=> get_username_string('full', $hookup_user['user_id'], $hookup_user['username'], $hookup_user['user_colour']),
+				'NAME'		=> $user_details[$hookup_user['user_id']]['username'],
+				'COMMENT'	=> isset($hookup_user['comment']) ? $hookup_user['comment'] : '',
+				'USERNAME_FULL'	=> get_username_string('full', $hookup_user['user_id'], $user_details[$hookup_user['user_id']]['username'], $user_details[$hookup_user['user_id']]['user_colour']),
 				'IS_SELF'	=> $is_self
 			));
 
@@ -139,20 +209,433 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$available = isset($this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']])
 				? $this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']]
-				: HOOKUP_UNSET;
+				: hookup::HOOKUP_UNSET;
 
-				$template->assign_block_vars('user.date', array(
+				$this->template->assign_block_vars('user.date', array(
 					'ID'				=> $hookup_date['date_id'],
 					'AVAILABLE'			=> $this->user->lang['HOOKUP_STATUS'][$available],
-					'STATUS_YES'		=> ($available == HOOKUP_YES),
-					'STATUS_NO'			=> ($available == HOOKUP_NO),
-					'STATUS_MAYBE'		=> ($available == HOOKUP_MAYBE),
-					'STATUS_UNSET'		=> ($available == HOOKUP_UNSET),
+					'STATUS_YES'		=> ($available == hookup::HOOKUP_YES),
+					'STATUS_NO'			=> ($available == hookup::HOOKUP_NO),
+					'STATUS_MAYBE'		=> ($available == hookup::HOOKUP_MAYBE),
+					'STATUS_UNSET'		=> ($available == hookup::HOOKUP_UNSET),
 					'S_SELECT_NAME'		=> 'available['.$hookup_date['date_id'].']',
-					'S_IS_ACTIVE'		=> $hookup_date['date_id'] == $hookup->hookup_active_date,
+					'S_IS_ACTIVE'		=> $hookup_date['date_id'] == $this->hookup->hookup_active_date,
 				));
 			}
 		}
 
+	}
+
+	protected function process_selfinvite($event, $is_owner, $is_member)
+	{
+		$hookup_errors = array();
+
+		// Check for self-invite / leave
+		// TODO: Do this with AJAX
+		$invite_self = $this->request->variable('invite_self', '');
+		if(($this->hookup->hookup_self_invite || $is_owner)  && $invite_self == 'join' && !$is_member)
+		{
+			$this->hookup->add_user($this->user->data['user_id']);
+			return $hookup_errors;
+		}
+		if(($this->hookup->hookup_self_invite || $is_owner) && $invite_self == 'leave' && $is_member)
+		{
+			if(confirm_box(true))
+			{
+				$this->hookup->remove_user($this->user->data['user_id']);
+				return $hookup_errors;
+			}
+			else
+			{
+				$s_hidden_fields = build_hidden_fields(array(
+					't'				=> $event['topic_id'],
+					'invite_self'	=> 'leave',
+				));
+				confirm_box(false, $this->user->lang['HOOKUP_INVITE_SELF_LEAVE_CONFIRM'], $s_hidden_fields);
+			}
+		}
+
+		return $hookup_errors;
+	}
+
+	protected function process_add_user($event, $is_owner)
+	{
+		$add_users = $this->request->variable('usernames', '', true);
+		$add_groups = $this->request->variable('add_groups', array(0));
+
+		if(empty($add_users) && empty($add_groups))
+		{
+			return array();
+		}
+
+		if(!$is_owner)
+		{
+			return array($this->user->lang('NOT_AUTH_HOOKUP'));
+		}
+
+		$hookup_errors = array();
+
+		// Add users
+
+		if(!empty($add_users))
+		{
+			// Cleanup Usernames
+			$usernames = array_unique(explode("\n", $add_users));
+			$usernames = array_map('utf8_clean_string', $usernames);
+
+			//TODO: Prevent anonymous and bots
+			$sql = 'SELECT user_id, username, user_type, user_permissions, user_lang, user_email, user_jabber, user_notify_type
+				FROM ' . USERS_TABLE . '
+				WHERE ' . $this->db->sql_in_set('username_clean', $usernames);
+			$result = $this->db->sql_query($sql);
+			$new_users = array();
+			while($row = $this->db->sql_fetchrow($result))
+			{
+				$new_users[$row['user_id']] = $row;
+			}
+			$this->db->sql_freeresult($result);
+
+			$userids_to_add = array_diff(array_keys($new_users), array_keys($this->hookup->hookup_users));
+			$userids_already_added = array_intersect(array_keys($new_users), array_keys($this->hookup->hookup_users));
+
+		}
+
+		// Add groups
+
+		if(!empty($add_groups))
+		{
+			$sql = 'SELECT u.user_id, u.username, u.user_type, u.user_permissions, u.user_lang, u.user_email, u.user_jabber, u.user_notify_type
+				FROM ' . USER_GROUP_TABLE . ' ug
+				JOIN ' . USERS_TABLE . ' u
+					ON (u.user_id = ug.user_id)
+				WHERE ' . $this->db->sql_in_set('ug.group_id', $add_groups) . '
+					AND ug.user_pending = 0';
+			$result = $this->db->sql_query($sql);
+
+			$new_users = array();
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$new_users[$row['user_id']] = $row;
+			}
+			$this->db->sql_freeresult($result);
+
+			$userids_to_add = array_diff(array_keys($new_users), $userids);
+		}
+
+		// Add & notify
+		//now that we have the user_ids and data, add the users
+		if (isset($userids_to_add) && count($userids_to_add) > 0)
+		{
+			//check if users have read permission
+			$user_auth = new \phpbb\auth\auth();
+			foreach($userids_to_add as $key => $user_id)
+			{
+				$user_auth->acl($new_users[$user_id]);
+				if (!$user_auth->acl_get('f_read', $event['forum_id']))
+				{
+					$hookup_errors[] = sprintf($this->user->lang['USER_CANNOT_READ_FORUM'], $new_users[$user_id]['username']);
+					unset($userids_to_add[$key]);
+				}
+			}
+
+			//insert users into database
+			foreach($userids_to_add as $user_id)
+			{
+				//no need to notify the user about new dates when he hasn't visited the
+				//hookup yet and thus not even entered his available info for the first dates
+				$this->hookup->add_user($user_id, '', 1);
+			}
+
+			$this->hookup->submit(false);
+
+			//notify new users about invitation
+			if($this->messenger == null)
+			{
+				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
+				$this->messenger = new \messenger();
+			}
+			$messenger = $this->messenger;
+			$forum_id = $event['forum_id'];
+			$topic_id = $event['topic_id'];
+			foreach($userids_to_add as $user_id)
+			{
+				$userdata = $new_users[$user_id];
+				$messenger->template('@gn36_hookup/hookup_added', $userdata['user_lang']);
+				$messenger->to($userdata['user_email'], $userdata['username']);
+				$messenger->im($userdata['user_jabber'], $userdata['username']);
+				$messenger->assign_vars(array(
+					'USERNAME'		=> $userdata['username'],
+					'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
+					'U_TOPIC'	=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
+				));
+				$messenger->send($userdata['user_notify_type']);
+			}
+			$messenger->save_queue();
+
+			//add userids to local array
+			$userids = array_merge(array_keys($this->hookup->hookup_users), $userids_to_add);
+		}
+
+		//generate error messages for users that are already members
+		if (isset($userids_already_added) && count($userids_already_added) > 0)
+		{
+			foreach($userids_already_added as $userid)
+			{
+				$hookup_errors[] = sprintf($this->user->lang['HOOKUP_USER_EXISTS'], $new_users[$userid]['username']);
+			}
+		}
+
+		return $hookup_errors;
+	}
+
+	protected function process_disable($event, $is_owner)
+	{
+		$action = $this->request->variable('delete_hookup', 'no');
+
+		if($action != 'disable' && $action != 'delete')
+		{
+			return array();
+		}
+
+		if(!$is_owner)
+		{
+			return array($this->user->lang('NOT_AUTH_HOOKUP'));
+		}
+
+		if(confirm_box(true))
+		{
+			if($action == 'disable')
+			{
+				$this->hookup->hookup_enabled = false;
+				$this->hookup->submit(false);
+			}
+			else if($action == 'delete')
+			{
+				$this->hookup->delete();
+				$this->hookup->submit(false);
+			}
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				't'				=> $topic_id,
+				'delete_hookup'	=> $action
+			));
+			confirm_box(false, $user->lang['DELETE_HOOKUP_' . strtoupper($action) . '_CONFIRM'], $s_hidden_fields);
+		}
+
+		return array();
+	}
+
+	protected function process_deletes($event, $is_owner)
+	{
+		$delete_user_ids = $this->request->variable('delete_user', array(0));
+		$delete_date_ids = $this->request->variable('delete_date', array(0));
+
+		if(empty($delete_date_ids) && empty($delete_user_ids))
+		{
+			return array();
+		}
+
+		if(!$is_owner)
+		{
+			return array($this->user->lang('NOT_AUTH_HOOKUP'));
+		}
+
+		if(confirm_box(true))
+		{
+			foreach ($delete_date_ids as $date)
+			{
+				$this->hookup->remove_date(0, (int) $date);
+			}
+
+			foreach ($delete_user_ids as $user_id)
+			{
+				$this->hookup->remove_user((int) $user_id);
+			}
+		}
+		else
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				't'				=> $event['topic_id'],
+				'delete_date'	=> $delete_date_ids,
+				'delete_user'	=> $delete_user_ids,
+				//'available'		=> $available,
+			));
+			confirm_box(false, sprintf($this->user->lang['HOOKUP_DELETE_CONFIRM'], count($delete_date_ids), count($delete_user_ids)), $s_hidden_fields);
+		}
+
+		return array();
+	}
+
+	protected function process_add_date($event, $is_member_or_owner)
+	{
+		$add_dates = $this->request->variable('add_date', '', true);
+
+		if(empty($add_dates))
+		{
+			return array();
+		}
+
+		if(!$is_member_or_owner)
+		{
+			return array($this->user->lang('NOT_AUTH_HOOKUP'));
+		}
+
+		$hookup_errors = array();
+		$add_dates = array_map("trim", explode("\n", $add_dates));
+
+		//replace german date format
+		$add_dates = preg_replace('#(\\d{1,2})\\. ?(\\d{1,2})\\. ?(\\d{4})#', '$3-$2-$1', $add_dates);
+		$date_added = false;
+
+		foreach($add_dates as $date)
+		{
+			//strtotime uses the local (server) timezone, so parse manually and use gmmktime to ignore any timezone
+			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date, $m))
+			{
+				$hookup_errors[] = "$date: {$this->user->lang['INVALID_DATE']}";
+			}
+			else
+			{
+				$date_time = $this->user->get_timestamp_from_format('Y-m-d H:i', $date);
+
+				if ($date_time < time())
+				{
+					$hookup_errors[] = "$date: {$this->user->lang['CANNOT_ADD_PAST']}";
+				}
+				else
+				{
+					//check for duplicate
+					if (!$this->hookup->add_date($date_time))
+					{
+						$hookup_errors[] = sprintf($this->user->lang['DATE_ALREADY_ADDED'], $this->user->format_date($date_time));
+					}
+					else
+					{
+						$date_added = true;
+					}
+				}
+			}
+		}
+
+		if ($date_added)
+		{
+			//notify members about new dates
+			if($this->messenger == null)
+			{
+				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
+				$this->messenger = new \messenger();
+			}
+			$messenger = $this->messenger;
+			$notify_users = array();
+			$notified_userids = array();
+
+			// Fetch users to be notified:
+			foreach($this->hookup->hookup_users as $user_id => $user)
+			{
+				if($user['notify_status'] == 0)
+				{
+					$notify_users[$user_id] = $user;
+				}
+			}
+
+			if(!empty($notify_users))
+			{
+				$sql = 'SELECT u.user_id, u.username, u.user_lang, u.user_email, u.user_jabber, u.user_notify_type
+					FROM ' . USERS_TABLE . ' u
+					WHERE ' . $this->db->sql_in_set('u.user_id', array_keys($notify_users));
+
+				$result = $this->db->sql_query($sql);
+				while ($row = $this->db->sql_fetchrow($result))
+				{
+					$messenger->template('@gn36_hookup/hookup_dates_added', $row['user_lang']);
+					$messenger->to($row['user_email'], $row['username']);
+					$messenger->im($row['user_jabber'], $row['username']);
+					$messenger->assign_vars(array(
+						'USERNAME' 		=> $row['username'],
+						'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
+						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f={$event['forum_id']}&t={$event['topic_id']}"
+								));
+					$messenger->send($row['user_notify_type']);
+
+					$notified_userids[] = $row['user_id'];
+				}
+				$this->db->sql_freeresult($result);
+
+				$messenger->save_queue();
+
+				//set notify status
+				foreach($notified_userids as $user_id)
+				{
+					$this->hookup->hookup_users[$user_id]['notify_status'] = 1;
+				}
+			}
+		}
+
+		return $hookup_errors;
+	}
+
+	protected function process_status($event, $is_member)
+	{
+		$availables = $this->request->variable('available', array(0 => 0));
+
+		if(!$this->request->is_set_post('available'))
+		{
+			return array();
+		}
+
+		if(!$is_member)
+		{
+			return array($this->user->lang('NO_HOOKUP_MEMBER'));
+		}
+
+		foreach($availables as $date_id => $available)
+		{
+			//ignore HOOKUP_UNSET and other invalid values
+			if (!is_numeric($date_id) || !isset($this->hookup->hookup_dates[$date_id]) || !in_array($available, array(hookup::HOOKUP_YES, hookup::HOOKUP_NO, hookup::HOOKUP_MAYBE)))
+			{
+				continue;
+			}
+
+			$this->hookup->set_user_date($this->user->data['user_id'], $date_id, $available);
+		}
+
+		$this->hookup->update_available_sums();
+
+		$this->hookup->set_user_data($this->user->data['user_id'], 0, $this->request->variable('comment', '', true));
+
+		return array();
+	}
+
+	/**
+	 * Processes all submitted data in viewtopic into the hookup object without sending changes to database
+	 * Don't forget to run $this->hookup->submit() afterwards!
+	 *
+	 * @param unknown $event
+	 * @return array errors
+	 */
+	protected function process_submit($event)
+	{
+		$is_owner  = $event['topic_data']['topic_poster'] == $this->user->data['user_id'] || $this->auth->acl_get('m_edit', $event['forum_id']);
+		$is_member = isset($this->hookup->hookup_users[$this->user->data['user_id']]);
+
+		$hookup_errors = $this->process_selfinvite($event, $is_owner, $is_member);
+
+		$is_member = isset($this->hookup->hookup_users[$this->user->data['user_id']]);
+
+		// If we are neither member nor owner, we can't submit anything else anyways, so return
+		if(!$is_member && !$is_owner)
+		{
+			return $hookup_errors;
+		}
+
+		$hookup_errors = array_merge($hookup_errors, $this->process_add_user($event, $is_owner));
+		$hookup_errors = array_merge($hookup_errors, $this->process_add_date($event, ($is_member || $is_owner)));
+		$hookup_errors = array_merge($hookup_errors, $this->process_disable($event, $is_owner));
+		$hookup_errors = array_merge($hookup_errors, $this->process_deletes($event, $is_owner));
+		$hookup_errors = array_merge($hookup_errors, $this->process_status($event, $is_member));
+
+		return $hookup_errors;
 	}
 }

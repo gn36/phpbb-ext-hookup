@@ -20,6 +20,20 @@ services:
             - @request
         tags:
             - { name: event.listener }
+    gn36.hookup.events.viewtopic:
+        class: gn36\hookup\event\viewtopic
+        arguments:
+            - @gn36.hookup.functions.hookup
+            - @template
+            - @dbal.conn
+            - @user
+            - @auth
+            - @request
+            - %core.root_path%
+            - %core.php_ext%
+            - %gn36.hookup.path%
+        tags:
+            - { name: event.listener }
     gn36.hookup.cron.weekly_reset:
         class: gn36\hookup\cron\weekly_reset
         arguments:

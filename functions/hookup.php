@@ -139,6 +139,8 @@ class hookup
 		{
 			$group_ids = array($group_ids);
 		}
+		array_map('intval', $group_ids);
+
 		//get some userdata
 		$sql = 'SELECT u.user_id
 			FROM ' . USER_GROUP_TABLE . ' ug
@@ -153,13 +155,29 @@ class hookup
 		{
 			if(!isset($this->hookup_users[$row['user_id']]))
 			{
-				$this->hookup_users[$row['user_id']] = array('user_id' => $row['user_id'],
+				$this->hookup_users[$row['user_id']] = array(
+					'user_id' 		=> $row['user_id'],
 					'notify_status' => 0,
-					'comment' => ''
+					'comment' 		=> ''
 				);
 			}
 		}
 		$db->sql_freeresult($result);
+	}
+
+	/**
+	 * Add a user to the hookup. If user already exists, resets comment and notify_status to given values.
+	 * @param int $user_id
+	 * @param string $comment
+	 * @param int $notify_status
+	 */
+	public function add_user($user_id, $comment = '', $notify_status = 0)
+	{
+		$this->hookup_users[$user_id] = array(
+			'user_id' 		=> (int) $user_id,
+			'notify_status' => (int) $notify_status,
+			'comment' 		=> $comment,
+		);
 	}
 
 	/**
@@ -173,11 +191,13 @@ class hookup
 			if($entry['date_time'] == $date)
 			{
 				//this entry allready exists
-				return;
+				return false;
 			}
 		}
 		//Doesn't exist, so add:
 		$this->hookup_dates[] = array('date_time' => $date);
+
+		return true;
 	}
 
 	/**
@@ -228,20 +248,20 @@ class hookup
 	}
 
 	/**
-	 * Update a users status
+	 * Update a users status on a specific date
 	 *
 	 * @param int $user_id
 	 * @param int $date_id
 	 * @param int $value
-	 * @param string $comment
 	 * @return boolean
 	 */
-	public function set_user($user_id, $date_id, $value = hookup::HOOKUP_MAYBE, $comment = '')
+	public function set_user_date($user_id, $date_id, $value = hookup::HOOKUP_MAYBE)
 	{
-		$this->hookup_users[$user_id] = array('user_id' => $user_id,
-			'notify_status' => 0,
-			'comment' => $comment,
-			);
+		if(!isset($this->hookup_users[$user_id]))
+		{
+			return false;
+		}
+
 		if(isset($this->hookup_dates[$date_id]))
 		{
 			$this->hookup_availables[$user_id][$date_id] = $value;
@@ -250,6 +270,33 @@ class hookup
 		{
 			return false;
 		}
+		return true;
+	}
+
+	/**
+	 * Set User basic data
+	 * @param int $user_id
+	 * @param string $notify_status
+	 * @param string $comment
+	 * @return boolean
+	 */
+	public function set_user_data($user_id, $notify_status = null, $comment = null)
+	{
+		if(!isset($this->hookup_users[$user_id]))
+		{
+			return false;
+		}
+
+		if($notify_status !== null)
+		{
+			$this->hookup_users[$user_id]['notify_status'] = $notify_status;
+		}
+
+		if($comment !== null)
+		{
+			$this->hookup_users[$user_id]['comment'] = $comment;
+		}
+
 		return true;
 	}
 
