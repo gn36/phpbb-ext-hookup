@@ -14,7 +14,6 @@ namespace gn36\hookup\event;
  * @ignore
  */
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use gn36\hookup\functions\hookup;
 
 class posting implements EventSubscriberInterface
 {

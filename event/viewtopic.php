@@ -309,7 +309,6 @@ class viewtopic implements EventSubscriberInterface
 				$this->db->sql_query($sql);
 			}
 
-
 			//notify all members about active date
 			if ($set_active && $send_email && !empty($this->hookup->hookup_users))
 			{
