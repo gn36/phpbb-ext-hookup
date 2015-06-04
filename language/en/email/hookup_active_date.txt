@@ -1,13 +1,13 @@
-Subject: Aktives Datum wurde festgelegt: {ACTIVE_DATE_SHORT} — „{TOPIC_TITLE}“
+Subject: Active date set: {ACTIVE_DATE_SHORT} - "{TOPIC_TITLE}"
 
-Hallo {USERNAME},
+Hello {USERNAME},
 
-du erhältst diese Benachrichtigung, weil du Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ bist. Der aktive Termin dieses Terminplaners wurde festgelegt auf den:
+You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}". The active date for this meeting planner has been set to:
 
 {ACTIVE_DATE}
 
 
-Du kannst den folgenden Link benutzen, um das Thema und den Terminplaner anzusehen:
+You can use the following link to view the topic and the meeting planner:
 
 {U_TOPIC}
 

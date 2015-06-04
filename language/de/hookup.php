@@ -1,5 +1,11 @@
 <?php
-//Hookup mod by Pyramide german language file
+/**
+* hookup [German]
+*
+* @package language
+* @copyright (c) 2015 gn#36
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*/
 
 
 /**
@@ -88,6 +94,3 @@ $lang = array_merge($lang, array(
 	'HOOKUP_AUTORESET'		=> 'Wöchentliches Rücksetzen',
 	'HOOKUP_AUTORESET_DESC'	=> 'Mit dieser Einstellung kannst du den Terminplaner so einstellen, dass er sich automatisch wöchentlich aktualisiert.<br /> Durch diese Einstellung wird der erste eingetragene Termin wöchentlich wiederholt.',
 ));
-
-
-?>

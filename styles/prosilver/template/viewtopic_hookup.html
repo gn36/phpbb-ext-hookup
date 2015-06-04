@@ -81,7 +81,7 @@
 		<tbody>
 			<!-- BEGIN user -->
 			<tr <!-- IF !user.IS_SELF -->class="hookup_hidemobile"<!-- ENDIF -->>
-				<td>{user.USERNAME_FULL}<!-- IF user.COMMENT --> <span class="comment"><img src="{T_THEME_PATH}/images/icon_comment.gif" alt="Kommentar" /><span>{user.COMMENT}</span></span><!-- ENDIF --></td>
+				<td>{user.USERNAME_FULL}<!-- IF user.COMMENT --> <span class="comment"><img src="{S_EXT_PATH}styles/prosilver/theme/images/icon_comment.gif" alt="Comment" /><span>{user.COMMENT}</span></span><!-- ENDIF --></td>
 				<!-- IF user.IS_SELF -->
 					<!-- DEFINE $USER_IS_IN_LIST = 1 -->
 					<!-- DEFINE $USER_COMMENT = '{user.COMMENT}' -->
@@ -192,9 +192,9 @@
 			<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
 		</fieldset>
 
-		<script type="text/javascript" src="{T_TEMPLATE_PATH}/calendar.js"></script>
-		<script type="text/javascript" src="{T_TEMPLATE_PATH}/calendar-setup.js"></script>
-		<script type="text/javascript" src="{S_LANG_PATH}/mods/calendar-{S_LANG_NAME}.js"></script>
+		<script type="text/javascript" src="{S_EXT_PATH}styles/prosilver/template/calendar.js"></script>
+		<script type="text/javascript" src="{S_EXT_PATH}styles/prosilver/template/calendar-setup.js"></script>
+		<script type="text/javascript" src="{S_EXT_PATH}language/{S_LANG_NAME}/calendar-{S_LANG_NAME}.js"></script>
 		<script type="text/javascript">
 		function appendDate(cal) {
 			var formatted_date = cal.date.print(cal.params.ifFormat);

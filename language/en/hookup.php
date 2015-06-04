@@ -1,10 +1,24 @@
 <?php
-//Hookup mod by Pyramide german language file
-
+/**
+*
+* hookup mod [English]
+*
+* @package language
+* @version $Id: hookup.php 1 2009-04-24 23:56:57Z joas $
+* @copyright (c) 2006-2008 Pyramide (Frank Dreyer), (c) 2008-2015 gn#36 (Martin Beckmann)
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*
+*/
 
 /**
 * DO NOT CHANGE
 */
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
 if (empty($lang) || !is_array($lang))
 {
 	$lang = array();
@@ -12,82 +26,76 @@ if (empty($lang) || !is_array($lang))
 
 // Define categories and permission types
 $lang = array_merge($lang, array(
-	'HOOKUP'				=> 'Terminplaner',
-	'HOOKUP_DESC'			=> 'Dieses Thema enthält einen Terminplaner, der dazu verwendet werden kann einen Termin mit anderen Usern abzusprechen.',
-	'ADD_HOOKUP'			=> 'Terminplaner',
-	'ADD_HOOKUP_DESC'		=> 'Diesem Thema einen Terminplaner hinzufügen',
-	'ADD_HOOKUP_REACTIVATE'	=> 'Terminplaner reaktivieren',
-	'ADD_HOOKUP_REACTIVATE_EXPLAIN' => 'Es existieren noch Daten eines zuvor deaktivierten Terminplaners. Wenn du diesen reaktivierst, sind die alten Benutzer und Termine wieder verfügbar.',
-	'HOOKUP_STATUS'			=> array(\gn36\hookup\functions\hookup::HOOKUP_YES => 'Ja', \gn36\hookup\functions\hookup::HOOKUP_NO => 'Nein', \gn36\hookup\functions\hookup::HOOKUP_MAYBE => 'Evtl.', \gn36\hookup\functions\hookup::HOOKUP_UNSET => '-'),
-	'HOOKUP_DATEFORMAT'		=> 'd.m H:i', //this is used for the column headings so it should be short
+	'HOOKUP'				=> 'Meeting planner',
+	'HOOKUP_DESC'			=> 'This topic has a meeting planner attached. The planner can be used to find a time to meet.',
+	'ADD_HOOKUP'			=> 'Meeting',
+	'ADD_HOOKUP_DESC'		=> 'Attach a meeting to this topic',
+	'ADD_HOOKUP_REACTIVATE'	=> 'reactivate meeting',
+	'ADD_HOOKUP_REACTIVATE_EXPLAIN' => 'Data of a previously disabled meeting planner is available. If you reactivate it, the previously added dates and users will be available again.',
+	'HOOKUP_STATUS'			=> array(\gn36\hookup\functions\hookup::HOOKUP_YES => 'Yes', \gn36\hookup\functions\hookup::HOOKUP_NO => 'No', \gn36\hookup\functions\hookup::HOOKUP_MAYBE => 'Maybe', \gn36\hookup\functions\hookup::HOOKUP_UNSET => '-'),
+	'HOOKUP_DATEFORMAT'		=> 'd M H:i', //d M h:i a // this is used for the column headings so it should be short
 	'HOOKUP_DATEFORMAT_TITLE' => 'd.m.Y H:i', //this is used for the topic title
 	'HOOKUP_DATEFORMAT_POST' => 'l, d.m.Y H:i', //this is used for the post when the active date is set
-	'HOOKUP_DATEFORMAT_CALENDAR' => '%d.%m.%Y %H:%M',
-	'HOOKUP_ADD_USERS'		=> 'Benutzer einladen',
-	'HOOKUP_ADD_GROUPS'		=> 'Gruppen einladen',
-	'HOOKUP_ADD_DATES'		=> 'Datumsvorschläge hinzufügen',
-	'HOOKUP_ADD_DATES_EXPLAIN'=> 'Hiermit fügst du neue Datumsvorschläge in die Liste ein. Gib pro Zeile ein Datum im Format TT.MM.JJJJ ss:mm oder JJJJ-MM-TT ss:mm ein.',
-	'HOOKUP_ADD_DATEFORMAT'	=> ' (jjjj-mm-tt ss:mm)', //shown only for non js users (js users use the calendar)
-	'CLEAR'					=> 'Löschen',
-	'CLEAR_TITLE'			=> 'Löscht die ausgewählten Daten',
-	'UNSET_ACTIVE'			=> 'Termin neu verhandeln',
-	'SET_ACTIVE'			=> 'Festlegen',
-	'SET_ACTIVE_CONFIRM'	=> 'Bist du sicher, dass du %s zum aktiven Datum machen möchtest?',
-	'UNSET_ACTIVE_CONFIRM'	=> 'Bist du sicher, dass du das aktive Datum zurücksetzen und den Terminplaner wiedereröffnen möchtest?',
-	'ACTIVE_DATE_SET'		=> 'Das aktive Datum wurde auf %s gesetzt.',
-	'ACTIVE_DATE_UNSET'		=> 'Das aktive Datum wurde zurückgesetzt.',
-	'ACTIVE_DATE'			=> 'Aktiver Termin',
-	'SHOW_ALL_DATES'		=> 'Alle Termine zeigen',
-	'HIDE_ALL_DATES'		=> 'Terminliste verstecken',
-	'NO_DATE'				=> 'Datum existiert nicht!',
-	'INVALID_DATE'			=> 'Ungültiges Datum. Das Datum muss im Format TT.MM.JJJJ SS:MM oder JJJJ-MM-TT SS:MM angegeben werden',
-	'CANNOT_ADD_PAST'		=> 'Kann kein Datum in der Vergangenheit hinzufügen',
-	'SUM'					=> 'Summe',
-	'HOOKUP_NO_DATES'		=> 'Es wurden noch keine Termine hinzugefügt.',
-	'HOOKUP_NO_USERS'		=> 'Es wurden noch keine Benutzer eingeladen.',
-	'HOOKUP_USER_EXISTS'	=> 'Der Benutzer %s ist bereits Mitglied des Terminplaners.',
-	'HOOKUP_USERS_EXIST'	=> 'Alle Benutzer der gewählten Gruppen sind bereits Mitglied des Terminplaners.',
-	'USERNAMES_EXPLAIN'		=> 'Hiermit kannst du neue Benutzer in die Liste einfügen. Du kannst mehrere User gleichzeitig eingeben, verwende für jeden User eine neue Zeile.',
-	'HOOKUP_ADD_GROUPS_EXPLAIN'=> 'Hiermit kannst du komplette Gruppen in die Liste einfügen. Die Mitglieder der Gruppe werden einzeln in die Liste eingefügt, eine Mehrfachauswahl ist möglich.',
-	'HOOKUP_OVERVIEW'		=> 'Terminplaner-Übersicht',
-	'DATE_ALREADY_ADDED'	=> 'Das Datum %1s wurde diesem Terminplaner bereits hinzugefügt',
-	'HOOKUP_DELETE_EXPLAIN'	=> 'Hier kannst du einzelne Benutzer/Datumsvorschläge oder den kompletten Terminplaner löschen',
-	'DELETE_HOOKUP'			=> 'Terminplaner löschen',
-	'DELETE_WHOLE_HOOKUP'	=> 'Gesamten Terminplaner löschen',
-	'DELETE_HOOKUP_NO'		=> 'Nichts löschen',
-	'DELETE_HOOKUP_DISABLE'	=> 'Nur deaktivieren',
-	'DELETE_HOOKUP_DISABLE_EXPLAIN' => 'Der Terminplaner wird im Thema nicht mehr angezeigt, die gespeicherten Daten (Benutzer, Datumsvorschläge, Verfügbarkeitsinformationen) bleiben jedoch in der Datenbank gespeichert.',
-	'DELETE_HOOKUP_DISABLE_CONFIRM'	=> 'Willst du den Terminplaner wirklich deaktivieren? Die Gespeicherten Daten (Benutzer, Datumsvorschläge, Verfügbarkeitsinformationen) bleiben in der Datenbank gespeichert und der Terminplaner kann jederzeit wieder reaktiviert werden.',
-	'DELETE_HOOKUP_DELETE'	=> 'Alle Daten löschen',
-	'DELETE_HOOKUP_DELETE_EXPLAIN' => 'Alle Daten dieses Terminplaners werden aus der Datenbank gelöscht.',
-	'DELETE_HOOKUP_DELETE_CONFIRM'	=> 'Willst du den Terminplaner wirklich vollständig löschen? Die Gespeicherten Daten (Benutzer, Datumsvorschläge, Verfügbarkeitsinformationen) gehen verloren und können nicht wiederhergestellt werden.',
-	'DELETE_USERS'			=> 'Einzelne Benutzer löschen',
-	'DELETE_DATES'			=> 'Einzelne Datumsvorschläge löschen',
-	'HOOKUP_DELETE_VIEWTOPIC_EXPLAIN' => 'Dieses Thema enthält bereits einen aktiven Terminplaner. Um den gesamten Terminplaner oder einzelne Benutzer/Datumsvorschläge zu löschen, verwende den Reiter <em>Löschen</em> in der Themenansicht',
-	'HOOKUP_DELETE_CONFIRM'	=> 'Willst du wirklich %d Datumsvorschläge und %d Benutzer löschen?',
-	//'ADDED_AT_BY'			=> 'hinzugefügt am %1s von %2s',
-	'OPEN_CALENDAR'			=> 'Kalender öffnen',
-	'USER_CANNOT_READ_FORUM'=> 'Der Benutzer %s hat keine Leseberechtigung für dieses Forum',
-	'SET_ACTIVE_TITLE_PREFIX'=>'Aktives Datum dem Thementitel voranstellen',
-	'SET_ACTIVE_SEND_EMAIL'	=> 'Mitglieder des Terminplaners per E-Mail über aktives Datum informieren',
-	'SET_ACTIVE_POST_REPLY'	=> 'Dem Thema einen neuen Beitrag mit Hinweis auf das aktive Datum hinzufügen',
-	'SET_ACTIVE_POST_TEMPLATE'=> "Der Termin wurde festgelegt: [b]{ACTIVE_DATE}[/b]",
-	'HOOKUP_SELF_INVITE'	=> 'Selbsteinladung',
-	'HOOKUP_SELF_INVITE_DESC' => 'Jeder Interessent darf sich selbst der Mitgliederliste hinzufügen',
-	'HOOKUP_SELF_INVITE_EXPLAIN' => 'Wenn die Liste potentieller Teilnehmer sehr groß ist, aber vermutlich nur wenige tatsächlich Interesse haben, kann man mit dieser Option aktivieren, dass sich jeder Interessent selbst als Mitglied des Terminplaners eintragen darf.',
-	'HOOKUP_INVITE_SELF'	=> 'Teilnehmen',
-	'HOOKUP_INVITE_SELF_DESC' => 'Ja, ich möchte an diesem Terminplaner teilnehmen.',
-	'HOOKUP_INVITE_SELF_EXPLAIN' => 'Dies ist ein offener Terminplaner, jeder Interessent kann sich selbst als Teilnehmer eintragen. Wenn du an diesem Termin teilnehmen möchtest, verwende dazu den folgenden Button.',
-	'HOOKUP_INVITE_SELF_EXPLAIN_GUEST' => 'Dies ist ein offener Terminplaner, jeder Interessent kann sich selbst als Teilnehmer eintragen. Um diese Funktion nutzen zu können, musst du dich jedoch zuerst im Forum anmelden.',
-	'HOOKUP_INVITE_SELF_LEAVE'	=> 'Teilnahme beenden',
-	'HOOKUP_INVITE_SELF_LEAVE_DESC'	=> 'Klicke hier, um deine Teilnahme an diesem Terminplaner zu beenden.',
-	'HOOKUP_INVITE_SELF_LEAVE_EXPLAIN' => 'Du bist derzeit ein Mitglied dieses Terminplaners. Verwende den folgenden Button, wenn du nicht mehr teilnehmen möchtest.',
-	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Möchtest du deine Teilnahme an diesem Terminplaner wirklich beenden?',
-	'HOOKUP_INVITE_MYSELF'	=> 'Mich selbst einladen',
-	'COMMENT'				=> 'Kommentar',
-	'HOOKUP_AUTORESET'		=> 'Wöchentliches Rücksetzen',
-	'HOOKUP_AUTORESET_DESC'	=> 'Mit dieser Einstellung kannst du den Terminplaner so einstellen, dass er sich automatisch wöchentlich aktualisiert.<br /> Durch diese Einstellung wird der erste eingetragene Termin wöchentlich wiederholt.',
+	'HOOKUP_DATEFORMAT_CALENDAR' => '%Y-%m-%d %H:%M',
+	'HOOKUP_ADD_USERS'		=> 'Invite users',
+	'HOOKUP_ADD_GROUPS'		=> 'Invite groups',
+	'HOOKUP_ADD_DATES'		=> 'Propose new dates',
+	'HOOKUP_ADD_DATES_EXPLAIN'=> 'Here you can propose new dates. Enter one date per line in DD.MM.YYYY hh:mm or YYYY-MM-DD hh:mm format.',
+	'HOOKUP_ADD_DATEFORMAT'	=> ' (yyyy-mm-dd hh:mm)', //shown only for non js users (js users use the calendar)
+	'CLEAR'					=> 'Clear',
+	'CLEAR_TITLE'			=> 'Clears the selected date(s)',
+	'UNSET_ACTIVE'			=> 'Unset active date',
+	'SET_ACTIVE'			=> 'Set active',
+	'SET_ACTIVE_CONFIRM'	=> 'Are you sure you want to make %s the active date?',
+	'UNSET_ACTIVE_CONFIRM'	=> 'Are you sure you want to unset the active date and reopen the meeting planner?',
+	'ACTIVE_DATE_SET'		=> 'The active date has been set to %s.',
+	'ACTIVE_DATE_UNSET'		=> 'The active date has been unset.',
+	'ACTIVE_DATE'			=> 'Active date',
+	'SHOW_ALL_DATES'		=> 'Show all dates',
+	'HIDE_ALL_DATES'		=> 'Hide date list',
+	'NO_DATE'				=> 'Date does not exist!',
+	'INVALID_DATE'			=> 'Invalid date. Please enter date in DD.MM.YYYY HH:MM or YYYY-MM-DD HH:MM format.',
+	'CANNOT_ADD_PAST'		=> 'Cannot add a date in the past',
+	'SUM'					=> 'Sum',
+	'HOOKUP_NO_DATES'		=> 'No dates have been added yet.',
+	'HOOKUP_NO_USERS'		=> 'No users have been invited yet.',
+	'HOOKUP_USER_EXISTS'	=> 'The user %s is already a member of this meeting planner.',
+	'HOOKUP_USERS_EXIST'	=> 'The selected users are already members of this meeting planner.',
+	'USERNAMES_EXPLAIN'		=> 'Here, you can add new users to the list. Multiple users can be entered, be sure to start a new line for each user.',
+	'HOOKUP_ADD_GROUPS_EXPLAIN'=> 'Here, you can add complete groups to the list. Multiple groups can be selected, every user in all selected groups will be added.',
+	'HOOKUP_OVERVIEW'		=> 'Meeting planner-overview',
+	'DATE_ALREADY_ADDED'	=> 'The date %1s has already been added to this meeting planner',
+	'HOOKUP_DELETE_EXPLAIN'	=> 'Here you can delete individual users, dates or the whole meeting planner',
+	'DELETE_HOOKUP'			=> 'Delete meeting planner',
+	'DELETE_WHOLE_HOOKUP'	=> 'Delete whole meeting planner',
+	'DELETE_HOOKUP_NO'		=> 'Don\'t delete anything',
+	'DELETE_HOOKUP_DISABLE'	=> 'Disable only',
+	'DELETE_HOOKUP_DISABLE_EXPLAIN' => 'The meeting planner will not be displayed in the topic anymore, but the data (users, dates, available information) will be kept in the database.',
+	'DELETE_HOOKUP_DISABLE_CONFIRM'	=> 'Do you really want to disable the meeting planner? The data (users, dates, available information) will be kept in the database and the meeting planner can be reactivated anytime',
+	'DELETE_HOOKUP_DELETE'	=> 'Delete all data',
+	'DELETE_HOOKUP_DELETE_EXPLAIN' => 'All data related to this meeting planner will be deleted.',
+	'DELETE_HOOKUP_DELETE_CONFIRM'	=> 'Do you really want to delete this meeting planner? All stored data (users, dates, available information) will be lost and cannot be restored.',
+	'DELETE_USERS'			=> 'Delete individual users',
+	'DELETE_DATES'			=> 'Delete individual dates',
+	'HOOKUP_DELETE_VIEWTOPIC_EXPLAIN' => 'This topic already contains an active meeting planner. To delete individual dates/users or the whole meeting planner, use the <em>delete</em> tab in the topic view',
+	'HOOKUP_DELETE_CONFIRM'	=> 'Do you really want to delete %d dates and %d users?',
+	//'ADDED_AT_BY'			=> 'added at %1s by %2s',
+	'OPEN_CALENDAR'			=> 'Open calendar',
+	'USER_CANNOT_READ_FORUM'=> 'The user %s doesn\'t have the permission to read this forum',
+	'SET_ACTIVE_TITLE_PREFIX'=>'Prepend topic title with active date',
+	'SET_ACTIVE_SEND_EMAIL'	=> 'Notify members of the meeting planner via e-mail about the active date',
+	'SET_ACTIVE_POST_REPLY'	=> 'Add a reply with a notice about the active date to this topic',
+	'SET_ACTIVE_POST_TEMPLATE'=> "The active date has been set: [b]{ACTIVE_DATE}[/b]",
+	'HOOKUP_SELF_INVITE'	=> 'Self-invite',
+	'HOOKUP_SELF_INVITE_DESC' => 'Anyone who is interested may add himself to the member list.',
+	'HOOKUP_SELF_INVITE_EXPLAIN' => 'If there is a large number of potentially interested users but only a few of them are actually interested, you can use this option to allow interests to invite themselves as member of the meeting planner.',
+	'HOOKUP_INVITE_SELF'	=> 'Participate',
+	'HOOKUP_INVITE_SELF_DESC' => 'Yes, I want to be part of this meeting planner.',
+	'HOOKUP_INVITE_SELF_EXPLAIN' => 'This is an open meeting planner, anyone who is interested may add themselves as member. If you want to participate, use the following button.',
+	'HOOKUP_INVITE_SELF_EXPLAIN_GUEST' => 'This is an open meeting planner, anyone who is interested may add themselves as member. You need to login first if you want to use this feature.',
+	'HOOKUP_INVITE_SELF_LEAVE'	=> 'Cancel membership',
+	'HOOKUP_INVITE_SELF_LEAVE_DESC'	=> 'Click here to cancel your membership in this meeting planner.',
+	'HOOKUP_INVITE_SELF_LEAVE_EXPLAIN' => 'You are currently a member of this meeting planner. Use the following button if you don\'t want to participate anymore.',
+	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Do you really want to cancel your membership in this meeting planner?',
+	'HOOKUP_INVITE_MYSELF'	=> 'Invite myself',
 ));
-
-
-?>

@@ -168,6 +168,8 @@ class viewtopic implements EventSubscriberInterface
 			'L_HOOKUP_Y'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_YES]{0},
 			'L_HOOKUP_N'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_NO]{0},
 			'L_HOOKUP_M'		=> $this->user->lang['HOOKUP_STATUS'][hookup::HOOKUP_MAYBE]{0},
+			'S_EXT_PATH'		=> $this->hookup_path,
+			'S_LANG_NAME'		=> $this->user->lang_name,
 		));
 
 		// Output dates

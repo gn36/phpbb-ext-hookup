@@ -1,8 +1,8 @@
-Subject: Benachrichtigung über neue Datumsvorschläge — „{TOPIC_TITLE}“
+Subject: New dates notification- "{TOPIC_TITLE}"
 
-Hallo {USERNAME},
+Hello {USERNAME},
 
-du erhältst diese Benachrichtigung, weil du Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ bist. Seit deinem letzten Besuch wurden zu diesem Terminplaner neue Datumsvorschläge hinzugefügt. Du kannst den folgenden Link benutzen, um das Thema und den Terminplaner anzusehen. Du erhältst keine weitere Benachrichtigung, bis du das Thema besucht hast.
+You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}". This meeting planner has received new dates since your last visit. You can use the following link to view the topic and the meeting planner, no more notifications will be sent until you visit the topic.
 
 {U_TOPIC}
 

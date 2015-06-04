@@ -92,5 +92,20 @@ div.unset-bg, td.unset-bg {
 		min-width:150px;
 		float:right;
 	}
-	
+
+	.comment > span {
+		display:inline;
+		position:inherit;
+		z-index: inherit;
+		left: inherit;
+		top: inherit;
+		margin: inherit;
+		background: none;
+		border: none;
+		color: inherit;
+		width: auto;
+	}
+	.comment:hover > span {
+		display:inline;
+	}
 }

@@ -1,5 +1,11 @@
 <?php
-//Hookup mod by Pyramide german language file
+/**
+* permissions_hookup [German]
+*
+* @package language
+* @copyright (c) 2015 gn#36
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*/
 
 
 /**

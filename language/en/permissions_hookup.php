@@ -1,6 +1,11 @@
 <?php
-//Hookup mod by Pyramide german language file
-
+/**
+* permissions_hookup [English]
+*
+* @package language
+* @copyright (c) 2015 gn#36
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*/
 
 /**
 * DO NOT CHANGE
@@ -12,5 +17,5 @@ if (empty($lang) || !is_array($lang))
 
 // Define categories and permission types
 $lang = array_merge($lang, array(
-	'ACL_F_HOOKUP'		=> 'Kann Terminplaner hinzufügen',
+	'ACL_F_HOOKUP'		=> 'Can add hookup meetings',
 ));
