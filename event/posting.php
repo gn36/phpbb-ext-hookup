@@ -64,7 +64,7 @@ class posting implements EventSubscriberInterface
 	public function submit_post($event)
 	{
 		// Check permissions
-		if(!$this->auth->acl_get('f_hookup', $event['forum_id']) && !$this->auth->acl_get('m_edit', $event['forum_id']))
+		if(!$this->auth->acl_get('f_hookup', $event['data']['forum_id']) && !$this->auth->acl_get('m_edit', $event['data']['forum_id']))
 		{
 			return;
 		}
@@ -116,14 +116,14 @@ class posting implements EventSubscriberInterface
 		}
 
 		// Check for first post
-		if($event['post_data']['topic_first_post_id'] != $event['post_data']['post_id'])
+		if(isset($event['post_data']['topic_first_post_id']) && (!isset($event['post_data']['post_id']) || $event['post_data']['topic_first_post_id'] != $event['post_data']['post_id']))
 		{
 			return;
 		}
 
 		$this->user->add_lang_ext('gn36/hookup', 'hookup');
 
-		if($event['topic_id'])
+		if(isset($event['topic_id']) && $event['topic_id'])
 		{
 			$this->hookup->load_hookup($event['topic_id']);
 		}

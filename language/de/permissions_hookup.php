@@ -12,8 +12,5 @@ if (empty($lang) || !is_array($lang))
 
 // Define categories and permission types
 $lang = array_merge($lang, array(
-	'acl_f_hookup'		=> array('lang' => 'Kann Terminplaner hinzufügen', 'cat' => 'content')
+	'ACL_F_HOOKUP'		=> 'Kann Terminplaner hinzufÃ¼gen',
 ));
-
-
-?>

@@ -100,7 +100,7 @@ class v_1_0_0_compat30x extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-				array('permission.add', array('f_hookup', true, 'f_read')),
+				array('permission.add', array('f_hookup', false, 'f_read')),
 				array('config.add', array('hookup_last_run', '0')),
 				array('config.add', array('hookup_interval', '86400')),
 		);
