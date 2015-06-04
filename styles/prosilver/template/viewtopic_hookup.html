@@ -1,3 +1,4 @@
+<div style="clear:both"></div>
 <!-- IF S_ACTIVE_DATE -->
 <div class="panel" id="hookup-active-date">
 <div class="inner"><span class="corners-top"><span></span></span>
@@ -32,29 +33,23 @@
 </div>
 <!-- ENDIF -->
 
-<script type="text/javascript">
-<!--
 
-var panels = new Array('overview-panel'<!-- IF S_IS_HOOKUP_OWNER or S_IS_HOOKUP_MEMBER -->, 'add-date-panel'<!-- ENDIF --><!-- IF S_IS_SELF_INVITE and not S_IS_HOOKUP_OWNER -->, 'self-invite-panel'<!-- ENDIF --><!-- IF S_IS_HOOKUP_OWNER -->, 'add-user-panel', 'add-group-panel', 'delete-panel'<!-- ENDIF -->);
-var show_panel = 'overview-panel';
-//-->
-</script>
 
 
 <div id="tabs-boundary">
-<div id="tabs">
+<div id="tabs" class="sub-panels" role="tablist" data-show-panel="overview-panel">
 	<ul>
-		<li id="overview-panel-tab" class="activetab"><a href="#tabs" onclick="subPanels('overview-panel'); return false;"><span>{L_HOOKUP_OVERVIEW}</span></a></li>
+		<li id="overview-panel-tab" class="tab activetab"><a href="#tabs" aria-controls="overview-panel" role="tab" data-subpanel="overview-panel"><span>{L_HOOKUP_OVERVIEW}</span></a></li>
 		<!-- IF S_IS_HOOKUP_OWNER or S_IS_HOOKUP_MEMBER -->
-		<li id="add-date-panel-tab"><a href="#tabs" onclick="subPanels('add-date-panel'); return false;"><span>{L_HOOKUP_ADD_DATES}</span></a></li>
+		<li id="add-date-panel-tab" class="tab"><a href="#tabs" aria-controls="add-date-panel" role="tab" data-subpanel="add-date-panel"><span>{L_HOOKUP_ADD_DATES}</span></a></li>
 		<!-- ENDIF -->
 		<!-- IF S_IS_SELF_INVITE and not S_IS_HOOKUP_OWNER -->
-		<li id="self-invite-panel-tab"><a href="#tabs" onclick="subPanels('self-invite-panel'); return false;"><span><!-- IF not S_IS_HOOKUP_MEMBER -->{L_HOOKUP_INVITE_SELF}<!-- ELSE -->{L_HOOKUP_INVITE_SELF_LEAVE}<!-- ENDIF --></span></a></li>
+		<li id="self-invite-panel-tab" class="tab"><a href="#tabs" aria-controls="self-invite-panel" role="tab" data-subpanel="self-invite-panel"><span><!-- IF not S_IS_HOOKUP_MEMBER -->{L_HOOKUP_INVITE_SELF}<!-- ELSE -->{L_HOOKUP_INVITE_SELF_LEAVE}<!-- ENDIF --></span></a></li>
 		<!-- ENDIF -->
 		<!-- IF S_IS_HOOKUP_OWNER -->
-		<li id="add-user-panel-tab"><a href="#tabs" onclick="subPanels('add-user-panel'); return false;"><span>{L_HOOKUP_ADD_USERS}</span></a></li>
-		<li id="add-group-panel-tab"><a href="#tabs" onclick="subPanels('add-group-panel'); return false;"><span>{L_HOOKUP_ADD_GROUPS}</span></a></li>
-		<li id="delete-panel-tab"><a href="#tabs" onclick="subPanels('delete-panel'); return false;"><span>{L_DELETE}</span></a></li>
+		<li id="add-user-panel-tab" class="tab"><a href="#tabs" aria-controls="add-user-panel" role="tab" data-subpanel="add-user-panel"><span>{L_HOOKUP_ADD_USERS}</span></a></li>
+		<li id="add-group-panel-tab" class="tab"><a href="#tabs" aria-controls="add-group-panel" role="tab" data-subpanel="add-group-panel"><span>{L_HOOKUP_ADD_GROUPS}</span></a></li>
+		<li id="delete-panel-tab" class="tab"><a href="#tabs" aria-controls="delete-panel" role="tab" data-subpanel="delete-panel"><span>{L_DELETE}</span></a></li>
 		<!-- ENDIF -->
 	</ul>
 </div>
