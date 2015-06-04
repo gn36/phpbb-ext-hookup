@@ -189,7 +189,6 @@ class viewtopic implements EventSubscriberInterface
 				'ID'			=> $hookup_date['date_id'],
 				'DATE'			=> $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
 				'FULL_DATE'		=> $this->user->format_date($hookup_date['date_time']),
-				//'ADDED_AT_BY'		=> sprintf($user->lang['ADDED_AT_BY'], $user->format_date($hookup_date['added_at']), $hookup_date['added_by_name']),
 				'YES_COUNT'		=> $yes_count,
 				'YES_PERCENT'	=> $yes_percent,
 				'MAYBE_COUNT'	=> $maybe_count,
