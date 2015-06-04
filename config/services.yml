@@ -34,6 +34,16 @@ services:
             - %gn36.hookup.path%
         tags:
             - { name: event.listener }
+    gn36.hookup.events.mcp_events:
+        class: gn36\hookup\event\mcp_events
+        arguments:
+            - @gn36.hookup.functions.hookup
+        tags:
+            - { name: event.listener }
+    gn36.hookup.events.acp_events:
+        class: gn36\hookup\event\acp_events
+        tags:
+            - { name: event.listener }
     gn36.hookup.cron.weekly_reset:
         class: gn36\hookup\cron\weekly_reset
         arguments:

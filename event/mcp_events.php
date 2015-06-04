@@ -17,37 +17,35 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event listener
  */
-class acp_events implements EventSubscriberInterface
+class mcp_events implements EventSubscriberInterface
 {
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.permissions'			=> 'add_permissions',
+			'core.delete_topics_after_query' => 'delete_topic',
 		);
 	}
+
+	/** @var \gn36\hookup\functions\hookup */
+	protected $hookup;
 
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	public function __construct(\gn36\hookup\functions\hookup $hookup)
 	{
-
+		$this->hookup = $hookup;
 	}
 
 	/**
-	* Add permissions for setting topic based posts per page settings.
+	* Delete the hookup which belongs to the topic by deleting all parts.
 	*
 	* @param object $event The event object
 	* @return null
 	* @access public
 	*/
-	public function add_permissions($event)
+	public function delete_topic($event)
 	{
-
-		$event['permissions'] = array_merge($event['permissions'], array(
-			// Forum perms
-			'f_hookup'	=> array('lang' => 'ACL_F_HOOKUP', 'cat' => 'content'),
-		));
-
+		$this->hookup->delete_in_db($event['topic_ids'], false);
 	}
 }

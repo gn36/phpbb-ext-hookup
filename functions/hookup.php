@@ -494,4 +494,31 @@ class hookup
 		return $this->submit(false, false, true);
 
 	}
+
+	/**
+	 * Efficiently delete one or multiple hookups directly in DB.
+	 *
+	 * @param array $topic_ids
+	 */
+	public function delete_in_db($topic_ids, $update_topics = true)
+	{
+		if(!is_array($topic_ids))
+		{
+			$topic_ids = array($topic_ids);
+		}
+		$sql = "DELETE FROM {$this->members_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$this->db->sql_query($sql);
+
+		$sql = "DELETE FROM {$this->dates_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$this->db->sql_query($sql);
+
+		$sql = "DELETE FROM {$this->available_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$this->db->sql_query($sql);
+
+		if($update_topics)
+		{
+			$sql = "UPDATE " . TOPICS_TABLE . " SET hookup_enabled = 0 WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+			$this->db->sql_query($sql);
+		}
+	}
 }
