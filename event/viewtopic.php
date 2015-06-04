@@ -327,20 +327,20 @@ class viewtopic implements EventSubscriberInterface
 				$result = $this->db->sql_query($sql);
 				while ($row = $this->db->sql_fetchrow($result))
 				{
-					$messenger->template('hookup_active_date', $row['user_lang']);
+					$messenger->template('@gn36_hookup/hookup_active_date', $row['user_lang']);
 					$messenger->to($row['user_email'], $row['username']);
 					$messenger->im($row['user_jabber'], $row['username']);
 					$messenger->assign_vars(array(
 						'USERNAME' 		=> $row['username'],
 						'TOPIC_TITLE'	=> $title_without_date,
-						'U_TOPIC'		=> generate_board_url() . "/viewtopic.$phpEx?f=$forum_id&t=$topic_id",
+						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
 						//TODO use recipients language
-						'ACTIVE_DATE'	=> $this->user->format_date($datelist[$set_active]['date_time'], $row['user_dateformat']),
-						'ACTIVE_DATE_SHORT'=> $this->user->format_date($datelist[$set_active]['date_time'], $user->lang['HOOKUP_DATEFORMAT']),
+						'ACTIVE_DATE'	=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $row['user_dateformat']),
+						'ACTIVE_DATE_SHORT'=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
 					));
 					$messenger->send($row['user_notify_type']);
 				}
-				$db->sql_freeresult($result);
+				$this->db->sql_freeresult($result);
 
 				$messenger->save_queue();
 			}
