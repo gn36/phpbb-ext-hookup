@@ -70,74 +70,78 @@
 <div id="hookup-table">
 	<div id="hookup-table-scrollwrapper">
 	<table class="table1" cellspacing="0" cellpadding="4">
-		<tr>
-			<th>&nbsp;</th>
-			<!-- BEGIN date -->
-			<th<!-- IF date.S_IS_ACTIVE --> class="activedate"<!-- ENDIF --> style="white-space: nowrap" title="{date.FULL_DATE}">{date.DATE}</th>
-			<!-- END date -->
-		</tr>
-
-		<!-- BEGIN user -->
-		<tr>
-			<td>{user.USERNAME_FULL}<!-- IF user.COMMENT --> <span class="comment"><img src="{T_THEME_PATH}/images/icon_comment.gif" alt="Kommentar" /><span>{user.COMMENT}</span></span><!-- ENDIF --></td>
-			<!-- IF user.IS_SELF -->
-				<!-- DEFINE $USER_IS_IN_LIST = 1 -->
-				<!-- DEFINE $USER_COMMENT = '{user.COMMENT}'-->
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
 				<!-- BEGIN date -->
-				<td class="<!-- IF date.S_IS_ACTIVE -->activedate <!-- ENDIF --><!-- IF user.date.STATUS_YES -->yes-bg<!-- ELSEIF user.date.STATUS_MAYBE -->maybe-bg<!-- ELSEIF user.date.STATUS_NO -->no-bg<!-- ELSE -->unset-bg<!-- ENDIF -->" style="color: black;">
-					<select name="{user.date.S_SELECT_NAME}" class="<!-- IF user.date.STATUS_YES -->yes-bg<!-- ELSEIF user.date.STATUS_MAYBE -->maybe-bg<!-- ELSEIF user.date.STATUS_NO -->no-bg<!-- ELSE -->unset-bg<!-- ENDIF -->">
-					<option class="unset-bg" value="{HOOKUP_UNSET}" <!-- IF user.date.STATUS_UNSET -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_UNSET}</option>
-					<option class="yes-bg" value="{HOOKUP_YES}" <!-- IF user.date.STATUS_YES -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_YES}</option>
-					<option class="maybe-bg" value="{HOOKUP_MAYBE}" <!-- IF user.date.STATUS_MAYBE -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_MAYBE}</option>
-					<option class="no-bg" value="{HOOKUP_NO}" <!-- IF user.date.STATUS_NO -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_NO}</option>
-					</select>
-				</td>
+				<th<!-- IF date.S_IS_ACTIVE --> class="activedate"<!-- ENDIF --> style="white-space: nowrap" title="{date.FULL_DATE}">{date.DATE}</th>
 				<!-- END date -->
-			<!-- ELSE -->
-				<!-- BEGIN date -->
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN user -->
+			<tr <!-- IF !user.IS_SELF -->class="hookup_hidemobile"<!-- ENDIF -->>
+				<td>{user.USERNAME_FULL}<!-- IF user.COMMENT --> <span class="comment"><img src="{T_THEME_PATH}/images/icon_comment.gif" alt="Kommentar" /><span>{user.COMMENT}</span></span><!-- ENDIF --></td>
+				<!-- IF user.IS_SELF -->
+					<!-- DEFINE $USER_IS_IN_LIST = 1 -->
+					<!-- DEFINE $USER_COMMENT = '{user.COMMENT}' -->
+					<!-- BEGIN date -->
 					<td class="<!-- IF date.S_IS_ACTIVE -->activedate <!-- ENDIF --><!-- IF user.date.STATUS_YES -->yes-bg<!-- ELSEIF user.date.STATUS_MAYBE -->maybe-bg<!-- ELSEIF user.date.STATUS_NO -->no-bg<!-- ELSE -->unset-bg<!-- ENDIF -->" style="color: black;">
-						{user.date.AVAILABLE}
+						<select name="{user.date.S_SELECT_NAME}" class="<!-- IF user.date.STATUS_YES -->yes-bg<!-- ELSEIF user.date.STATUS_MAYBE -->maybe-bg<!-- ELSEIF user.date.STATUS_NO -->no-bg<!-- ELSE -->unset-bg<!-- ENDIF -->">
+						<option class="unset-bg" value="{HOOKUP_UNSET}" <!-- IF user.date.STATUS_UNSET -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_UNSET}</option>
+						<option class="yes-bg" value="{HOOKUP_YES}" <!-- IF user.date.STATUS_YES -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_YES}</option>
+						<option class="maybe-bg" value="{HOOKUP_MAYBE}" <!-- IF user.date.STATUS_MAYBE -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_MAYBE}</option>
+						<option class="no-bg" value="{HOOKUP_NO}" <!-- IF user.date.STATUS_NO -->selected="selected"<!-- ENDIF -->>{L_HOOKUP_NO}</option>
+						</select>
+					</td>
+					<!-- END date -->
+				<!-- ELSE -->
+					<!-- BEGIN date -->
+						<td class="<!-- IF date.S_IS_ACTIVE -->activedate <!-- ENDIF --><!-- IF user.date.STATUS_YES -->yes-bg<!-- ELSEIF user.date.STATUS_MAYBE -->maybe-bg<!-- ELSEIF user.date.STATUS_NO -->no-bg<!-- ELSE -->unset-bg<!-- ENDIF -->" style="color: black;">
+							{user.date.AVAILABLE}
+						</td>
+					<!-- END date -->
+				<!-- ENDIF -->
+			</tr>
+			<!-- END user -->
+			
+			
+			<tr style="border-bottom: 3px double black;">
+				<td class="spacerow"></td>
+				
+				<!-- BEGIN date -->
+				<td<!-- IF date.S_IS_ACTIVE --> class="spacerow activedate"<!-- ELSE --> class="spacerow"<!-- ENDIF -->></td>
+				<!-- END date -->
+			</tr>
+			
+			<tr>
+				<td>{L_SUM}:</td>
+				<!-- BEGIN date -->
+					<td <!-- IF date.S_IS_ACTIVE -->class="activedate"<!-- ENDIF --> title="{date.DATE}: {date.YES_COUNT} {L_HOOKUP_YES}, {date.MAYBE_COUNT} {L_HOOKUP_MAYBE}, {date.NO_COUNT} {L_HOOKUP_NO}, {date.UNSET_COUNT} {L_HOOKUP_UNSET}">
+					<div class="summary-box">
+						<!-- IF date.YES_PERCENT > 0 --><div class="summary yes-bg" style="width:{date.YES_PERCENT}%;">{date.YES_COUNT}</div><!-- ENDIF -->
+						<!-- IF date.MAYBE_PERCENT > 0 --><div class="summary maybe-bg" style="width:{date.MAYBE_PERCENT}%;">{date.MAYBE_COUNT}</div><!-- ENDIF -->
+						<!-- IF date.NO_PERCENT > 0 --><div class="summary no-bg" style="width:{date.NO_PERCENT}%;">{date.NO_COUNT}</div><!-- ENDIF -->
+						<!-- IF date.UNSET_PERCENT > 0 --><div class="summary unset-bg" style="width:{date.UNSET_PERCENT}%;">{date.UNSET_COUNT}</div><!-- ENDIF -->
+					</div>
 					</td>
 				<!-- END date -->
-			<!-- ENDIF -->
-		</tr>
-		<!-- END user -->
-		
-		<tr style="border-bottom: 3px double black;">
-			<td class="spacerow"></td>
+			</tr>
 			
-			<!-- BEGIN date -->
-			<td<!-- IF date.S_IS_ACTIVE --> class="spacerow activedate"<!-- ELSE --> class="spacerow"<!-- ENDIF -->></td>
-			<!-- END date -->
-		</tr>
-		
-		<tr>
-			<td>{L_SUM}:</td>
-			<!-- BEGIN date -->
-				<td <!-- IF date.S_IS_ACTIVE -->class="activedate"<!-- ENDIF --> title="{date.DATE}: {date.YES_COUNT} {L_HOOKUP_YES}, {date.MAYBE_COUNT} {L_HOOKUP_MAYBE}, {date.NO_COUNT} {L_HOOKUP_NO}, {date.UNSET_COUNT} {L_HOOKUP_UNSET}">
-				<div class="summary-box">
-					<div class="summary yes-bg" style="width:{date.YES_PERCENT}%;">{date.YES_COUNT}</div>
-					<div class="summary maybe-bg" style="width:{date.MAYBE_PERCENT}%;">{date.MAYBE_COUNT}</div>
-					<div class="summary no-bg" style="width:{date.NO_PERCENT}%;">{date.NO_COUNT}</div>
-					<div class="summary unset-bg" style="width:{date.UNSET_PERCENT}%;">{date.UNSET_COUNT}</div>
-				</div>
-				</td>
-			<!-- END date -->
-		</tr>
-		
-		<!-- IF S_IS_HOOKUP_OWNER -->
-		<tr>
-			<td>&nbsp;</td>
-			
-			<!-- BEGIN date -->
-			<!-- IF date.S_IS_ACTIVE -->
-				<td class="activedate activedate_bottom"><b>{L_ACTIVE_DATE}</b></td>
-			<!-- ELSE -->
-				<td><a href="{date.U_SET_ACTIVE}" class="gen">{L_SET_ACTIVE}</a></td>
+			<!-- IF S_IS_HOOKUP_OWNER -->
+			<tr>
+				<td>&nbsp;</td>
+				
+				<!-- BEGIN date -->
+				<!-- IF date.S_IS_ACTIVE -->
+					<td class="activedate activedate_bottom"><b>{L_ACTIVE_DATE}</b></td>
+				<!-- ELSE -->
+					<td><a href="{date.U_SET_ACTIVE}" class="gen">{L_SET_ACTIVE}</a></td>
+				<!-- ENDIF -->
+				<!-- END date -->
+			</tr>
 			<!-- ENDIF -->
-			<!-- END date -->
-		</tr>
-		<!-- ENDIF -->
+		</tbody>
 	</table>
 	</div><!--scrollwrapper ende-->
 	<!-- IF S_IS_HOOKUP_MEMBER -->

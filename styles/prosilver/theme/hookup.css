@@ -79,3 +79,18 @@ div.unset-bg, td.unset-bg {
 .comment:hover > span {
 	display: block;
 }
+
+@media all and (max-width: 700px), all and (max-device-width: 700px) {
+	.hookup_hidemobile {
+		display:none;
+	}
+	tr td:first-child dfn {
+		display:none !important;
+	}
+	.summary-box {
+		width:60%;
+		min-width:150px;
+		float:right;
+	}
+	
+}
