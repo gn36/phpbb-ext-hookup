@@ -13,12 +13,6 @@ namespace gn36\hookup\cron;
 //TODO
 class weekly_reset extends \phpbb\cron\task\base
 {
-	/** @var string phpBB root path */
-	protected $root_path;
-
-	/** @var string phpEx */
-	protected $php_ext;
-
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
@@ -31,14 +25,32 @@ class weekly_reset extends \phpbb\cron\task\base
 	/** @var \phpbb\log\log_interface */
 	protected $log;
 
-	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, $root_path, $php_ext)
+	/** @var \gn36\hookup\functions\hookup */
+	protected $hookup;
+
+	/** @var string phpBB root path */
+	protected $root_path;
+
+	/** @var string phpEx */
+	protected $php_ext;
+
+	/** @var string */
+	protected $dates_table;
+
+	/** @var int */
+	protected $run_interval;
+
+	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\hookup\functions\hookup $hookup, $root_path, $php_ext, $hookup_dates_table, $hookup_run_interval)
 	{
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
 		$this->log = $log;
+		$this->hookup = $hookup;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
+		$this->dates_table = $hookup_dates_table;
+		$this->run_interval = intval($hookup_run_interval);
 	}
 
 	/**
@@ -49,7 +61,94 @@ class weekly_reset extends \phpbb\cron\task\base
 	{
 		$now = time();
 
-		//TODO: Actually run the weekly reset stuff
+		$sql = 'SELECT t.topic_id, d.date_time FROM ' . TOPICS_TABLE . ' t, ' . $this->dates_table . ' d  WHERE t.topic_id = d.topic_id AND t.hookup_autoreset = 1 AND t.hookup_enabled = 1';
+		$result = $this->db->sql_query($sql);
+
+		$date_list = array();
+		while($row = $this->db->sql_fetchrow($result))
+		{
+			$date_list[$row['topic_id']][] = $row['date_time'];
+		}
+
+		$hookup = $this->hookup;
+		foreach($date_list as $topic_id => $date_array)
+		{
+			sort($date_array);
+
+			$hookup->load_hookup($topic_id);
+
+			if(count($date_array) < 3)
+			{
+				for($i = count($date_array); $i < 3; $i++)
+				{
+					sort($date_array);
+					$old_time = $date_array[count($date_array) - 1];
+					$new_time = $old_time;
+
+					do
+					{
+						$new_time = $old_time + 604800;
+						//Daylight savings time adjustments:
+						if((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+						{
+							$dst_add = 0;
+						}
+						elseif(date('I', $new_time))
+						{
+							//New time is in DST, but old is not
+							//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
+							$dst_add = -3600;
+						}
+						else
+						{
+							//New time not in DST, but old is
+							//Since from DST to winter, there is a gain of an hour, that needs to be added:
+							$dst_add = 3600;
+						}
+						$old_time = $new_time;
+					}while($new_time < $now);
+
+					$date_array[] = $new_time + $dst_add;
+					$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
+				}
+			}
+
+			if($date_array[count($date_array) - 2] < $now)
+			{
+				//If the second last entry has already passed
+
+				$hookup->remove_date($date_array[0]);
+				$old_time = $date_array[count($date_array) - 1];
+				$new_time = $old_time;
+
+				do
+				{
+					$new_time = $old_time + 604800;
+					//Daylight savings time adjustments:
+					if((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+					{
+						$dst_add = 0;
+					}
+					elseif(date('I', $new_time))
+					{
+						//New time is in DST, but old is not
+						//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
+						$dst_add = -3600;
+					}
+					else
+					{
+						//New time not in DST, but old is
+						//Since from DST to winter, there is a gain of an hour, that needs to be added:
+						$dst_add = 3600;
+					}
+					$old_time = $new_time;
+				}while($new_time < $now);
+
+				$date_array[] = $new_time + $dst_add;
+				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
+			}
+			$hookup->submit();
+		}
 
 		$this->config->set('gn36_hookup_reset_last_run', $now, true);
 	}
@@ -74,7 +173,7 @@ class weekly_reset extends \phpbb\cron\task\base
 		$now = time();
 
 		// Run at most every day
-		return $now > $this->config['gn36_hookup_reset_last_run'] + 86400;
+		return $now > $this->config['gn36_hookup_reset_last_run'] + $this->run_interval;
 	}
 
 }

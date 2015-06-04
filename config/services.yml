@@ -41,8 +41,11 @@ services:
             - @config
             - @dbal.conn
             - @log
+            - @gn36.hookup.functions.hookup
             - %core.root_path%
             - %core.php_ext%
+            - %tables.gn36.hookup.dates%
+            - %gn36.hookup.reset.run_interval%
         calls:
             - [set_name, [gn36.hookup.cron.weekly_reset]]
         tags:
