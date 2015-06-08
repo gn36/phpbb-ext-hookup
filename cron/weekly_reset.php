@@ -93,7 +93,7 @@ class weekly_reset extends \phpbb\cron\task\base
 						{
 							$dst_add = 0;
 						}
-						elseif(date('I', $new_time))
+						else if(date('I', $new_time))
 						{
 							//New time is in DST, but old is not
 							//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
@@ -129,7 +129,7 @@ class weekly_reset extends \phpbb\cron\task\base
 					{
 						$dst_add = 0;
 					}
-					elseif(date('I', $new_time))
+					else if(date('I', $new_time))
 					{
 						//New time is in DST, but old is not
 						//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
