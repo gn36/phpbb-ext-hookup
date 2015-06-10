@@ -472,7 +472,7 @@ class viewtopic implements EventSubscriberInterface
 			}
 			$this->db->sql_freeresult($result);
 
-			$userids_to_add = array_diff(array_keys($new_users), $userids);
+			$userids_to_add = array_diff(array_keys($new_users), array_keys($this->hookup->hookup_users));
 		}
 
 		// Add & notify
