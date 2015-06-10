@@ -615,7 +615,19 @@ class viewtopic implements EventSubscriberInterface
 				'delete_user'	=> $delete_user_ids,
 				//'available'		=> $available,
 			));
-			confirm_box(false, sprintf($this->user->lang['HOOKUP_DELETE_CONFIRM'], count($delete_date_ids), count($delete_user_ids)), $s_hidden_fields);
+			if(count($delete_date_ids) > 0 && count($delete_user_ids) > 0)
+			{
+				$question = $this->user->lang(array('HOOKUP_DELETE_CONFIRM', 'UANDD'), $this->user->lang('USERS', count($delete_user_ids)), $this->user->lang('DATES', count($delete_date_ids)));
+			}
+			else if(count($delete_date_ids))
+			{
+				$question = $this->user->lang(array('HOOKUP_DELETE_CONFIRM', 'DATES'), $this->user->lang('DATES', count($delete_date_ids)));
+			}
+			else
+			{
+				$question = $this->user->lang(array('HOOKUP_DELETE_CONFIRM', 'USERS'), $this->user->lang('USERS', count($delete_user_ids)));
+			}
+			confirm_box(false, $question, $s_hidden_fields);
 		}
 
 		return array();

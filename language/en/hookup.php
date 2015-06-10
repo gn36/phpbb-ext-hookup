@@ -78,7 +78,19 @@ $lang = array_merge($lang, array(
 	'DELETE_USERS'			=> 'Delete individual users',
 	'DELETE_DATES'			=> 'Delete individual dates',
 	'HOOKUP_DELETE_VIEWTOPIC_EXPLAIN' => 'This topic already contains an active meeting planner. To delete individual dates/users or the whole meeting planner, use the <em>delete</em> tab in the topic view',
-	'HOOKUP_DELETE_CONFIRM'	=> 'Do you really want to delete %d dates and %d users?',
+	'HOOKUP_DELETE_CONFIRM'	=> array(
+		'USERS' => 'Do you really want to delete %s?',
+		'DATES'	=> 'Do you really want to delete %s?',
+		'UANDD' => 'Do you really want to delete %s and %s?',
+	),
+	'DATES' => array(
+		1 => '1 date',
+		2 => '%d dates',
+	),
+	'USERS' => array(
+		1 => '1 user',
+		2 => '%d users',
+	),
 	//'ADDED_AT_BY'			=> 'added at %1s by %2s',
 	'OPEN_CALENDAR'			=> 'Open calendar',
 	'USER_CANNOT_READ_FORUM'=> 'The user %s doesn\'t have the permission to read this forum',

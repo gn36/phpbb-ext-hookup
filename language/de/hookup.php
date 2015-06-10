@@ -70,7 +70,19 @@ $lang = array_merge($lang, array(
 	'DELETE_USERS'			=> 'Einzelne Benutzer löschen',
 	'DELETE_DATES'			=> 'Einzelne Datumsvorschläge löschen',
 	'HOOKUP_DELETE_VIEWTOPIC_EXPLAIN' => 'Dieses Thema enthält bereits einen aktiven Terminplaner. Um den gesamten Terminplaner oder einzelne Benutzer/Datumsvorschläge zu löschen, verwende den Reiter <em>Löschen</em> in der Themenansicht',
-	'HOOKUP_DELETE_CONFIRM'	=> 'Willst du wirklich %d Datumsvorschläge und %d Benutzer löschen?',
+	'HOOKUP_DELETE_CONFIRM'	=> array(
+		'USERS' => 'Möchtest du wirklich %s löschen?',
+		'DATES'	=> 'Möchtest du wirklich %s löschen?',
+		'UANDD' => 'Möchtest du wirklich %s und %s löschen?',
+	),
+	'DATES' => array(
+		1 => '1 Datumsvorschlag',
+		2 => '%d Datumsvorschläge',
+	),
+	'USERS' => array(
+		1 => '1 Benutzer',
+		2 => '%d Benutzer',
+	),
 	//'ADDED_AT_BY'			=> 'hinzugefügt am %1s von %2s',
 	'OPEN_CALENDAR'			=> 'Kalender öffnen',
 	'USER_CANNOT_READ_FORUM'=> 'Der Benutzer %s hat keine Leseberechtigung für dieses Forum',
