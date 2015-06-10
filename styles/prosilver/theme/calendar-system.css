@@ -30,7 +30,7 @@
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
   background: ButtonFace;
-  display:auto;
+  display:table-cell;
 }
 
 .calendar .nav {

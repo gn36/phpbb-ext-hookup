@@ -98,4 +98,8 @@ $lang = array_merge($lang, array(
 	'HOOKUP_INVITE_SELF_LEAVE_EXPLAIN' => 'You are currently a member of this meeting planner. Use the following button if you don\'t want to participate anymore.',
 	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Do you really want to cancel your membership in this meeting planner?',
 	'HOOKUP_INVITE_MYSELF'	=> 'Invite myself',
+	'COMMENT'				=> 'Comment',
+	'HOOKUP_AUTORESET'		=> 'Weekly reset',
+	'HOOKUP_AUTORESET_DESC'	=> 'With this setup you can set the meeting planner to automatically reset once a week.<br /> By doing this, the first entry of the planner is repeated every week and old dates are automatically deleted.',
+	'RUN'					=> 'Execute',
 ));
