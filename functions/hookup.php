@@ -506,13 +506,13 @@ class hookup
 		{
 			$topic_ids = array($topic_ids);
 		}
-		$sql = "DELETE FROM {$this->members_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$sql = "DELETE FROM {$this->hookup_members_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 		$this->db->sql_query($sql);
 
-		$sql = "DELETE FROM {$this->dates_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$sql = "DELETE FROM {$this->hookup_dates_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 		$this->db->sql_query($sql);
 
-		$sql = "DELETE FROM {$this->available_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+		$sql = "DELETE FROM {$this->hookup_available_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 		$this->db->sql_query($sql);
 
 		if($update_topics)
