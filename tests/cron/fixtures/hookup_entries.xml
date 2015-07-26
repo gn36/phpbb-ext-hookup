@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <table name="phpbb_topics">
+        <column>topic_id</column>
+        <column>hookup_enabled</column>
+        <column>hookup_autoreset</column>
+        <column>hookup_self_invite</column>
+        <row>
+            <value>4</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
+    </table>
+    <table name="phpbb_hookup_dates">
+    	<column>topic_id</column>
+    	<column>date_id</column>
+    	<column>date_time</column>
+    	<row>
+    		<value>1</value>
+    		<value>1</value>
+    		<value>0</value>
+    	</row>
+    </table>
+    <table name="phpbb_hookup_members">
+    	<column>topic_id</column>
+    	<column>user_id</column>
+    	<column>comment</column>
+    	<column>notify_status</column>
+    </table>
+    <table name="phpbb_hookup_available">
+    	<column>topic_id</column>
+    	<column>date_id</column>
+    	<column>user_id</column>
+    	<column>available</column>
+    </table>
+    <table name="phpbb_log">
+		<column>log_id</column>
+		<column>log_type</column>
+		<column>user_id</column>
+		<column>forum_id</column>
+		<column>topic_id</column>
+		<column>reportee_id</column>
+		<column>log_ip</column>
+		<column>log_time</column>
+		<column>log_operation</column>
+		<column>log_data</column>
+	</table>
+</dataset>
