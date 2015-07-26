@@ -65,21 +65,21 @@ class weekly_reset extends \phpbb\cron\task\base
 		$result = $this->db->sql_query($sql);
 
 		$date_list = array();
-		while($row = $this->db->sql_fetchrow($result))
+		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$date_list[$row['topic_id']][] = $row['date_time'];
 		}
 
 		$hookup = $this->hookup;
-		foreach($date_list as $topic_id => $date_array)
+		foreach ($date_list as $topic_id => $date_array)
 		{
 			sort($date_array);
 
 			$hookup->load_hookup($topic_id);
 
-			if(count($date_array) < 3)
+			if (count($date_array) < 3)
 			{
-				for($i = count($date_array); $i < 3; $i++)
+				for ($i = count($date_array); $i < 3; $i++)
 				{
 					sort($date_array);
 					$old_time = $date_array[count($date_array) - 1];
@@ -89,11 +89,11 @@ class weekly_reset extends \phpbb\cron\task\base
 					{
 						$new_time = $old_time + 604800;
 						//Daylight savings time adjustments:
-						if((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+						if ((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
 						{
 							$dst_add = 0;
 						}
-						else if(date('I', $new_time))
+						else if (date('I', $new_time))
 						{
 							//New time is in DST, but old is not
 							//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
@@ -106,14 +106,14 @@ class weekly_reset extends \phpbb\cron\task\base
 							$dst_add = 3600;
 						}
 						$old_time = $new_time;
-					}while($new_time < $now);
+					} while ($new_time < $now);
 
 					$date_array[] = $new_time + $dst_add;
 					$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
 				}
 			}
 
-			if($date_array[count($date_array) - 2] < $now)
+			if ($date_array[count($date_array) - 2] < $now)
 			{
 				//If the second last entry has already passed
 
@@ -125,11 +125,11 @@ class weekly_reset extends \phpbb\cron\task\base
 				{
 					$new_time = $old_time + 604800;
 					//Daylight savings time adjustments:
-					if((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+					if ((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
 					{
 						$dst_add = 0;
 					}
-					else if(date('I', $new_time))
+					else if (date('I', $new_time))
 					{
 						//New time is in DST, but old is not
 						//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
@@ -142,7 +142,7 @@ class weekly_reset extends \phpbb\cron\task\base
 						$dst_add = 3600;
 					}
 					$old_time = $new_time;
-				}while($new_time < $now);
+				} while ($new_time < $now);
 
 				$date_array[] = $new_time + $dst_add;
 				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
