@@ -63,13 +63,13 @@ class posting implements EventSubscriberInterface
 	public function submit_post($event)
 	{
 		// Check permissions
-		if(!$this->auth->acl_get('f_hookup', $event['data']['forum_id']) && !$this->auth->acl_get('m_edit', $event['data']['forum_id']))
+		if (!$this->auth->acl_get('f_hookup', $event['data']['forum_id']) && !$this->auth->acl_get('m_edit', $event['data']['forum_id']))
 		{
 			return;
 		}
 
 		// We store only if we are creating a new topic or editing the first post of an existing one
-		if(($event['post_mode'] != 'post' && $event['post_mode'] != 'edit_topic' && $event['post_mode'] != 'edit_first_post'))
+		if (($event['post_mode'] != 'post' && $event['post_mode'] != 'edit_topic' && $event['post_mode'] != 'edit_first_post'))
 		{
 			return;
 		}
@@ -77,14 +77,14 @@ class posting implements EventSubscriberInterface
 		$sql_data = $event['sql_data'];
 		$hookup_enabled = $this->request->is_set_post('hookup_enabled');
 
-		if($event['post_mode'] == 'edit')
+		if ($event['post_mode'] == 'edit')
 		{
 			$this->hookup->load_hookup($event['data']['topic_id']);
 
 			$no_data = empty($this->hookup->hookup_users) && empty($this->hookup->hookup_dates) && empty($this->hookup->hookup_availables);
 
 			// Only honor user setting on enable/disable if the hookup is inactive or not set
-			if($this->hookup->hookup_enabled || $no_data)
+			if ($this->hookup->hookup_enabled || $no_data)
 			{
 				$hookup_enabled = $this->hookup->hookup_enabled;
 			}
@@ -109,20 +109,20 @@ class posting implements EventSubscriberInterface
 	public function posting_display_template($event)
 	{
 		// Check permissions
-		if(!$this->auth->acl_get('f_hookup', $event['forum_id']) && !$this->auth->acl_get('m_edit', $event['forum_id']))
+		if (!$this->auth->acl_get('f_hookup', $event['forum_id']) && !$this->auth->acl_get('m_edit', $event['forum_id']))
 		{
 			return;
 		}
 
 		// Check for first post
-		if(isset($event['post_data']['topic_first_post_id']) && (!isset($event['post_data']['post_id']) || $event['post_data']['topic_first_post_id'] != $event['post_data']['post_id']))
+		if (isset($event['post_data']['topic_first_post_id']) && (!isset($event['post_data']['post_id']) || $event['post_data']['topic_first_post_id'] != $event['post_data']['post_id']))
 		{
 			return;
 		}
 
 		$this->user->add_lang_ext('gn36/hookup', 'hookup');
 
-		if(isset($event['topic_id']) && $event['topic_id'])
+		if (isset($event['topic_id']) && $event['topic_id'])
 		{
 			$this->hookup->load_hookup($event['topic_id']);
 		}

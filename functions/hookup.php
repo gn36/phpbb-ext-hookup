@@ -67,7 +67,7 @@ class hookup
 
 		$sql = 'SELECT hookup_enabled, hookup_active_date, hookup_self_invite, hookup_autoreset FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . $topic_id;
 		$result = $db->sql_query($sql);
-		if(!$row = $db->sql_fetchrow($result))
+		if (!$row = $db->sql_fetchrow($result))
 		{
 			//Thema existiert nicht:
 			return false;
@@ -84,7 +84,7 @@ class hookup
 		$result = $db->sql_query($sql);
 		//associative array user_id => user_row
 		$this->hookup_users = array();
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$this->hookup_users[$row['user_id']] = $row;
 		}
@@ -97,14 +97,14 @@ class hookup
 		$result = $db->sql_query($sql);
 		//associative array date_id => date_row
 		$this->hookup_dates = array();
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$this->hookup_dates[$row['date_id']] = $row;
 		}
 
 		//load available info
 		$this->hookup_available_sums = array();
-		foreach($this->hookup_dates as $date)
+		foreach ($this->hookup_dates as $date)
 		{
 			$this->hookup_available_sums[$date['date_id']] = array(hookup::HOOKUP_YES=>0, hookup::HOOKUP_MAYBE=>0, hookup::HOOKUP_NO=>0);
 		}
@@ -114,7 +114,7 @@ class hookup
 				WHERE topic_id=' . $topic_id;
 		$result = $db->sql_query($sql);
 		$this->hookup_availables = array();
-		while($row = $db->sql_fetchrow($result))
+		while ($row = $db->sql_fetchrow($result))
 		{
 			$this->hookup_availables[$row['user_id']][$row['date_id']] = $row['available'];
 			$this->hookup_available_sums[$row['date_id']][$row['available']]++;
@@ -131,11 +131,11 @@ class hookup
 	{
 		$db = $this->db;
 
-		if(!$group_ids)
+		if (!$group_ids)
 		{
 			return;
 		}
-		if(!is_array($group_ids))
+		if (!is_array($group_ids))
 		{
 			$group_ids = array($group_ids);
 		}
@@ -153,7 +153,7 @@ class hookup
 		$new_users = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
-			if(!isset($this->hookup_users[$row['user_id']]))
+			if (!isset($this->hookup_users[$row['user_id']]))
 			{
 				$this->hookup_users[$row['user_id']] = array(
 					'user_id' 		=> $row['user_id'],
@@ -186,9 +186,9 @@ class hookup
 	 */
 	public function add_date($date)
 	{
-		foreach($this->hookup_dates as $key => $entry)
+		foreach ($this->hookup_dates as $key => $entry)
 		{
-			if($entry['date_time'] == $date)
+			if ($entry['date_time'] == $date)
 			{
 				//this entry allready exists
 				return false;
@@ -207,14 +207,14 @@ class hookup
 	 */
 	public function get_date_id($date)
 	{
-		if(!$this->hookup_dates)
+		if (!$this->hookup_dates)
 		{
 			return null;
 		}
 
-		foreach($this->hookup_dates as $key => $entry)
+		foreach ($this->hookup_dates as $key => $entry)
 		{
-			if($entry['date_time'] == $date)
+			if ($entry['date_time'] == $date)
 			{
 				//This is the entry we are looking for:
 				return $key;
@@ -233,14 +233,14 @@ class hookup
 	{
 		$this->hookup_available_sums = array();
 
-		foreach($this->hookup_dates as $date_id => $data)
+		foreach ($this->hookup_dates as $date_id => $data)
 		{
 			$this->hookup_available_sums[$date_id] = array(hookup::HOOKUP_YES=>0, hookup::HOOKUP_MAYBE=>0, hookup::HOOKUP_NO=>0);
 		}
 
-		foreach($this->hookup_availables as $user_id => $date_list)
+		foreach ($this->hookup_availables as $user_id => $date_list)
 		{
-			foreach($date_list as $date_id => $availability)
+			foreach ($date_list as $date_id => $availability)
 			{
 				$this->hookup_available_sums[$date_id][$availability]++;
 			}
@@ -257,12 +257,12 @@ class hookup
 	 */
 	public function set_user_date($user_id, $date_id, $value = hookup::HOOKUP_MAYBE)
 	{
-		if(!isset($this->hookup_users[$user_id]))
+		if (!isset($this->hookup_users[$user_id]))
 		{
 			return false;
 		}
 
-		if(isset($this->hookup_dates[$date_id]))
+		if (isset($this->hookup_dates[$date_id]))
 		{
 			$this->hookup_availables[$user_id][$date_id] = $value;
 		}
@@ -282,17 +282,17 @@ class hookup
 	 */
 	public function set_user_data($user_id, $notify_status = null, $comment = null)
 	{
-		if(!isset($this->hookup_users[$user_id]))
+		if (!isset($this->hookup_users[$user_id]))
 		{
 			return false;
 		}
 
-		if($notify_status !== null)
+		if ($notify_status !== null)
 		{
 			$this->hookup_users[$user_id]['notify_status'] = $notify_status;
 		}
 
-		if($comment !== null)
+		if ($comment !== null)
 		{
 			$this->hookup_users[$user_id]['comment'] = $comment;
 		}
@@ -308,15 +308,15 @@ class hookup
 	 */
 	public function remove_date($date = 0, $date_id = 0)
 	{
-		if(!$this->hookup_dates || (!$date && !$date_id))
+		if (!$this->hookup_dates || (!$date && !$date_id))
 		{
 			return;
 		}
-		if($date)
+		if ($date)
 		{
-			foreach($this->hookup_dates as $key => $entry)
+			foreach ($this->hookup_dates as $key => $entry)
 			{
-				if($entry['date_time'] == $date)
+				if ($entry['date_time'] == $date)
 				{
 					//This entry needs to be removed
 					$this->_remove_date_from_userlist($entry['date_id']);
@@ -326,7 +326,7 @@ class hookup
 		}
 		else
 		{
-			if(isset($this->hookup_dates[$date_id]))
+			if (isset($this->hookup_dates[$date_id]))
 			{
 				$this->_remove_date_from_userlist($date_id);
 				unset($this->hookup_dates[$date_id]);
@@ -340,9 +340,9 @@ class hookup
 	 */
 	protected function _remove_date_from_userlist($date_id)
 	{
-		foreach($this->hookup_availables as $key => $date_array)
+		foreach ($this->hookup_availables as $key => $date_array)
 		{
-			if(isset($date_array[$date_id]))
+			if (isset($date_array[$date_id]))
 			{
 				unset($this->hookup_availables[$key][$date_id]);
 			}
@@ -356,7 +356,7 @@ class hookup
 	 */
 	public function remove_user($user_id)
 	{
-		if(!isset($this->hookup_users[$user_id]))
+		if (!isset($this->hookup_users[$user_id]))
 		{
 			return;
 		}
@@ -380,7 +380,7 @@ class hookup
 		$topic_id = $this->topic_id;
 
 		//For checking for differences, just load the old version from database:
-		if($return_changes)
+		if ($return_changes)
 		{
 			$old = new hookup();
 			$old->load_hookup($this->topic_id);
@@ -408,12 +408,12 @@ class hookup
 
 		// This might fail if the topic does not exist anymore
 		$db->sql_query($sql);
-		if(!$db->sql_affectedrows() && !$force_run)
+		if (!$db->sql_affectedrows() && !$force_run)
 		{
 			//the topic does not exist?
 			$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . $topic_id;
 			$result = $db->sql_query($sql);
-			if(!$db->sql_fetchrow($result))
+			if (!$db->sql_fetchrow($result))
 			{
 				return false;
 			}
@@ -422,7 +422,7 @@ class hookup
 		//Now update the users
 		$sql = 'DELETE FROM ' . $this->hookup_members_table . " WHERE topic_id = $topic_id";
 		$db->sql_query($sql);
-		foreach($this->hookup_users as $user_id => $user)
+		foreach ($this->hookup_users as $user_id => $user)
 		{
 			//Insert:
 			$user['topic_id'] = $topic_id;
@@ -433,10 +433,10 @@ class hookup
 		//Update the dates:
 		$sql = 'DELETE FROM ' . $this->hookup_dates_table . " WHERE topic_id = $topic_id";
 		$db->sql_query($sql);
-		foreach($this->hookup_dates as $date_id => $date)
+		foreach ($this->hookup_dates as $date_id => $date)
 		{
 			//Insert (uses old ID if available):
-			if(isset($date['date_id']) && !$date['date_id'])
+			if (isset($date['date_id']) && !$date['date_id'])
 			{
 				unset($date['date_id']);
 			}
@@ -448,11 +448,11 @@ class hookup
 		//Update the entries for availability:
 		$sql = 'DELETE FROM ' . $this->hookup_available_table . " WHERE topic_id = $topic_id";
 		$db->sql_query($sql);
-		if($this->hookup_availables)
+		if ($this->hookup_availables)
 		{
-			foreach($this->hookup_availables as $user_id => $availables)
+			foreach ($this->hookup_availables as $user_id => $availables)
 			{
-				foreach($availables as $date_id => $available)
+				foreach ($availables as $date_id => $available)
 				{
 					$rows[] = array('user_id' => $user_id,
 						'topic_id' => $topic_id,
@@ -465,7 +465,7 @@ class hookup
 		}
 
 		//Now update this object:
-		if($reload_data)
+		if ($reload_data)
 		{
 			$this->load_hookup($topic_id);
 		}
@@ -502,7 +502,7 @@ class hookup
 	 */
 	public function delete_in_db($topic_ids, $update_topics = true)
 	{
-		if(!is_array($topic_ids))
+		if (!is_array($topic_ids))
 		{
 			$topic_ids = array($topic_ids);
 		}
@@ -515,7 +515,7 @@ class hookup
 		$sql = "DELETE FROM {$this->hookup_available_table} WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 		$this->db->sql_query($sql);
 
-		if($update_topics)
+		if ($update_topics)
 		{
 			$sql = "UPDATE " . TOPICS_TABLE . " SET hookup_enabled = 0 WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 			$this->db->sql_query($sql);
