@@ -352,9 +352,11 @@ class viewtopic implements EventSubscriberInterface
 				$message = str_replace('{ACTIVE_DATE}', $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']), $message);
 
 				//TODO: functions_post_oo!
-				//$post = new post($topic_id);
-				//$post->post_text = $message;
-				//$post->submit();
+				include __DIR__ . '/../vendor/autoload.' . $this->phpEx;
+				
+				$post = new \Gn36\OoPostingApi\post($topic_id);
+				$post->post_text = $message;
+				$post->submit();
 			}
 
 			meta_refresh(3, $viewtopic_url);

@@ -15,7 +15,8 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.3"
+		"php": ">=5.3.3",
+		"gn36/phpbb-oo-posting-api": "dev-master"
 	},
 	"require-dev": {
 		"phpbb/epv": "dev-master"
