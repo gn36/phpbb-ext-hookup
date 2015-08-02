@@ -44,6 +44,9 @@ class viewtopic implements EventSubscriberInterface
 	/** @var \phpbb\request\request_interface */
 	protected $request;
 
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
+
 	/** @var \messenger */
 	protected $messenger;
 
@@ -56,7 +59,7 @@ class viewtopic implements EventSubscriberInterface
 	/** @var string */
 	protected $hookup_path;
 
-	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, $phpbb_root_path, $phpEx, $hookup_path)
+	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
 	{
 		$this->hookup = $hookup;
 		$this->template = $template;
@@ -68,6 +71,7 @@ class viewtopic implements EventSubscriberInterface
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->phpEx = $phpEx;
 		$this->hookup_path = $hookup_path;
+		$this->notification_manager = $notification_manager;
 	}
 
 	public function show_hookup_viewtopic($event)
@@ -522,6 +526,17 @@ class viewtopic implements EventSubscriberInterface
 					'U_TOPIC'	=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
 				));
 				$messenger->send($userdata['user_notify_type']);
+
+				// Notification
+				$notify_data = array(
+					'user_id' 		=> $this->user->data['user_id'],
+					'invited_user' 	=> $user_id,
+					'topic_title' 	=> $event['topic_data']['topic_title'],
+					'topic_id' 		=> $event['topic_id'],
+					'forum_id'		=> $event['forum_id'],
+				);
+				print_r($notify_data);
+				$this->notification_manager->add_notifications('gn36.hookup.notification.type.invited', $notify_data);
 			}
 			$messenger->save_queue();
 

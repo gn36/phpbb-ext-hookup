@@ -2,7 +2,7 @@
 /**
 *
 * @package hookup
-* @copyright (c) 2008 Martin Beckmann (gn#36) http://www.goose-necks.de
+* @copyright (c) 2008 Martin Beckmann (gn#36) http://phpbb.gn36.de
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
