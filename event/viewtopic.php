@@ -353,7 +353,7 @@ class viewtopic implements EventSubscriberInterface
 
 				//TODO: functions_post_oo!
 				include __DIR__ . '/../vendor/autoload.' . $this->phpEx;
-				
+
 				$post = new \Gn36\OoPostingApi\post($topic_id);
 				$post->post_text = $message;
 				$post->submit();
