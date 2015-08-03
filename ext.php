@@ -39,7 +39,7 @@ class ext extends \phpbb\extension\base
 
 		$matches = null;
 		preg_match($pattern, $string, $matches);
-		if(!$matches)
+		if (!$matches)
 		{
 			return false;
 		}
@@ -63,7 +63,7 @@ class ext extends \phpbb\extension\base
 		$meta_mgr 	= $mgr->create_extension_metadata_manager($this->extension_name, $template);
 
 		$meta = $meta_mgr->get_metadata();
-		if(isset($meta['require']))
+		if (isset($meta['require']))
 		{
 			$require = $meta['require'];
 		}
@@ -72,21 +72,21 @@ class ext extends \phpbb\extension\base
 			$require = array();
 		}
 
-		if(isset($meta['extra']['soft_require']))
+		if (isset($meta['extra']['soft_require']))
 		{
 			$require = array_merge($require, $meta['extra']['soft_require']);
 		}
 
 		$require = array_merge($require, $this->extra_dependencies());
 
-		foreach($require as $key => $value)
+		foreach ($require as $key => $value)
 		{
 			$info = $this->split_version_info($value);
 
-			switch(strtolower($key))
+			switch (strtolower($key))
 			{
 				case 'php':
-					if(!phpbb_version_compare(PHP_VERSION, $info['version'], $info['operator']))
+					if (!phpbb_version_compare(PHP_VERSION, $info['version'], $info['operator']))
 					{
 						echo "PHP VERSION FAILED";
 						return false;
@@ -94,7 +94,7 @@ class ext extends \phpbb\extension\base
 					break;
 				case 'phpbb':
 				case 'phpbb/phpbb':
-					if(phpbb_version_compare($config['version'], $info['version'], $info['operator']))
+					if (phpbb_version_compare($config['version'], $info['version'], $info['operator']))
 					{
 						// No suitable phpbb Version
 						echo "PHPBB VERSION FAILED";
@@ -102,7 +102,7 @@ class ext extends \phpbb\extension\base
 					}
 					break;
 				case 'gn36/phpbb-oo-posting-api':
-					if(!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
+					if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
 					{
 						echo "Vendor dependency $key is missing.";
 						return false;
@@ -110,7 +110,7 @@ class ext extends \phpbb\extension\base
 					break;
 				default:
 					// This should be an extension as a requirement
-					if(!$mgr->is_enabled($key))
+					if (!$mgr->is_enabled($key))
 					{
 						echo "EXTENSION $key IS MISSING";
 						return false;
@@ -120,7 +120,7 @@ class ext extends \phpbb\extension\base
 					$ext_meta 		= $ext_meta_mgr->get_metadata();
 					$ext_version 	= $ext_meta['version'];
 
-					if(!phpbb_version_compare($ext_version, $info['version'], $info['operator']))
+					if (!phpbb_version_compare($ext_version, $info['version'], $info['operator']))
 					{
 						echo "EXTENSION $key HAS INCOMPATIBLE VERSION";
 						return false;
@@ -138,11 +138,11 @@ class ext extends \phpbb\extension\base
 	 */
 	public function enable_step($old_state)
 	{
-		switch($old_state)
+		switch ($old_state)
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				foreach($this->notification_types as $notification_type)
+				foreach ($this->notification_types as $notification_type)
 				{
 					$phpbb_notifications->enable_notifications($notification_type);
 				}
@@ -160,11 +160,11 @@ class ext extends \phpbb\extension\base
 	 */
 	public function disable_step($old_state)
 	{
-		switch($old_state)
+		switch ($old_state)
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				foreach($this->notification_types as $notification_type)
+				foreach ($this->notification_types as $notification_type)
 				{
 					$phpbb_notifications->disable_notifications($notification_type);
 				}
@@ -181,11 +181,11 @@ class ext extends \phpbb\extension\base
 	 */
 	public function purge_step($old_state)
 	{
-		switch($old_state)
+		switch ($old_state)
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				foreach($this->notification_types as $notification_type)
+				foreach ($this->notification_types as $notification_type)
 				{
 					$phpbb_notifications->purge_notifications($notification_type);
 				}

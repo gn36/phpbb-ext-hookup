@@ -37,7 +37,7 @@ class user_added extends base
 
 		$users = array($this->get_data('invited_user'));
 
-		if(empty($users))
+		if (empty($users))
 		{
 			// This should not happen really - this means we invited nobody.
 			return array();

@@ -75,7 +75,7 @@ class base extends \phpbb\notification\type\base
 
 		$users = $this->hookup->hookup_users;
 
-		if(empty($users))
+		if (empty($users))
 		{
 			// Maybe the data was entered by someone else?
 			return array();
@@ -134,7 +134,7 @@ class base extends \phpbb\notification\type\base
 	public function create_insert_array($notification_data, $pre_create_data = array())
 	{
 		// This should be the user who has taken the action:
-		if(isset($notification_data['user_id']))
+		if (isset($notification_data['user_id']))
 		{
 			$this->set_data('user_id', $notification_data['user_id']);
 		}
@@ -143,7 +143,7 @@ class base extends \phpbb\notification\type\base
 			$this->set_data('user_id', $this->user->data['user_id']);
 		}
 
-		if(isset($notification_data['date']))
+		if (isset($notification_data['date']))
 		{
 			$this->set_data('date', $notification_data['date']);
 		}
@@ -152,7 +152,7 @@ class base extends \phpbb\notification\type\base
 			$this->set_data('date', 0);
 		}
 
-		if(isset($notification_data['yes']))
+		if (isset($notification_data['yes']))
 		{
 			$this->set_data('yes', $notification_data['yes']);
 			$this->set_data('no', $notification_data['no']);
@@ -166,7 +166,7 @@ class base extends \phpbb\notification\type\base
 		}
 
 		$this->set_data('topic_id', $notification_data['topic_id']);
-		if(isset($notification_data['forum_id']))
+		if (isset($notification_data['forum_id']))
 		{
 			$this->set_data('forum_id', $notification_data['forum_id']);
 		}

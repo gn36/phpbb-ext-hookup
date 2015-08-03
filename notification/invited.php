@@ -35,9 +35,9 @@ class invited extends base
 			'ignore_users' => array(),
 		), $options);
 
-		if(!is_array($notification_data['invited_user']))
+		if (!is_array($notification_data['invited_user']))
 		{
-			if(!isset($notification_data['invited_user']))
+			if (!isset($notification_data['invited_user']))
 			{
 				return array();
 			}
@@ -48,7 +48,7 @@ class invited extends base
 			$users = $notification_data['invited_user'];
 		}
 
-		if(empty($users))
+		if (empty($users))
 		{
 			// This should not happen really - this means we invited nobody.
 			return array();
