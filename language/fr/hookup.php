@@ -33,7 +33,7 @@ $lang = array_merge($lang, array(
 	'ADD_HOOKUP_REACTIVATE'	=> 'Réactiver une réunion',
 	'ADD_HOOKUP_REACTIVATE_EXPLAIN' => 'Les données d’une précédante planification de réunion qui a été désactivée seront à nouveau disponibles. Si vous les réactivez, les dates et les utilisateurs seront à nouveau disponibles.',
 	'HOOKUP_STATUS'			=> array(\gn36\hookup\functions\hookup::HOOKUP_YES => 'Oui', \gn36\hookup\functions\hookup::HOOKUP_NO => 'Non', \gn36\hookup\functions\hookup::HOOKUP_MAYBE => 'Peut-être', \gn36\hookup\functions\hookup::HOOKUP_UNSET => '-'),
-	'HOOKUP_DATEFORMAT'		=> 'd.m.Y', //d M h:i a // this is used for the column headings so it should be short
+	'HOOKUP_DATEFORMAT'		=> 'j.n.y H:i', //d M h:i a // this is used for the column headings so it should be short
 	'HOOKUP_DATEFORMAT_TITLE' => 'l d F Y à H:i', //this is used for the topic title
 	'HOOKUP_DATEFORMAT_POST' => 'l d F Y à H:i', //this is used for the post when the active date is set
 	'HOOKUP_DATEFORMAT_CALENDAR' => '%Y-%m-%d %H:%M',
