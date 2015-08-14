@@ -1,0 +1,11 @@
+Subject: Notification de nouvelle date - "{TOPIC_TITLE}"
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification parce que vous êtes membre de la planification de réunion du sujet "{TOPIC_TITLE}" à "{SITENAME}". Ce planificateur de réunion a reçu de nouvelles dates depuis votre dernière visite. Vous pouvez utiliser le lien suivant pour voir le sujet et le planificateur de réunion. Il n'y aura plus de notifications qui seront envoyées jusqu'à ce que vous visitiez le sujet.
+
+Vous pouvez voir le sujet et le planificateur de réunion ici:
+
+{U_TOPIC}
+
+{EMAIL_SIG}
