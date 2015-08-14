@@ -50,16 +50,16 @@ div.summary {
 	float: left;
 	color: black;
 }
-div.yes-bg, td.yes-bg {
+div.yes-bg, td.yes-bg, select.yes-bg, option.yes-bg {
 	background: #33CC00;
 }
-div.maybe-bg, td.maybe-bg {
+div.maybe-bg, td.maybe-bg, select.maybe-bg, option.maybe-bg {
 	background: #FFCC00;
 }
-div.no-bg, td.no-bg {
+div.no-bg, td.no-bg, select.no-bg, option.no-bg {
 	background: #FF3300;
 }
-div.unset-bg, td.unset-bg {
+div.unset-bg, td.unset-bg, select.unset-bg, option.unset-bg {
 	background: #ABABAB;
 }
 
