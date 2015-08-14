@@ -1,0 +1,14 @@
+Subject: La date de réunion à été fixée - "{TOPIC_TITLE}"
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification parce que vous êtes membre de la planification de réunion du sujet "{TOPIC_TITLE}" à "{SITENAME}". La date de la réunion a été fixé comme suit :
+
+{ACTIVE_DATE}
+
+
+Vous pouvez voir le sujet et le planificateur de réunion ici:
+
+{U_TOPIC}
+
+{EMAIL_SIG}
