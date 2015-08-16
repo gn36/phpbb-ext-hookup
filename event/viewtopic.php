@@ -47,6 +47,9 @@ class viewtopic implements EventSubscriberInterface
 	/** @var \messenger */
 	protected $messenger;
 
+	/** @var \phpbb\event\dispatcher_interface */
+	protected $phpbb_dispatcher;
+
 	/** @var string */
 	protected $phpbb_root_path;
 
@@ -56,7 +59,7 @@ class viewtopic implements EventSubscriberInterface
 	/** @var string */
 	protected $hookup_path;
 
-	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, $phpbb_root_path, $phpEx, $hookup_path)
+	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, $phpbb_root_path, $phpEx, $hookup_path)
 	{
 		$this->hookup = $hookup;
 		$this->template = $template;
@@ -68,6 +71,7 @@ class viewtopic implements EventSubscriberInterface
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->phpEx = $phpEx;
 		$this->hookup_path = $hookup_path;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
 	}
 
 	public function show_hookup_viewtopic($event)
@@ -298,13 +302,41 @@ class viewtopic implements EventSubscriberInterface
 			$send_email = $this->request->variable('send_email', false);
 			$post_reply = $this->request->variable('post_reply', false);
 
+			$topic_data = $event['topic_data'];
+			$new_title = preg_replace('#^(\\[.+?\\] )?#', ($set_active != 0 ? '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ' : ''), $event['topic_data']['topic_title']);
+
+			/**
+			 * Perform additional actions when active date is set
+			 *
+			 * @event gn36.hookup.set_activedate_confirmed
+			 * @var bool	title_prefix	User wants to have a title prefix added
+			 * @var bool	send_email		User wants E-Mails to be sent
+			 * @var bool	post_reply		User wants to post a reply to the topic
+			 * @var int		set_active		Date selected as active (0 means reset of active date)
+			 * @var string	new_title		The new topic title that will be present after the update
+			 * @var int 	topic_id		ID of the topic of the hookup
+			 * @var int 	forum_id		ID of the forum the topic is in
+			 * @var array 	topic_data		Topic data as received from core.viewtopic_assign_template_vars_before
+			 * @since 1.0.0-dev
+			 */
+			$vars = array(
+				'title_prefix',
+				'send_email',
+				'post_reply',
+				'set_active',
+				'new_title',
+				'topic_id',
+				'forum_id',
+				'topic_data',
+			);
+
+			extract($this->phpbb_dispatcher->trigger_event('gn36.hookup.set_activedate_confirmed', compact($vars)));
+
 			//insert active date (short format) into topic title. this will use language
 			//and timezone of the "active maker" but the alternative would be
 			//to query the HOOKUP_DATES table every time we need the topic title
 			if ($set_active == 0 || $title_prefix)
 			{
-				$new_title = preg_replace('#^(\\[.+?\\] )?#', ($set_active != 0 ? '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ' : ''), $event['topic_data']['topic_title']);
-
 				$sql = 'UPDATE ' . TOPICS_TABLE . '
 						SET hookup_active_date = ' . (int) $set_active . ",
 							topic_title = '" . $this->db->sql_escape($new_title) . "'

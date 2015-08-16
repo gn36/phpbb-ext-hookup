@@ -29,6 +29,7 @@ services:
             - @user
             - @auth
             - @request
+            - @dispatcher
             - %core.root_path%
             - %core.php_ext%
             - %gn36.hookup.path%
