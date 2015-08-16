@@ -190,20 +190,16 @@ class viewtopic implements EventSubscriberInterface
 			$maybe_percent = $total_count > 0 ? round(($maybe_count / $total_count) * 100) : 0;
 			$no_percent = $total_count > 0 ? round(($no_count / $total_count) * 100) : 0;
 			$unset_percent = 100 - ($yes_percent + $maybe_percent + $no_percent);
+			// More than 100%
 			if ($unset_percent < 0)
 			{
-				// More than 100%
-				if ($no_percent > 0 && $no_percent - $unset_percent > 0)
+				if ($maybe_percent > 0)
 				{
-					$no_percent -= $unset_percent;
-				}
-				else if ($maybe_percent > 0 && $maybe_percent - $unset_percent > 0)
-				{
-					$maybe_percent -= $unset_percent;
+					$maybe_percent--;
 				}
 				else
 				{
-					$yes_percent -= $unset_percent;
+					$no_percent--;
 				}
 			}
 
