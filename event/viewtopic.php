@@ -325,7 +325,6 @@ class viewtopic implements EventSubscriberInterface
 				'forum_id',
 				'topic_data',
 			);
-
 			extract($this->phpbb_dispatcher->trigger_event('gn36.hookup.set_activedate_confirmed', compact($vars)));
 
 			//insert active date (short format) into topic title. this will use language
