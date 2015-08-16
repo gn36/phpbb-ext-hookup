@@ -27,7 +27,7 @@
 		if(document.getElementById('tabs-boundary')) document.getElementById('tabs-boundary').style.display = set_display;
 	}
 	</script>
-	<h2><b>{L_ACTIVE_DATE}:</b> {ACTIVE_DATE_DATE}</h2>
+	<h2><b>{L_ACTIVE_DATE}{L_COLON}</b> {ACTIVE_DATE_DATE}</h2>
 	<!-- IF S_IS_HOOKUP_OWNER --><a class="genmed" href="{U_UNSET_ACTIVE}">{L_UNSET_ACTIVE}</a> | <!-- ENDIF --><a class="genmed" id="show-all-dates-link" href="#" onclick="toggle_hookup_table()">{L_SHOW_ALL_DATES}</a>
 <span class="corners-bottom"><span></span></span></div>
 </div>
@@ -115,9 +115,9 @@
 			</tr>
 			
 			<tr>
-				<td>{L_SUM}:</td>
+				<td>{L_SUM}{L_COLON}</td>
 				<!-- BEGIN date -->
-					<td <!-- IF date.S_IS_ACTIVE -->class="activedate"<!-- ENDIF --> title="{date.DATE}: {date.YES_COUNT} {L_HOOKUP_YES}, {date.MAYBE_COUNT} {L_HOOKUP_MAYBE}, {date.NO_COUNT} {L_HOOKUP_NO}, {date.UNSET_COUNT} {L_HOOKUP_UNSET}">
+					<td <!-- IF date.S_IS_ACTIVE -->class="activedate"<!-- ENDIF --> title="{date.DATE}{L_COLON} {date.YES_COUNT} {L_HOOKUP_YES}, {date.MAYBE_COUNT} {L_HOOKUP_MAYBE}, {date.NO_COUNT} {L_HOOKUP_NO}, {date.UNSET_COUNT} {L_HOOKUP_UNSET}">
 					<div class="summary-box">
 						<!-- IF date.YES_PERCENT > 0 --><div class="summary yes-bg" style="width:{date.YES_PERCENT}%;">{date.YES_COUNT}</div><!-- ENDIF -->
 						<!-- IF date.MAYBE_PERCENT > 0 --><div class="summary maybe-bg" style="width:{date.MAYBE_PERCENT}%;">{date.MAYBE_COUNT}</div><!-- ENDIF -->
@@ -146,7 +146,7 @@
 	</div><!--scrollwrapper ende-->
 	<!-- IF S_IS_HOOKUP_MEMBER -->
 	<p>
-		{L_COMMENT}:<br />
+		{L_COMMENT}{L_COLON}<br />
 		<input type="text" name="comment" class="inputbox" value="{USER_COMMENT}" />
 	</p>
 	<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
@@ -183,7 +183,7 @@
 		var cal;
 		</script>
 		<p>
-			<label for="add_date" class="gen">{L_HOOKUP_ADD_DATES}:</label><br />
+			<label for="add_date" class="gen">{L_HOOKUP_ADD_DATES}{L_COLON}</label><br />
 			<textarea class="inputbox autowidth" cols="30" rows="5" name="add_date" id="add_date"></textarea>
 		</p>
 		<fieldset>
@@ -265,7 +265,7 @@
 		<form method="post" action="{S_HOOKUP_ACTION}" id="ucp">
 			<fieldset>
 				<dl>
-					<dt><label for="usernames">{L_USERNAME}:</label><br />[<a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a>]</dt>
+					<dt><label for="usernames">{L_USERNAME}{L_COLON}</label><br />[<a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a>]</dt>
 					<dd><textarea class="inputbox autowidth" id="usernames" name="usernames" cols="40" rows="5"></textarea></dd>
 					<!-- IF not S_IS_HOOKUP_MEMBER -->
 					<dd><label for="invite_self"><input type="checkbox" id="invite_self" name="invite_self" value="join"/> {L_HOOKUP_INVITE_MYSELF}</label></dd>
@@ -288,7 +288,7 @@
 		<form method="post" action="{S_HOOKUP_ACTION}">
 			<fieldset>
 				<dl>
-					<dt><label for="add_groups">{L_GROUPS}:</label></dt>
+					<dt><label for="add_groups">{L_GROUPS}{L_COLON}</label></dt>
 					<dd><select name="add_groups[]" id="add_groups" size="6" multiple="multiple">{S_GROUP_LIST}</select></dd>
 				</dl>
 				<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
@@ -309,7 +309,7 @@
 		<form method="post" action="{S_HOOKUP_ACTION}">
 			<fieldset>
 				<!--dl>
-					<dt><label for="delete_hookup_no">{L_DELETE_HOOKUP}:</label></dt>
+					<dt><label for="delete_hookup_no">{L_DELETE_HOOKUP}{L_COLON}</label></dt>
 					<dd>
 						<label for="delete_hookup_no"><input type="radio" name="delete_hookup" id="delete_hookup_no" value="no" checked="checked"/>{L_DELETE_HOOKUP_NO}</label>
 						<label for="delete_hookup_disable"><input type="radio" name="delete_hookup" id="delete_hookup_disable" value="disable"/>{L_DELETE_HOOKUP_DISABLE}</label>
@@ -319,7 +319,7 @@
 				
 				<!-- IF S_HAS_USERS -->
 				<dl>
-					<dt><label for="delete_user">{L_DELETE_USERS}:</label></dt>
+					<dt><label for="delete_user">{L_DELETE_USERS}{L_COLON}</label></dt>
 					<dd>
 						<select name="delete_user[]" id="delete_user" size="5" multiple="multiple">
 						<!-- BEGIN user -->
@@ -332,7 +332,7 @@
 				
 				<!-- IF S_HAS_DATES -->
 				<dl>
-					<dt><label for="delete_date">{L_DELETE_DATES}:</label></dt>
+					<dt><label for="delete_date">{L_DELETE_DATES}{L_COLON}</label></dt>
 					<dd>
 						<select name="delete_date[]" id="delete_date" size="5" multiple="multiple">
 						<!-- BEGIN date -->
@@ -352,13 +352,13 @@
 	<!-- ENDIF -->
 	
 	<fieldset class="fields1">
-		<p>{L_DELETE_WHOLE_HOOKUP}:</p>
+		<p>{L_DELETE_WHOLE_HOOKUP}{L_COLON}</p>
 	
 		<form method="post" action="{S_HOOKUP_ACTION}">
 			<fieldset>
 				<input type="hidden" name="delete_hookup" value="disable"/>
 				<dl>
-					<dt><label>{L_DELETE_HOOKUP_DISABLE}:</label></dt>
+					<dt><label>{L_DELETE_HOOKUP_DISABLE}{L_COLON}</label></dt>
 					<dd>
 						<input class="button1" type="submit" name="post" value="{L_RUN}" /><br />
 						{L_DELETE_HOOKUP_DISABLE_EXPLAIN}
@@ -371,7 +371,7 @@
 			<fieldset>
 				<input type="hidden" name="delete_hookup" value="delete"/>
 				<dl>
-					<dt><label>{L_DELETE_HOOKUP_DELETE}:</label></dt>
+					<dt><label>{L_DELETE_HOOKUP_DELETE}{L_COLON}</label></dt>
 					<dd>
 						<input class="button1" type="submit" name="post" value="{L_RUN}" /><br />
 						{L_DELETE_HOOKUP_DELETE_EXPLAIN}
