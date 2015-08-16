@@ -29,6 +29,7 @@ services:
             - @user
             - @auth
             - @request
+            - @dispatcher
             - @notification_manager
             - %core.root_path%
             - %core.php_ext%
