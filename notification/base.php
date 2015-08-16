@@ -71,9 +71,9 @@ class base extends \phpbb\notification\type\base
 		), $options);
 
 		// We usually wish to notify the users who are listed in a hookup:
-		if(!$this->hookup->topic_id == $notification_data['topic_id'])
+		if (!$this->hookup->topic_id == $notification_data['topic_id'])
 		{
-			if($this->hookup->topic_id)
+			if ($this->hookup->topic_id)
 			{
 				// If we are actually using the hookup for some other topic, this will ensure we don't break its use - stupid bugs
 				$this->hookup = clone $this->hookup;

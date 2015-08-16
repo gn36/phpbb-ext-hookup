@@ -382,9 +382,9 @@ class viewtopic implements EventSubscriberInterface
 			}
 
 			// New notification system
-			if(!empty($this->hookup->hookup_users))
+			if (!empty($this->hookup->hookup_users))
 			{
-				if($set_active)
+				if ($set_active)
 				{
 					$notify_data = array(
 						'user_id' 		=> $this->user->data['user_id'],
