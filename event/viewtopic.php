@@ -331,7 +331,7 @@ class viewtopic implements EventSubscriberInterface
 			 * @var int 	topic_id		ID of the topic of the hookup
 			 * @var int 	forum_id		ID of the forum the topic is in
 			 * @var array 	topic_data		Topic data as received from core.viewtopic_assign_template_vars_before
-			 * @since 1.0.0-dev
+			 * @since 1.0.0-a1
 			 */
 			$vars = array(
 				'title_prefix',
