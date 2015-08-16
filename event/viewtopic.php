@@ -103,6 +103,20 @@ class viewtopic implements EventSubscriberInterface
 
 		// Set the hookup as "viewed" for the current user:
 		$this->hookup->set_user_data($this->user->data['user_id'], 0);
+		$notifications_read = array(
+			'gn36.hookup.notification.type.invited',
+			'gn36.hookup.notification.type.user_added',
+			'gn36.hookup.notification.type.date_added',
+			'gn36.hookup.notification.type.active_date_set',
+			'gn36.hookup.notification.type.active_date_reset',
+		);
+		//$this->notification_manager->mark_notifications_read($notifications_read, $event['topic_id'], $this->user->data['user_id']);
+
+		// We actually need to delete these to be able to send them again...
+		// There must be a better solution to this, but there is no unique single value ID that can be used for this
+		// We would need a combination of two numeric values to generate a unique ID (user_id <-> topic_id)
+		// TODO
+
 		// This will submit all changes to the db, including the ones processed in $this->process_submit();
 		$this->hookup->submit();
 
@@ -329,6 +343,8 @@ class viewtopic implements EventSubscriberInterface
 				$this->db->sql_query($sql);
 			}
 
+			$this->hookup->update_available_sums();
+
 			//notify all members about active date
 			if ($set_active && $send_email && !empty($this->hookup->hookup_users))
 			{
@@ -363,6 +379,42 @@ class viewtopic implements EventSubscriberInterface
 				$this->db->sql_freeresult($result);
 
 				$messenger->save_queue();
+			}
+
+			// New notification system
+			if(!empty($this->hookup->hookup_users))
+			{
+				if($set_active)
+				{
+					$notify_data = array(
+						'user_id' 		=> $this->user->data['user_id'],
+						'date_id' 		=> $set_active,
+						'date'			=> $this->hookup->hookup_dates[$set_active]['date_time'],
+						'topic_title' 	=> $event['topic_data']['topic_title'],
+						'topic_id' 		=> $event['topic_id'],
+						'forum_id'		=> $event['forum_id'],
+						'yes'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_YES],
+						'no'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_NO],
+						'maybe'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_MAYBE],
+					);
+
+					$this->notification_manager->add_notifications('gn36.hookup.notification.type.active_date_set', $notify_data);
+					$this->notification_manager->update_notifications('gn36.hookup.notification.type.active_date_set', $notify_data);
+					$this->notification_manager->delete_notifications('gn36.hookup.notification.type.active_date_reset', $event['topic_id']);
+				}
+				else
+				{
+					$notify_data = array(
+						'user_id' 		=> $this->user->data['user_id'],
+						'topic_title' 	=> isset($new_title) ? $new_title : $event['topic_data']['topic_title'],
+						'topic_id' 		=> $event['topic_id'],
+						'forum_id'		=> $event['forum_id'],
+					);
+
+					$this->notification_manager->delete_notifications('gn36.hookup.notification.type.active_date_set', $event['topic_id']);
+					$this->notification_manager->add_notifications('gn36.hookup.notification.type.active_date_reset', $notify_data);
+					$this->notification_manager->update_notifications('gn36.hookup.notification.type.active_date_reset', $notify_data);
+				}
 			}
 
 			//post reply to this topic. Again this can only be in the "active maker"s language
@@ -551,8 +603,9 @@ class viewtopic implements EventSubscriberInterface
 					'topic_id' 		=> $event['topic_id'],
 					'forum_id'		=> $event['forum_id'],
 				);
-				print_r($notify_data);
+
 				$this->notification_manager->add_notifications('gn36.hookup.notification.type.invited', $notify_data);
+				$this->notification_manager->update_notifications('gn36.hookup.notification.type.user_added', $notify_data);
 			}
 			$messenger->save_queue();
 
@@ -592,11 +645,26 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$this->hookup->hookup_enabled = false;
 				$this->hookup->submit(false);
+				// TODO: is there a way to hide notifications?
+				$this->notification_manager->delete_notifications(array(
+					'gn36.hookup.notification.type.invited',
+					'gn36.hookup.notification.type.user_added',
+					'gn36.hookup.notification.type.date_added',
+					'gn36.hookup.notification.type.active_date_set',
+					'gn36.hookup.notification.type.active_date_reset',
+				), $event['topic_id']);
 			}
 			else if ($action == 'delete')
 			{
 				$this->hookup->delete();
 				$this->hookup->submit(false);
+				$this->notification_manager->delete_notifications(array(
+					'gn36.hookup.notification.type.invited',
+					'gn36.hookup.notification.type.user_added',
+					'gn36.hookup.notification.type.date_added',
+					'gn36.hookup.notification.type.active_date_set',
+					'gn36.hookup.notification.type.active_date_reset',
+				), $event['topic_id']);
 			}
 		}
 		else
@@ -637,6 +705,9 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$this->hookup->remove_user((int) $user_id);
 			}
+			//TODO: Remove notifications
+			// Remove notifications for removed users
+			//$this->notification_manager->delete_notifications('gn36.hookup.notification.type.invited', $notify_data);
 		}
 		else
 		{
@@ -703,6 +774,7 @@ class viewtopic implements EventSubscriberInterface
 				}
 				else
 				{
+					echo "x";
 					//check for duplicate
 					if (!$this->hookup->add_date($date_time))
 					{
@@ -714,7 +786,7 @@ class viewtopic implements EventSubscriberInterface
 					}
 				}
 			}
-		}
+		};
 
 		if ($date_added)
 		{
@@ -770,6 +842,16 @@ class viewtopic implements EventSubscriberInterface
 					$this->hookup->hookup_users[$user_id]['notify_status'] = 1;
 				}
 			}
+
+			// Notification
+			$notify_data = array(
+				'user_id' 		=> $this->user->data['user_id'],
+				'topic_title' 	=> $event['topic_data']['topic_title'],
+				'topic_id' 		=> $event['topic_id'],
+				'forum_id'		=> $event['forum_id'],
+			);
+
+			$this->notification_manager->update_notifications('gn36.hookup.notification.type.date_added', $notify_data);
 		}
 
 		return $hookup_errors;

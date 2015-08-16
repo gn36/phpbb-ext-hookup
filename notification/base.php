@@ -71,9 +71,17 @@ class base extends \phpbb\notification\type\base
 		), $options);
 
 		// We usually wish to notify the users who are listed in a hookup:
-		$this->hookup->load_hookup($notification_data['topic_id']);
+		if(!$this->hookup->topic_id == $notification_data['topic_id'])
+		{
+			if($this->hookup->topic_id)
+			{
+				// If we are actually using the hookup for some other topic, this will ensure we don't break its use - stupid bugs
+				$this->hookup = clone $this->hookup;
+			}
+			$this->hookup->load_hookup($notification_data['topic_id']);
+		}
 
-		$users = $this->hookup->hookup_users;
+		$users = array_keys($this->hookup->hookup_users);
 
 		if (empty($users))
 		{
@@ -94,7 +102,7 @@ class base extends \phpbb\notification\type\base
 	public function get_title()
 	{
 		$username = $this->user_loader->get_username($this->get_data('user_id'), 'no_profile');
-		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'), $this->get_data('date'), $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
+		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'), $this->user->format_date($this->get_data('date')), $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
 	}
 
 	function users_to_query()
@@ -179,4 +187,54 @@ class base extends \phpbb\notification\type\base
 		return parent::create_insert_array($notification_data, $pre_create_data);
 	}
 
+	/**
+	 * Update a notification
+	 *
+	 * @param array $notification_data Data specific for this type that will be updated
+	 */
+	public function update_notifications($notification_data)
+	{
+		$old_notifications = array();
+		$sql = 'SELECT n.user_id
+			FROM ' . $this->notifications_table . ' n, ' . $this->notification_types_table . ' nt
+			WHERE n.notification_type_id = ' . (int) $this->notification_type_id . '
+				AND n.item_id = ' . static::get_item_id($notification_data) . '
+				AND nt.notification_type_id = n.notification_type_id
+				AND nt.notification_type_enabled = 1';
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$old_notifications[] = $row['user_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		// Find the new users to notify
+		$notifications = $this->find_users_for_notification($notification_data);
+
+		// Find the notifications we must delete
+		$remove_notifications = array_diff($old_notifications, array_keys($notifications));
+
+		// Find the notifications we must add
+		$add_notifications = array();
+		foreach (array_diff(array_keys($notifications), $old_notifications) as $user_id)
+		{
+			$add_notifications[$user_id] = $notifications[$user_id];
+		}
+
+		// Add the necessary notifications
+		$this->notification_manager->add_notifications_for_users($this->get_type(), $notification_data, $add_notifications);
+
+		// Remove the necessary notifications
+		if (!empty($remove_notifications))
+		{
+			$sql = 'DELETE FROM ' . $this->notifications_table . '
+				WHERE notification_type_id = ' . (int) $this->notification_type_id . '
+					AND item_id = ' . static::get_item_id($notification_data) . '
+					AND ' . $this->db->sql_in_set('user_id', $remove_notifications);
+			$this->db->sql_query($sql);
+		}
+
+		// return true to continue with the update code in the notifications service (this will update the rest of the notifications)
+		return true;
+	}
 }

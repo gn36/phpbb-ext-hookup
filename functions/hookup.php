@@ -397,6 +397,9 @@ class hookup
 			$changed = array();
 		}
 
+		// This should all be one transaction:
+		$db->sql_transaction('begin');
+
 		//start with updating the topic:
 		$row = array(
 			'hookup_enabled' => $this->hookup_enabled,
@@ -415,6 +418,7 @@ class hookup
 			$result = $db->sql_query($sql);
 			if (!$db->sql_fetchrow($result))
 			{
+				$db->sql_transaction('rollback');
 				return false;
 			}
 		}
@@ -433,8 +437,10 @@ class hookup
 		//Update the dates:
 		$sql = 'DELETE FROM ' . $this->hookup_dates_table . " WHERE topic_id = $topic_id";
 		$db->sql_query($sql);
+
 		foreach ($this->hookup_dates as $date_id => $date)
 		{
+
 			//Insert (uses old ID if available):
 			if (isset($date['date_id']) && !$date['date_id'])
 			{
@@ -463,6 +469,9 @@ class hookup
 			}
 			$db->sql_multi_insert($this->hookup_available_table, $rows);
 		}
+
+		// Done, finish the transaction:
+		$db->sql_transaction('commit');
 
 		//Now update this object:
 		if ($reload_data)
