@@ -47,9 +47,6 @@ class viewtopic implements EventSubscriberInterface
 	/** @var \phpbb\notification\manager */
 	protected $notification_manager;
 
-	/** @var \messenger */
-	protected $messenger;
-
 	/** @var \phpbb\event\dispatcher_interface */
 	protected $phpbb_dispatcher;
 
@@ -70,7 +67,6 @@ class viewtopic implements EventSubscriberInterface
 		$this->user = $user;
 		$this->auth = $auth;
 		$this->request = $request;
-		$this->messenger = null;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->phpEx = $phpEx;
 		$this->hookup_path = $hookup_path;
@@ -114,7 +110,7 @@ class viewtopic implements EventSubscriberInterface
 			'gn36.hookup.notification.type.active_date_set',
 			'gn36.hookup.notification.type.active_date_reset',
 		);
-		//$this->notification_manager->mark_notifications_read($notifications_read, $event['topic_id'], $this->user->data['user_id']);
+		$this->notification_manager->mark_notifications_read($notifications_read, $event['topic_id'], $this->user->data['user_id']);
 
 		// We actually need to delete these to be able to send them again...
 		// There must be a better solution to this, but there is no unique single value ID that can be used for this
