@@ -67,7 +67,7 @@ class global_events implements EventSubscriberInterface
 
 		foreach ($notifications_data as $subscription)
 		{
-			$this->notification_manager->add_subscription($subscription['item_type'], 0, $subscription['method'], $user_id);
+			$this->notification_manager->add_subscription($subscription['item_type'], 0, $subscription['method'], $event['user_id']);
 		}
 	}
 }
