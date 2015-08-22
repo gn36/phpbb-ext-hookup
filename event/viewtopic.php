@@ -19,6 +19,9 @@ use gn36\hookup\functions\hookup;
 class viewtopic implements EventSubscriberInterface
 {
 
+	/**
+	 * @return array
+	 */
 	static public function getSubscribedEvents()
 	{
 		return array(
@@ -59,6 +62,20 @@ class viewtopic implements EventSubscriberInterface
 	/** @var string */
 	protected $hookup_path;
 
+	/**
+	 * Constructor
+	 *
+	 * @param \gn36\hookup\functions\hookup $hookup
+	 * @param \phpbb\template\template $template
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\user $user
+	 * @param \phpbb\auth\auth $auth
+	 * @param \phpbb\request\request_interface $request
+	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
+	 * @param string $phpbb_root_path
+	 * @param string $phpEx
+	 * @param string $hookup_path
+	 */
 	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, $phpbb_root_path, $phpEx, $hookup_path)
 	{
 		$this->hookup = $hookup;
@@ -74,6 +91,11 @@ class viewtopic implements EventSubscriberInterface
 		$this->phpbb_dispatcher = $phpbb_dispatcher;
 	}
 
+	/**
+	 * Process all hookup stuff in viewtopic
+	 *
+	 * @param \phpbb\event\data $event
+	 */
 	public function show_hookup_viewtopic($event)
 	{
 		// Check auth
@@ -267,6 +289,12 @@ class viewtopic implements EventSubscriberInterface
 
 	}
 
+	/**
+	 * Processes hookup set activedate requests
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_set_activedate($event, $is_owner)
 	{
 		$set_active_set = $this->request->is_set('set_active', \phpbb\request\request_interface::POST) || $this->request->is_set('set_active', \phpbb\request\request_interface::GET);
@@ -422,6 +450,13 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process hookup self invite
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 * @param bool $is_member
+	 */
 	protected function process_selfinvite($event, $is_owner, $is_member)
 	{
 		$hookup_errors = array();
@@ -454,6 +489,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process adding hookup users
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_add_user($event, $is_owner)
 	{
 		$add_users = $this->request->variable('usernames', '', true);
@@ -584,6 +625,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process enable/disable
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_disable($event, $is_owner)
 	{
 		$action = $this->request->variable('delete_hookup', 'no');
@@ -623,6 +670,12 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process user/date deletes
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_deletes($event, $is_owner)
 	{
 		$delete_user_ids = $this->request->variable('delete_user', array(0));
@@ -676,6 +729,11 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process adding dates
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member_or_owner
+	 */
 	protected function process_add_date($event, $is_member_or_owner)
 	{
 		$add_dates = $this->request->variable('add_date', '', true);
@@ -787,6 +845,11 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process status changes
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member
+	 */
 	protected function process_status($event, $is_member)
 	{
 		$availables = $this->request->variable('available', array(0 => 0));
@@ -823,7 +886,7 @@ class viewtopic implements EventSubscriberInterface
 	 * Processes all submitted data in viewtopic into the hookup object without sending changes to database
 	 * Don't forget to run $this->hookup->submit() afterwards!
 	 *
-	 * @param unknown $event
+	 * @param \phpbb\event\data $event
 	 * @return array errors
 	 */
 	protected function process_submit($event)
