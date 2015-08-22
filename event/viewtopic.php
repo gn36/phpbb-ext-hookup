@@ -373,42 +373,6 @@ class viewtopic implements EventSubscriberInterface
 			$this->hookup->update_available_sums();
 
 			//notify all members about active date
-			if ($set_active && $send_email && !empty($this->hookup->hookup_users))
-			{
-				if ($this->messenger == null)
-				{
-					include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-					$this->messenger = new \messenger();
-				}
-				$messenger = $this->messenger;
-				$title_without_date = preg_replace('#^(\\[.+?\\] )#', '', $event['topic_data']['topic_title']);
-
-				$sql = 'SELECT u.user_id, u.username, u.user_lang, u.user_dateformat, u.user_email, u.user_jabber, u.user_notify_type
-					FROM ' . USERS_TABLE . " u
-					WHERE " . $this->db->sql_in_set('user_id', array_keys($this->hookup->hookup_users));
-
-				$result = $this->db->sql_query($sql);
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					$messenger->template('@gn36_hookup/hookup_active_date', $row['user_lang']);
-					$messenger->to($row['user_email'], $row['username']);
-					$messenger->im($row['user_jabber'], $row['username']);
-					$messenger->assign_vars(array(
-						'USERNAME' 		=> $row['username'],
-						'TOPIC_TITLE'	=> $title_without_date,
-						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
-						//TODO use recipients language
-						'ACTIVE_DATE'	=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $row['user_dateformat']),
-						'ACTIVE_DATE_SHORT'=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
-					));
-					$messenger->send($row['user_notify_type']);
-				}
-				$this->db->sql_freeresult($result);
-
-				$messenger->save_queue();
-			}
-
-			// New notification system
 			if (!empty($this->hookup->hookup_users))
 			{
 				if ($set_active)
@@ -600,28 +564,8 @@ class viewtopic implements EventSubscriberInterface
 
 			$this->hookup->submit(false);
 
-			//notify new users about invitation
-			if ($this->messenger == null)
-			{
-				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-				$this->messenger = new \messenger();
-			}
-			$messenger = $this->messenger;
-			$forum_id = $event['forum_id'];
-			$topic_id = $event['topic_id'];
 			foreach ($userids_to_add as $user_id)
 			{
-				$userdata = $new_users[$user_id];
-				$messenger->template('@gn36_hookup/hookup_added', $userdata['user_lang']);
-				$messenger->to($userdata['user_email'], $userdata['username']);
-				$messenger->im($userdata['user_jabber'], $userdata['username']);
-				$messenger->assign_vars(array(
-					'USERNAME'		=> $userdata['username'],
-					'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
-					'U_TOPIC'	=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
-				));
-				$messenger->send($userdata['user_notify_type']);
-
 				// Notification
 				$notify_data = array(
 					'user_id' 		=> $this->user->data['user_id'],
@@ -634,10 +578,6 @@ class viewtopic implements EventSubscriberInterface
 				$this->notification_manager->add_notifications('gn36.hookup.notification.type.invited', $notify_data);
 				$this->notification_manager->update_notifications('gn36.hookup.notification.type.user_added', $notify_data);
 			}
-			$messenger->save_queue();
-
-			//add userids to local array
-			$userids = array_merge(array_keys($this->hookup->hookup_users), $userids_to_add);
 		}
 
 		//generate error messages for users that are already members
@@ -787,7 +727,7 @@ class viewtopic implements EventSubscriberInterface
 		foreach ($add_dates as $date)
 		{
 			//strtotime uses the local (server) timezone, so parse manually and use gmmktime to ignore any timezone
-			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date, $m))
+			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date))
 			{
 				$hookup_errors[] = "$date: {$this->user->lang['INVALID_DATE']}";
 			}
@@ -801,7 +741,6 @@ class viewtopic implements EventSubscriberInterface
 				}
 				else
 				{
-					echo "x";
 					//check for duplicate
 					if (!$this->hookup->add_date($date_time))
 					{
@@ -817,59 +756,6 @@ class viewtopic implements EventSubscriberInterface
 
 		if ($date_added)
 		{
-			//notify members about new dates
-			if ($this->messenger == null)
-			{
-				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-				$this->messenger = new \messenger();
-			}
-			$messenger = $this->messenger;
-			$notify_users = array();
-			$notified_userids = array();
-
-			// Fetch users to be notified:
-			foreach ($this->hookup->hookup_users as $user_id => $user)
-			{
-				if ($user['notify_status'] == 0)
-				{
-					$notify_users[$user_id] = $user;
-				}
-			}
-
-			if (!empty($notify_users))
-			{
-				$sql = 'SELECT u.user_id, u.username, u.user_lang, u.user_email, u.user_jabber, u.user_notify_type
-					FROM ' . USERS_TABLE . ' u
-					WHERE ' . $this->db->sql_in_set('u.user_id', array_keys($notify_users));
-
-				$result = $this->db->sql_query($sql);
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					// TODO: Messenger ersetzen durch notification?
-					// https://www.phpbb.com/community/viewtopic.php?f=461&t=2259916#p13718356
-					$messenger->template('@gn36_hookup/hookup_dates_added', $row['user_lang']);
-					$messenger->to($row['user_email'], $row['username']);
-					$messenger->im($row['user_jabber'], $row['username']);
-					$messenger->assign_vars(array(
-						'USERNAME' 		=> $row['username'],
-						'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
-						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f={$event['forum_id']}&t={$event['topic_id']}"
-								));
-					$messenger->send($row['user_notify_type']);
-
-					$notified_userids[] = $row['user_id'];
-				}
-				$this->db->sql_freeresult($result);
-
-				$messenger->save_queue();
-
-				//set notify status
-				foreach ($notified_userids as $user_id)
-				{
-					$this->hookup->hookup_users[$user_id]['notify_status'] = 1;
-				}
-			}
-
 			// Notification
 			$notify_data = array(
 				'user_id' 		=> $this->user->data['user_id'],
