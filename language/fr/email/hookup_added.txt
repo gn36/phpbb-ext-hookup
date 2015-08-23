@@ -1,11 +1,10 @@
-Subject: Invitation à participer à une planification de réunion
+Subject: Invitation à participer à un événement
 
 Bonjour {USERNAME},
 
-Vous avez été invité à participer à la planification de réunion du sujet "{TOPIC_TITLE}" sur "{SITENAME}". Visitez-le et complétez-le lorsque vous aurez le temps.
+Vous avez été invité à participer l’événement planifié sur le sujet « {TOPIC_TITLE} » sur « {SITENAME} ». Consultez-le et complétez-le dès que vous le pourrez.
 
-Vous pouvez voir le sujet et le planificateur de réunion ici:
-
+Pour consulter le sujet et l’événement associé, cliquez sur le lien suivant :
 {U_TOPIC}
 
 {EMAIL_SIG}
