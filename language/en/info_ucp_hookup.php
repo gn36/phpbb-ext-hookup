@@ -31,4 +31,5 @@ $lang = array_merge($lang, array(
 	'HOOKUP_NOTIFY_DATE_ADDED_OPTION'			=> 'New date options have been added to a meeting planner you participate in',
 	'HOOKUP_NOTIFY_USER_ADDED_OPTION'			=> 'A new user has been added to a meeting planner you participate in',
 	'HOOKUP_NOTIFY_INVITED_OPTION'				=> 'You have been invited to participate in a meeting planner',
+	'NOTIFICATION_GROUP_HOOKUP'					=> 'Hookup Notifications',
 ));
