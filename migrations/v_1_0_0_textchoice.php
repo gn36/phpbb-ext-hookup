@@ -28,7 +28,7 @@ class v_1_0_0_textchoice extends \phpbb\db\migration\migration
 		);
 	}
 
-public function revert_schema()
+	public function revert_schema()
 	{
 		return array(
 			'drop_columns' => array(
