@@ -68,7 +68,8 @@ class weekly_reset extends \phpbb\cron\task\base
 		$text_list = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			if($row['text'] == null) {
+			if ($row['text'] == null)
+			{
 				$date_list[$row['topic_id']][] = $row['date_time'];
 			}
 			else

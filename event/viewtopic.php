@@ -165,10 +165,10 @@ class viewtopic implements EventSubscriberInterface
 			$hookup_errors[] = $this->user->lang['HOOKUP_NO_USERS'];
 		}
 		$active_date_date = '-';
-		if(isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]))
+		if (isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]))
 		{
 			$active_date_date = $this->user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']);
-			if($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'] != null)
+			if ($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'] != null)
 			{
 				$active_date_date = $this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'];
 			}
@@ -234,7 +234,7 @@ class viewtopic implements EventSubscriberInterface
 			}
 			$full_date = $this->user->format_date($hookup_date['date_time']);
 			$short_date = $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']);
-			if($hookup_date['text'] != null)
+			if ($hookup_date['text'] != null)
 			{
 				$short_date = $full_date = $hookup_date['text'];
 			}
@@ -330,10 +330,10 @@ class viewtopic implements EventSubscriberInterface
 		}
 
 		$active_date_formatted =  '-';
-		if($set_active != 0)
+		if ($set_active != 0)
 		{
 			$active_date_formatted = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time']);
-			if($this->hookup->hookup_dates[$set_active]['text'] != null)
+			if ($this->hookup->hookup_dates[$set_active]['text'] != null)
 			{
 				$active_date_formatted = $this->hookup->hookup_dates[$set_active]['text'];
 			}
@@ -350,9 +350,9 @@ class viewtopic implements EventSubscriberInterface
 
 			$topic_data = $event['topic_data'];
 			$new_string = '';
-			if($set_active != 0)
+			if ($set_active != 0)
 			{
-				if($this->hookup->hookup_dates[$set_active]['text'] != null)
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
 				{
 					$new_string = '[' . $this->hookup->hookup_dates[$set_active]['text'] . '] ';
 				}
@@ -437,10 +437,9 @@ class viewtopic implements EventSubscriberInterface
 					$messenger->im($row['user_jabber'], $row['username']);
 					$active_date = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $row['user_dateformat']);
 					$active_date_short = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']);
-					if($this->hookup->hookup_dates[$set_active]['text'] != null)
+					if ($this->hookup->hookup_dates[$set_active]['text'] != null)
 					{
 						$active_date_short = $active_date = $this->hookup->hookup_dates[$set_active]['text'];
-						
 					}
 					$messenger->assign_vars(array(
 						'USERNAME' 		=> $row['username'],
@@ -462,7 +461,7 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$message = $this->user->lang['SET_ACTIVE_POST_TEMPLATE'];
 				$active_date = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']);
-				if($this->hookup->hookup_dates[$set_active]['text'] != null)
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
 				{
 					$active_date = $this->hookup->hookup_dates[$set_active]['text'];
 				}
@@ -817,7 +816,6 @@ class viewtopic implements EventSubscriberInterface
 				{
 					$text = trim($text[1]);
 					$date_time = '0';
-					
 				}
 				else
 				{
@@ -825,12 +823,12 @@ class viewtopic implements EventSubscriberInterface
 					$date_time = $this->user->get_timestamp_from_format('Y-m-d H:i', $date);
 
 					if ($date_time < time())
-					{	
+					{
 						$hookup_continue = false;
 						$hookup_errors[] = "$date: {$this->user->lang['CANNOT_ADD_PAST']}";
 					}
 				}
-				if($hookup_continue)
+				if ($hookup_continue)
 				{
 					//check for duplicate
 					if (!$this->hookup->add_date($date_time, $text))
