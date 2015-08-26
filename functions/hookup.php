@@ -185,7 +185,7 @@ class hookup
 	 * @param int $date
 	 * @param string $text
 	 */
-	public function add_date($date, $text)
+	public function add_date($date, $text = null)
 	{
 		foreach ($this->hookup_dates as $key => $entry)
 		{
