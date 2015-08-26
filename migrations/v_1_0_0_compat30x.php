@@ -45,6 +45,7 @@ class v_1_0_0_compat30x extends \phpbb\db\migration\migration
 						'date_id' 		=> array('UINT:11', null, 'auto_increment'),
 						'topic_id'		=> array('UINT:11', 0),
 						'date_time'		=> array('UINT:11', 0),
+						'text'			=> array('VCHAR:255', null),
 					),
 					'PRIMARY_KEY' => 'date_id',
 					'KEYS' => array(
