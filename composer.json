@@ -12,6 +12,11 @@
 			"email": "gn#36@phpbb.de",
 			"homepage": "https://www.phpbb.de/",
 			"role": "Lead Developer"
+		},
+		{
+			"name": "Kilian Röhner",
+			"email": "kilian@mirdan.de",
+			"role": "Developer"
 		}
 	],
 	"require": {
