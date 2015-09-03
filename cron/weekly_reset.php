@@ -61,13 +61,21 @@ class weekly_reset extends \phpbb\cron\task\base
 	{
 		$now = time();
 
-		$sql = 'SELECT t.topic_id, d.date_time FROM ' . TOPICS_TABLE . ' t, ' . $this->dates_table . ' d  WHERE t.topic_id = d.topic_id AND t.hookup_autoreset = 1 AND t.hookup_enabled = 1';
+		$sql = 'SELECT t.topic_id, d.date_time, d.text FROM ' . TOPICS_TABLE . ' t, ' . $this->dates_table . ' d  WHERE t.topic_id = d.topic_id AND t.hookup_autoreset = 1 AND t.hookup_enabled = 1';
 		$result = $this->db->sql_query($sql);
 
 		$date_list = array();
+		$text_list = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$date_list[$row['topic_id']][] = $row['date_time'];
+			if ($row['text'] == null)
+			{
+				$date_list[$row['topic_id']][] = $row['date_time'];
+			}
+			else
+			{
+				$text_list[$row['topic_id']][] = $row['text'];
+			}
 		}
 
 		$hookup = $this->hookup;
@@ -109,7 +117,10 @@ class weekly_reset extends \phpbb\cron\task\base
 					} while ($new_time < $now);
 
 					$date_array[] = $new_time + $dst_add;
-					$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
+					$hookup->hookup_dates[] = array(
+						'date_time'	=> $new_time + $dst_add,
+						'text'		=> null,
+						);
 				}
 			}
 
@@ -146,6 +157,13 @@ class weekly_reset extends \phpbb\cron\task\base
 
 				$date_array[] = $new_time + $dst_add;
 				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
+			}
+			for ($i = count($text_array[$topic_id]); $i < 3; $i++)
+			{
+				$hookup->hookup_dates[] = array(
+					'date_time'	=> '0',
+					'text'		=> $text_array[$topic_id][$i],
+					);
 			}
 			$hookup->submit();
 		}
