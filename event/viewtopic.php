@@ -19,6 +19,9 @@ use gn36\hookup\functions\hookup;
 class viewtopic implements EventSubscriberInterface
 {
 
+	/**
+	 * @return array
+	 */
 	static public function getSubscribedEvents()
 	{
 		return array(
@@ -59,8 +62,20 @@ class viewtopic implements EventSubscriberInterface
 	/** @var string */
 	protected $hookup_path;
 
-	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
-	{
+	/**
+	 * Constructor
+	 *
+	 * @param \gn36\hookup\functions\hookup $hookup
+	 * @param \phpbb\template\template $template
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\user $user
+	 * @param \phpbb\auth\auth $auth
+	 * @param \phpbb\request\request_interface $request
+	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
+	 * @param string $phpbb_root_path
+	 * @param string $phpEx
+	 * @param string $hookup_path
+	 */	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)	{
 		$this->hookup = $hookup;
 		$this->template = $template;
 		$this->db = $db;
@@ -74,6 +89,11 @@ class viewtopic implements EventSubscriberInterface
 		$this->notification_manager = $notification_manager;
 	}
 
+	/**
+	 * Process all hookup stuff in viewtopic
+	 *
+	 * @param \phpbb\event\data $event
+	 */
 	public function show_hookup_viewtopic($event)
 	{
 		// Check auth
@@ -156,7 +176,15 @@ class viewtopic implements EventSubscriberInterface
 		{
 			$hookup_errors[] = $this->user->lang['HOOKUP_NO_USERS'];
 		}
-
+		$active_date_date = '-';
+		if (isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]))
+		{
+			$active_date_date = $this->user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']);
+			if ($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'] != null)
+			{
+				$active_date_date = $this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'];
+			}
+		}
 		$this->template->assign_vars(array(
 			'S_HAS_HOOKUP'		=> true,
 			'S_IS_HOOKUP_OWNER' => $is_owner,
@@ -166,7 +194,7 @@ class viewtopic implements EventSubscriberInterface
 			'S_IS_SELF_INVITE'	=> $this->hookup->hookup_self_invite,
 			'S_HOOKUP_ACTION'	=> $viewtopic_url,
 			'S_ACTIVE_DATE'		=> $this->hookup->hookup_active_date,
-			'ACTIVE_DATE_DATE'	=> isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]) ? $this->user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']) : '-',
+			'ACTIVE_DATE_DATE'	=> $active_date_date,
 			'S_NUM_DATES'		=> count($this->hookup->hookup_dates),
 			'S_NUM_DATES_PLUS_1'=> count($this->hookup->hookup_dates) + 1,
 			'U_UNSET_ACTIVE'	=> $viewtopic_url . '&amp;set_active=0',
@@ -216,11 +244,17 @@ class viewtopic implements EventSubscriberInterface
 					$no_percent--;
 				}
 			}
+			$full_date = $this->user->format_date($hookup_date['date_time']);
+			$short_date = $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']);
+			if ($hookup_date['text'] != null)
+			{
+				$short_date = $full_date = $hookup_date['text'];
+			}
 
 			$this->template->assign_block_vars('date', array(
 				'ID'			=> $hookup_date['date_id'],
-				'DATE'			=> $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
-				'FULL_DATE'		=> $this->user->format_date($hookup_date['date_time']),
+				'DATE'			=> $short_date,
+				'FULL_DATE'		=> $full_date,
 				'YES_COUNT'		=> $yes_count,
 				'YES_PERCENT'	=> $yes_percent,
 				'MAYBE_COUNT'	=> $maybe_count,
@@ -281,6 +315,12 @@ class viewtopic implements EventSubscriberInterface
 
 	}
 
+	/**
+	 * Processes hookup set activedate requests
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_set_activedate($event, $is_owner)
 	{
 		$set_active_set = $this->request->is_set('set_active', \phpbb\request\request_interface::POST) || $this->request->is_set('set_active', \phpbb\request\request_interface::GET);
@@ -301,7 +341,15 @@ class viewtopic implements EventSubscriberInterface
 			trigger_error('NO_DATE');
 		}
 
-		$active_date_formatted = $set_active != 0 ? $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time']) : '-';
+		$active_date_formatted =  '-';
+		if ($set_active != 0)
+		{
+			$active_date_formatted = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time']);
+			if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+			{
+				$active_date_formatted = $this->hookup->hookup_dates[$set_active]['text'];
+			}
+		}
 		$topic_id = $event['topic_id'];
 		$forum_id = $event['forum_id'];
 		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id");
@@ -313,7 +361,19 @@ class viewtopic implements EventSubscriberInterface
 			$post_reply = $this->request->variable('post_reply', false);
 
 			$topic_data = $event['topic_data'];
-			$new_title = preg_replace('#^(\\[.+?\\] )?#', ($set_active != 0 ? '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ' : ''), $event['topic_data']['topic_title']);
+			$new_string = '';
+			if ($set_active != 0)
+			{
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+				{
+					$new_string = '[' . $this->hookup->hookup_dates[$set_active]['text'] . '] ';
+				}
+				else
+				{
+					$new_string = '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ';
+				}
+			}
+			$new_title = preg_replace('#^(\\[.+?\\] )?#', $new_string, $event['topic_data']['topic_title']);
 
 			/**
 			 * Perform additional actions when active date is set
@@ -408,7 +468,12 @@ class viewtopic implements EventSubscriberInterface
 			if ($set_active && $post_reply)
 			{
 				$message = $this->user->lang['SET_ACTIVE_POST_TEMPLATE'];
-				$message = str_replace('{ACTIVE_DATE}', $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']), $message);
+				$active_date = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']);
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+				{
+					$active_date = $this->hookup->hookup_dates[$set_active]['text'];
+				}
+				$message = str_replace('{ACTIVE_DATE}', $active_date, $message);
 
 				//TODO: functions_post_oo!
 				//$post = new post($topic_id);
@@ -438,6 +503,13 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process hookup self invite
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 * @param bool $is_member
+	 */
 	protected function process_selfinvite($event, $is_owner, $is_member)
 	{
 		$hookup_errors = array();
@@ -470,6 +542,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process adding hookup users
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_add_user($event, $is_owner)
 	{
 		$add_users = $this->request->variable('usernames', '', true);
@@ -588,6 +666,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process enable/disable
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_disable($event, $is_owner)
 	{
 		$action = $this->request->variable('delete_hookup', 'no');
@@ -642,6 +726,12 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process user/date deletes
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_deletes($event, $is_owner)
 	{
 		$delete_user_ids = $this->request->variable('delete_user', array(0));
@@ -698,6 +788,11 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process adding dates
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member_or_owner
+	 */
 	protected function process_add_date($event, $is_member_or_owner)
 	{
 		$add_dates = $this->request->variable('add_date', '', true);
@@ -722,25 +817,37 @@ class viewtopic implements EventSubscriberInterface
 
 		foreach ($add_dates as $date)
 		{
+			$text_match = preg_match('#\#(.*)#', $date, $text);
 			//strtotime uses the local (server) timezone, so parse manually and use gmmktime to ignore any timezone
-			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date))
+			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date) && !$text_match)
 			{
 				$hookup_errors[] = "$date: {$this->user->lang['INVALID_DATE']}";
 			}
 			else
 			{
+				$hookup_continue = true;
+				if ($text_match)
+				{
+					$text = trim($text[1]);
+					$date_time = '0';
+				}
+				else
+				{
+					$text = null;
 				$date_time = $this->user->get_timestamp_from_format('Y-m-d H:i', $date);
 
 				if ($date_time < time())
 				{
+						$hookup_continue = false;
 					$hookup_errors[] = "$date: {$this->user->lang['CANNOT_ADD_PAST']}";
 				}
-				else
+				}
+				if ($hookup_continue)
 				{
 					//check for duplicate
-					if (!$this->hookup->add_date($date_time))
+					if (!$this->hookup->add_date($date_time, $text))
 					{
-						$hookup_errors[] = sprintf($this->user->lang['DATE_ALREADY_ADDED'], $this->user->format_date($date_time));
+						$hookup_errors[] = sprintf($this->user->lang['DATE_ALREADY_ADDED'], $this->user->format_date($date_time, $text));
 					}
 					else
 					{
@@ -766,6 +873,11 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process status changes
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member
+	 */
 	protected function process_status($event, $is_member)
 	{
 		$availables = $this->request->variable('available', array(0 => 0));
@@ -802,7 +914,7 @@ class viewtopic implements EventSubscriberInterface
 	 * Processes all submitted data in viewtopic into the hookup object without sending changes to database
 	 * Don't forget to run $this->hookup->submit() afterwards!
 	 *
-	 * @param unknown $event
+	 * @param \phpbb\event\data $event
 	 * @return array errors
 	 */
 	protected function process_submit($event)
