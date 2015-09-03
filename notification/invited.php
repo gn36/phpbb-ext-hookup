@@ -75,6 +75,7 @@ class invited extends base
 	{
 		$vars = parent::get_email_template_variables();
 		$vars['USERNAME'] = $this->get_data('invited_user');
+		return $vars;
 	}
 
 	public function create_insert_array($notification_data, $pre_create_data = array())
