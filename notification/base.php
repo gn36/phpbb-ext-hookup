@@ -102,7 +102,13 @@ class base extends \phpbb\notification\type\base
 	public function get_title()
 	{
 		$username = $this->user_loader->get_username($this->get_data('user_id'), 'no_profile');
-		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'), $this->user->format_date($this->get_data('date')), $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
+		$description = $this->get_data('text');
+		if (empty($description))
+		{
+			$description = $this->user->format_date($this->get_data('date'));
+		}
+
+		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'), $description , $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
 	}
 
 	function users_to_query()
@@ -158,6 +164,11 @@ class base extends \phpbb\notification\type\base
 		else
 		{
 			$this->set_data('date', 0);
+		}
+
+		if (isset($notification_data['text']))
+		{
+			$this->set_data('text', $notification_data['text']);
 		}
 
 		if (isset($notification_data['yes']))

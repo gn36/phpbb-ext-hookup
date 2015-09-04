@@ -437,6 +437,7 @@ class viewtopic implements EventSubscriberInterface
 						'user_id' 		=> $this->user->data['user_id'],
 						'date_id' 		=> $set_active,
 						'date'			=> $this->hookup->hookup_dates[$set_active]['date_time'],
+						'text'			=> $this->hookup->hookup_dates[$set_active]['text'],
 						'topic_title' 	=> $event['topic_data']['topic_title'],
 						'topic_id' 		=> $event['topic_id'],
 						'forum_id'		=> $event['forum_id'],
