@@ -72,10 +72,13 @@ class viewtopic implements EventSubscriberInterface
 	 * @param \phpbb\auth\auth $auth
 	 * @param \phpbb\request\request_interface $request
 	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
+	 * @param \phpbb\notification\manager $notification_manager
 	 * @param string $phpbb_root_path
 	 * @param string $phpEx
 	 * @param string $hookup_path
-	 */	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)	{
+	 */
+	 function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
+	 {
 		$this->hookup = $hookup;
 		$this->template = $template;
 		$this->db = $db;
