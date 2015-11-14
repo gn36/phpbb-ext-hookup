@@ -195,6 +195,7 @@ class viewtopic implements EventSubscriberInterface
 			'S_HAS_DATES'		=> empty($this->hookup->hookup_dates) ? false : true,
 			'S_HAS_USERS'		=> empty($this->hookup->hookup_users) ? false : true,
 			'S_IS_SELF_INVITE'	=> $this->hookup->hookup_self_invite,
+			'S_AUTORESET'		=> $this->hookup->hookup_autoreset,
 			'S_HOOKUP_ACTION'	=> $viewtopic_url,
 			'S_ACTIVE_DATE'		=> $this->hookup->hookup_active_date,
 			'ACTIVE_DATE_DATE'	=> $active_date_date,

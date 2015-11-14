@@ -112,5 +112,6 @@ $lang = array_merge($lang, array(
 	'COMMENT'				=> 'Comment',
 	'HOOKUP_AUTORESET'		=> 'Weekly reset',
 	'HOOKUP_AUTORESET_DESC'	=> 'With this setup you can set the meeting planner to automatically reset once a week.<br /> By doing this, the first entry of the planner is repeated every week and old dates are automatically deleted.',
+	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'This meeting planner will add new dates automatically each week. The oldest dates are deleted.',
 	'RUN'					=> 'Execute',
 ));
