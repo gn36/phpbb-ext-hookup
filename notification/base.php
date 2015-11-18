@@ -141,7 +141,7 @@ class base extends \phpbb\notification\type\base
 			'USERNAME' => $this->user_loader->get_username($this->get_data('user_id'), 'username'),
 			'TOPIC_TITLE' => $this->get_data('topic_title'),
 			'SITENAME' => $this->config['sitename'],
-			'U_TOPIC' => generate_board_url() . "{$this->phpbb_root_path}viewtopic.{$this->php_ext}?t={$this->get_data('topic_id')}",
+			'U_TOPIC' => generate_board_url() . "/viewtopic.{$this->php_ext}?t={$this->get_data('topic_id')}",
 		);
 	}
 
