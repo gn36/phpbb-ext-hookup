@@ -105,6 +105,6 @@ $lang = array_merge($lang, array(
 	'COMMENT'				=> 'Kommentar',
 	'HOOKUP_AUTORESET'		=> 'Wöchentliches Rücksetzen',
 	'HOOKUP_AUTORESET_DESC'	=> 'Mit dieser Einstellung kannst du den Terminplaner so einstellen, dass er sich automatisch wöchentlich aktualisiert.<br /> Durch diese Einstellung wird der erste eingetragene Termin wöchentlich wiederholt.',
-	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Dieser Terminplaner fügt jede Woche automatisch neue Termine hinzu. Die ältesten Termine werden dabei gelöscht.'
+	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Dieser Terminplaner fügt jede Woche automatisch neue Termine hinzu. Die ältesten Termine werden dabei gelöscht.',
 	'RUN'					=> 'Ausführen',
 ));
