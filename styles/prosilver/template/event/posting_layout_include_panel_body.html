@@ -1,0 +1,33 @@
+<!-- IF S_HOOKUP_ALLOWED -->
+	<div id="hookup-panel" class="panel bg3">
+		<div class="inner">
+			<dl>
+				<dt><label for="hookup_enabled">{L_ADD_HOOKUP}{L_COLON}</label></dt>
+				<dd>
+					<!-- IF S_TOPIC_HAS_HOOKUP -->
+					<input type="hidden" name="hookup_enabled" value="true"/>
+					{L_HOOKUP_DELETE_VIEWTOPIC_EXPLAIN}
+					<!-- ELSEIF S_TOPIC_HAS_INACTIVE_HOOKUP -->
+					<label for="hookup_enabled"><input type="checkbox" id="hookup_enabled" name="hookup_enabled"{S_HOOKUP_CHECKED} />{L_ADD_HOOKUP_REACTIVATE}</label><br/>
+					{L_ADD_HOOKUP_REACTIVATE_EXPLAIN}
+					<!-- ELSE -->
+					<label for="hookup_enabled"><input type="checkbox" id="hookup_enabled" name="hookup_enabled"{S_HOOKUP_CHECKED} />{L_ADD_HOOKUP_DESC}</label>
+					<!-- ENDIF -->
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="hookup_self_invite">{L_HOOKUP_SELF_INVITE}{L_COLON}</label></dt>
+				<dd>
+					<label for="hookup_self_invite"><input type="checkbox" id="hookup_self_invite" name="hookup_self_invite"{S_HOOKUP_SELF_INVITE_CHECKED} />{L_HOOKUP_SELF_INVITE_DESC}</label><br/>
+					{L_HOOKUP_SELF_INVITE_EXPLAIN}
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="hookup_autoreset">{L_HOOKUP_AUTORESET}{L_COLON}</label></dt>
+				<dd>
+					<label for="hookup_autoreset"><input type="checkbox" id="hookup_autoreset" name="hookup_autoreset"{S_HOOKUP_AUTORESET_CHECKED} />{L_HOOKUP_AUTORESET_DESC}</label>
+				</dd>
+			</dl>
+		</div>
+	</div>
+<!-- ENDIF -->

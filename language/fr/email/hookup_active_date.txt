@@ -1,0 +1,13 @@
+Subject: Date d’événement fixée - « {TOPIC_TITLE} »
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification car vous participez à un événement planifié dans le sujet « {TOPIC_TITLE} » à « {SITENAME} ».
+
+La date de l’événement a été fixé au :
+{ACTIVE_DATE}
+
+Pour consulter le sujet et l’événement associé, cliquez sur le lien suivant :
+{U_TOPIC}
+
+{EMAIL_SIG}

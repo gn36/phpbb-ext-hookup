@@ -2,7 +2,7 @@
 /**
 *
 * @package hookup
-* @copyright (c) 2008 Martin Beckmann (gn#36) http://www.goose-necks.de
+* @copyright (c) 2008 Martin Beckmann (gn#36) http://phpbb.gn36.de
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -90,7 +90,7 @@ class hookup
 		}
 
 		//load dates for this hookup
-		$sql = 'SELECT date_id, date_time
+		$sql = 'SELECT date_id, date_time, text
 				FROM ' . $this->hookup_dates_table . '
 				WHERE topic_id=' . $topic_id . '
 				ORDER BY date_time ASC';
@@ -183,19 +183,23 @@ class hookup
 	/**
 	 * Add a new date to the hookup
 	 * @param int $date
+	 * @param string $text
 	 */
-	public function add_date($date)
+	public function add_date($date, $text = null)
 	{
 		foreach ($this->hookup_dates as $key => $entry)
 		{
-			if ($entry['date_time'] == $date)
+			if (($text == null && $entry['date_time'] == $date) || ($date == '0' && $entry['text'] == $text))
 			{
 				//this entry allready exists
 				return false;
 			}
 		}
 		//Doesn't exist, so add:
-		$this->hookup_dates[] = array('date_time' => $date);
+		$this->hookup_dates[] = array(
+			'date_time'	=> $date,
+			'text'		=> $text,
+		);
 
 		return true;
 	}
@@ -214,7 +218,7 @@ class hookup
 
 		foreach ($this->hookup_dates as $key => $entry)
 		{
-			if ($entry['date_time'] == $date)
+			if ($entry['date_time'] == $date || $entry['text'] == $date)
 			{
 				//This is the entry we are looking for:
 				return $key;
@@ -225,7 +229,7 @@ class hookup
 	}
 
 	/**
-	 * Updates the availaibility sums based upon the data in the arrays.
+	 * Updates the availability sums based upon the data in the arrays.
 	 *
 	 * This is done automatically when data is loaded from the db.
 	 */
@@ -316,7 +320,7 @@ class hookup
 		{
 			foreach ($this->hookup_dates as $key => $entry)
 			{
-				if ($entry['date_time'] == $date)
+				if ($entry['date_time'] == $date || $entry['text'] == $date)
 				{
 					//This entry needs to be removed
 					$this->_remove_date_from_userlist($entry['date_id']);
@@ -397,6 +401,9 @@ class hookup
 			$changed = array();
 		}
 
+		// This should all be one transaction:
+		$db->sql_transaction('begin');
+
 		//start with updating the topic:
 		$row = array(
 			'hookup_enabled' => $this->hookup_enabled,
@@ -415,6 +422,7 @@ class hookup
 			$result = $db->sql_query($sql);
 			if (!$db->sql_fetchrow($result))
 			{
+				$db->sql_transaction('rollback');
 				return false;
 			}
 		}
@@ -433,8 +441,10 @@ class hookup
 		//Update the dates:
 		$sql = 'DELETE FROM ' . $this->hookup_dates_table . " WHERE topic_id = $topic_id";
 		$db->sql_query($sql);
+
 		foreach ($this->hookup_dates as $date_id => $date)
 		{
+
 			//Insert (uses old ID if available):
 			if (isset($date['date_id']) && !$date['date_id'])
 			{
@@ -463,6 +473,9 @@ class hookup
 			}
 			$db->sql_multi_insert($this->hookup_available_table, $rows);
 		}
+
+		// Done, finish the transaction:
+		$db->sql_transaction('commit');
 
 		//Now update this object:
 		if ($reload_data)

@@ -19,6 +19,9 @@ use gn36\hookup\functions\hookup;
 class viewtopic implements EventSubscriberInterface
 {
 
+	/**
+	 * @return array
+	 */
 	static public function getSubscribedEvents()
 	{
 		return array(
@@ -44,8 +47,11 @@ class viewtopic implements EventSubscriberInterface
 	/** @var \phpbb\request\request_interface */
 	protected $request;
 
-	/** @var \messenger */
-	protected $messenger;
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
+
+	/** @var \phpbb\event\dispatcher_interface */
+	protected $phpbb_dispatcher;
 
 	/** @var string */
 	protected $phpbb_root_path;
@@ -56,20 +62,41 @@ class viewtopic implements EventSubscriberInterface
 	/** @var string */
 	protected $hookup_path;
 
-	function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, $phpbb_root_path, $phpEx, $hookup_path)
-	{
+	/**
+	 * Constructor
+	 *
+	 * @param \gn36\hookup\functions\hookup $hookup
+	 * @param \phpbb\template\template $template
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\user $user
+	 * @param \phpbb\auth\auth $auth
+	 * @param \phpbb\request\request_interface $request
+	 * @param \phpbb\event\dispatcher_interface $phpbb_dispatcher
+	 * @param \phpbb\notification\manager $notification_manager
+	 * @param string $phpbb_root_path
+	 * @param string $phpEx
+	 * @param string $hookup_path
+	 */
+	 function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
+	 {
 		$this->hookup = $hookup;
 		$this->template = $template;
 		$this->db = $db;
 		$this->user = $user;
 		$this->auth = $auth;
 		$this->request = $request;
-		$this->messenger = null;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->phpEx = $phpEx;
 		$this->hookup_path = $hookup_path;
+		$this->phpbb_dispatcher = $phpbb_dispatcher;
+		$this->notification_manager = $notification_manager;
 	}
 
+	/**
+	 * Process all hookup stuff in viewtopic
+	 *
+	 * @param \phpbb\event\data $event
+	 */
 	public function show_hookup_viewtopic($event)
 	{
 		// Check auth
@@ -99,6 +126,20 @@ class viewtopic implements EventSubscriberInterface
 
 		// Set the hookup as "viewed" for the current user:
 		$this->hookup->set_user_data($this->user->data['user_id'], 0);
+		$notifications_read = array(
+			'gn36.hookup.notification.type.invited',
+			'gn36.hookup.notification.type.user_added',
+			'gn36.hookup.notification.type.date_added',
+			'gn36.hookup.notification.type.active_date_set',
+			'gn36.hookup.notification.type.active_date_reset',
+		);
+		$this->notification_manager->mark_notifications_read($notifications_read, $event['topic_id'], $this->user->data['user_id']);
+
+		// We actually need to delete these to be able to send them again...
+		// There must be a better solution to this, but there is no unique single value ID that can be used for this
+		// We would need a combination of two numeric values to generate a unique ID (user_id <-> topic_id)
+		// TODO
+
 		// This will submit all changes to the db, including the ones processed in $this->process_submit();
 		$this->hookup->submit();
 
@@ -138,7 +179,15 @@ class viewtopic implements EventSubscriberInterface
 		{
 			$hookup_errors[] = $this->user->lang['HOOKUP_NO_USERS'];
 		}
-
+		$active_date_date = '-';
+		if (isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]))
+		{
+			$active_date_date = $this->user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']);
+			if ($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'] != null)
+			{
+				$active_date_date = $this->hookup->hookup_dates[$this->hookup->hookup_active_date]['text'];
+			}
+		}
 		$this->template->assign_vars(array(
 			'S_HAS_HOOKUP'		=> true,
 			'S_IS_HOOKUP_OWNER' => $is_owner,
@@ -146,9 +195,10 @@ class viewtopic implements EventSubscriberInterface
 			'S_HAS_DATES'		=> empty($this->hookup->hookup_dates) ? false : true,
 			'S_HAS_USERS'		=> empty($this->hookup->hookup_users) ? false : true,
 			'S_IS_SELF_INVITE'	=> $this->hookup->hookup_self_invite,
+			'S_AUTORESET'		=> $this->hookup->hookup_autoreset,
 			'S_HOOKUP_ACTION'	=> $viewtopic_url,
 			'S_ACTIVE_DATE'		=> $this->hookup->hookup_active_date,
-			'ACTIVE_DATE_DATE'	=> isset($this->hookup->hookup_dates[$this->hookup->hookup_active_date]) ? $this->user->format_date($this->hookup->hookup_dates[$this->hookup->hookup_active_date]['date_time']) : '-',
+			'ACTIVE_DATE_DATE'	=> $active_date_date,
 			'S_NUM_DATES'		=> count($this->hookup->hookup_dates),
 			'S_NUM_DATES_PLUS_1'=> count($this->hookup->hookup_dates) + 1,
 			'U_UNSET_ACTIVE'	=> $viewtopic_url . '&amp;set_active=0',
@@ -186,11 +236,29 @@ class viewtopic implements EventSubscriberInterface
 			$maybe_percent = $total_count > 0 ? round(($maybe_count / $total_count) * 100) : 0;
 			$no_percent = $total_count > 0 ? round(($no_count / $total_count) * 100) : 0;
 			$unset_percent = 100 - ($yes_percent + $maybe_percent + $no_percent);
+			// More than 100%
+			if ($unset_percent < 0)
+			{
+				if ($maybe_percent > 0)
+				{
+					$maybe_percent--;
+				}
+				else
+				{
+					$no_percent--;
+				}
+			}
+			$full_date = $this->user->format_date($hookup_date['date_time']);
+			$short_date = $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']);
+			if ($hookup_date['text'] != null)
+			{
+				$short_date = $full_date = $hookup_date['text'];
+			}
 
 			$this->template->assign_block_vars('date', array(
 				'ID'			=> $hookup_date['date_id'],
-				'DATE'			=> $this->user->format_date($hookup_date['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
-				'FULL_DATE'		=> $this->user->format_date($hookup_date['date_time']),
+				'DATE'			=> $short_date,
+				'FULL_DATE'		=> $full_date,
 				'YES_COUNT'		=> $yes_count,
 				'YES_PERCENT'	=> $yes_percent,
 				'MAYBE_COUNT'	=> $maybe_count,
@@ -251,6 +319,12 @@ class viewtopic implements EventSubscriberInterface
 
 	}
 
+	/**
+	 * Processes hookup set activedate requests
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_set_activedate($event, $is_owner)
 	{
 		$set_active_set = $this->request->is_set('set_active', \phpbb\request\request_interface::POST) || $this->request->is_set('set_active', \phpbb\request\request_interface::GET);
@@ -271,7 +345,15 @@ class viewtopic implements EventSubscriberInterface
 			trigger_error('NO_DATE');
 		}
 
-		$active_date_formatted = $set_active != 0 ? $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time']) : '-';
+		$active_date_formatted =  '-';
+		if ($set_active != 0)
+		{
+			$active_date_formatted = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time']);
+			if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+			{
+				$active_date_formatted = $this->hookup->hookup_dates[$set_active]['text'];
+			}
+		}
 		$topic_id = $event['topic_id'];
 		$forum_id = $event['forum_id'];
 		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id");
@@ -282,13 +364,52 @@ class viewtopic implements EventSubscriberInterface
 			$send_email = $this->request->variable('send_email', false);
 			$post_reply = $this->request->variable('post_reply', false);
 
+			$topic_data = $event['topic_data'];
+			$new_string = '';
+			if ($set_active != 0)
+			{
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+				{
+					$new_string = '[' . $this->hookup->hookup_dates[$set_active]['text'] . '] ';
+				}
+				else
+				{
+					$new_string = '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ';
+				}
+			}
+			$new_title = preg_replace('#^(\\[.+?\\] )?#', $new_string, $event['topic_data']['topic_title']);
+
+			/**
+			 * Perform additional actions when active date is set
+			 *
+			 * @event gn36.hookup.set_activedate_confirmed
+			 * @var bool	title_prefix	User wants to have a title prefix added
+			 * @var bool	send_email		User wants E-Mails to be sent
+			 * @var bool	post_reply		User wants to post a reply to the topic
+			 * @var int		set_active		Date selected as active (0 means reset of active date)
+			 * @var string	new_title		The new topic title that will be present after the update
+			 * @var int 	topic_id		ID of the topic of the hookup
+			 * @var int 	forum_id		ID of the forum the topic is in
+			 * @var array 	topic_data		Topic data as received from core.viewtopic_assign_template_vars_before
+			 * @since 1.0.0-a1
+			 */
+			$vars = array(
+				'title_prefix',
+				'send_email',
+				'post_reply',
+				'set_active',
+				'new_title',
+				'topic_id',
+				'forum_id',
+				'topic_data',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('gn36.hookup.set_activedate_confirmed', compact($vars)));
+
 			//insert active date (short format) into topic title. this will use language
 			//and timezone of the "active maker" but the alternative would be
 			//to query the HOOKUP_DATES table every time we need the topic title
 			if ($set_active == 0 || $title_prefix)
 			{
-				$new_title = preg_replace('#^(\\[.+?\\] )?#', ($set_active != 0 ? '[' . $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_TITLE']) . '] ' : ''), $event['topic_data']['topic_title']);
-
 				$sql = 'UPDATE ' . TOPICS_TABLE . '
 						SET hookup_active_date = ' . (int) $set_active . ",
 							topic_title = '" . $this->db->sql_escape($new_title) . "'
@@ -309,47 +430,55 @@ class viewtopic implements EventSubscriberInterface
 				$this->db->sql_query($sql);
 			}
 
+			$this->hookup->update_available_sums();
+
 			//notify all members about active date
-			if ($set_active && $send_email && !empty($this->hookup->hookup_users))
+			if (!empty($this->hookup->hookup_users))
 			{
-				if ($this->messenger == null)
+				if ($set_active)
 				{
-					include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-					$this->messenger = new \messenger();
+					$notify_data = array(
+						'user_id' 		=> $this->user->data['user_id'],
+						'date_id' 		=> $set_active,
+						'date'			=> $this->hookup->hookup_dates[$set_active]['date_time'],
+						'text'			=> $this->hookup->hookup_dates[$set_active]['text'],
+						'topic_title' 	=> $event['topic_data']['topic_title'],
+						'topic_id' 		=> $event['topic_id'],
+						'forum_id'		=> $event['forum_id'],
+						'yes'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_YES],
+						'no'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_NO],
+						'maybe'			=> $this->hookup->hookup_available_sums[$set_active][\gn36\hookup\functions\hookup::HOOKUP_MAYBE],
+					);
+
+					$this->notification_manager->add_notifications('gn36.hookup.notification.type.active_date_set', $notify_data);
+					$this->notification_manager->update_notifications('gn36.hookup.notification.type.active_date_set', $notify_data);
+					$this->notification_manager->delete_notifications('gn36.hookup.notification.type.active_date_reset', $event['topic_id']);
 				}
-				$messenger = $this->messenger;
-				$title_without_date = preg_replace('#^(\\[.+?\\] )#', '', $event['topic_data']['topic_title']);
-
-				$sql = 'SELECT u.user_id, u.username, u.user_lang, u.user_dateformat, u.user_email, u.user_jabber, u.user_notify_type
-					FROM ' . USERS_TABLE . " u
-					WHERE " . $this->db->sql_in_set('user_id', array_keys($this->hookup->hookup_users));
-
-				$result = $this->db->sql_query($sql);
-				while ($row = $this->db->sql_fetchrow($result))
+				else
 				{
-					$messenger->template('@gn36_hookup/hookup_active_date', $row['user_lang']);
-					$messenger->to($row['user_email'], $row['username']);
-					$messenger->im($row['user_jabber'], $row['username']);
-					$messenger->assign_vars(array(
-						'USERNAME' 		=> $row['username'],
-						'TOPIC_TITLE'	=> $title_without_date,
-						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
-						//TODO use recipients language
-						'ACTIVE_DATE'	=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $row['user_dateformat']),
-						'ACTIVE_DATE_SHORT'=> $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT']),
-					));
-					$messenger->send($row['user_notify_type']);
-				}
-				$this->db->sql_freeresult($result);
+					$notify_data = array(
+						'user_id' 		=> $this->user->data['user_id'],
+						'topic_title' 	=> isset($new_title) ? $new_title : $event['topic_data']['topic_title'],
+						'topic_id' 		=> $event['topic_id'],
+						'forum_id'		=> $event['forum_id'],
+					);
 
-				$messenger->save_queue();
+					$this->notification_manager->delete_notifications('gn36.hookup.notification.type.active_date_set', $event['topic_id']);
+					$this->notification_manager->add_notifications('gn36.hookup.notification.type.active_date_reset', $notify_data);
+					$this->notification_manager->update_notifications('gn36.hookup.notification.type.active_date_reset', $notify_data);
+				}
 			}
 
 			//post reply to this topic. Again this can only be in the "active maker"s language
 			if ($set_active && $post_reply)
 			{
 				$message = $this->user->lang['SET_ACTIVE_POST_TEMPLATE'];
-				$message = str_replace('{ACTIVE_DATE}', $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']), $message);
+				$active_date = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']);
+				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
+				{
+					$active_date = $this->hookup->hookup_dates[$set_active]['text'];
+				}
+				$message = str_replace('{ACTIVE_DATE}', $active_date, $message);
 
 				//TODO: functions_post_oo!
 				//$post = new post($topic_id);
@@ -379,6 +508,13 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process hookup self invite
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 * @param bool $is_member
+	 */
 	protected function process_selfinvite($event, $is_owner, $is_member)
 	{
 		$hookup_errors = array();
@@ -411,6 +547,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process adding hookup users
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_add_user($event, $is_owner)
 	{
 		$add_users = $this->request->variable('usernames', '', true);
@@ -501,32 +643,20 @@ class viewtopic implements EventSubscriberInterface
 
 			$this->hookup->submit(false);
 
-			//notify new users about invitation
-			if ($this->messenger == null)
-			{
-				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-				$this->messenger = new \messenger();
-			}
-			$messenger = $this->messenger;
-			$forum_id = $event['forum_id'];
-			$topic_id = $event['topic_id'];
 			foreach ($userids_to_add as $user_id)
 			{
-				$userdata = $new_users[$user_id];
-				$messenger->template('@gn36_hookup/hookup_added', $userdata['user_lang']);
-				$messenger->to($userdata['user_email'], $userdata['username']);
-				$messenger->im($userdata['user_jabber'], $userdata['username']);
-				$messenger->assign_vars(array(
-					'USERNAME'		=> $userdata['username'],
-					'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
-					'U_TOPIC'	=> generate_board_url() . "/viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id",
-				));
-				$messenger->send($userdata['user_notify_type']);
-			}
-			$messenger->save_queue();
+				// Notification
+				$notify_data = array(
+					'user_id' 		=> $this->user->data['user_id'],
+					'invited_user' 	=> $user_id,
+					'topic_title' 	=> $event['topic_data']['topic_title'],
+					'topic_id' 		=> $event['topic_id'],
+					'forum_id'		=> $event['forum_id'],
+				);
 
-			//add userids to local array
-			$userids = array_merge(array_keys($this->hookup->hookup_users), $userids_to_add);
+				$this->notification_manager->add_notifications('gn36.hookup.notification.type.invited', $notify_data);
+				$this->notification_manager->update_notifications('gn36.hookup.notification.type.user_added', $notify_data);
+			}
 		}
 
 		//generate error messages for users that are already members
@@ -541,6 +671,12 @@ class viewtopic implements EventSubscriberInterface
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process enable/disable
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_disable($event, $is_owner)
 	{
 		$action = $this->request->variable('delete_hookup', 'no');
@@ -561,11 +697,26 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$this->hookup->hookup_enabled = false;
 				$this->hookup->submit(false);
+				// TODO: is there a way to hide notifications?
+				$this->notification_manager->delete_notifications(array(
+					'gn36.hookup.notification.type.invited',
+					'gn36.hookup.notification.type.user_added',
+					'gn36.hookup.notification.type.date_added',
+					'gn36.hookup.notification.type.active_date_set',
+					'gn36.hookup.notification.type.active_date_reset',
+				), $event['topic_id']);
 			}
 			else if ($action == 'delete')
 			{
 				$this->hookup->delete();
 				$this->hookup->submit(false);
+				$this->notification_manager->delete_notifications(array(
+					'gn36.hookup.notification.type.invited',
+					'gn36.hookup.notification.type.user_added',
+					'gn36.hookup.notification.type.date_added',
+					'gn36.hookup.notification.type.active_date_set',
+					'gn36.hookup.notification.type.active_date_reset',
+				), $event['topic_id']);
 			}
 		}
 		else
@@ -580,6 +731,12 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process user/date deletes
+	 *
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_owner
+	 */
 	protected function process_deletes($event, $is_owner)
 	{
 		$delete_user_ids = $this->request->variable('delete_user', array(0));
@@ -606,6 +763,9 @@ class viewtopic implements EventSubscriberInterface
 			{
 				$this->hookup->remove_user((int) $user_id);
 			}
+			//TODO: Remove notifications
+			// Remove notifications for removed users
+			//$this->notification_manager->delete_notifications('gn36.hookup.notification.type.invited', $notify_data);
 		}
 		else
 		{
@@ -633,6 +793,11 @@ class viewtopic implements EventSubscriberInterface
 		return array();
 	}
 
+	/**
+	 * Process adding dates
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member_or_owner
+	 */
 	protected function process_add_date($event, $is_member_or_owner)
 	{
 		$add_dates = $this->request->variable('add_date', '', true);
@@ -657,25 +822,37 @@ class viewtopic implements EventSubscriberInterface
 
 		foreach ($add_dates as $date)
 		{
+			$text_match = preg_match('#\#(.*)#', $date, $text);
 			//strtotime uses the local (server) timezone, so parse manually and use gmmktime to ignore any timezone
-			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date, $m))
+			if (!preg_match('#(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2})#', $date) && !$text_match)
 			{
 				$hookup_errors[] = "$date: {$this->user->lang['INVALID_DATE']}";
 			}
 			else
 			{
+				$hookup_continue = true;
+				if ($text_match)
+				{
+					$text = trim($text[1]);
+					$date_time = '0';
+				}
+				else
+				{
+					$text = null;
 				$date_time = $this->user->get_timestamp_from_format('Y-m-d H:i', $date);
 
 				if ($date_time < time())
 				{
+						$hookup_continue = false;
 					$hookup_errors[] = "$date: {$this->user->lang['CANNOT_ADD_PAST']}";
 				}
-				else
+				}
+				if ($hookup_continue)
 				{
 					//check for duplicate
-					if (!$this->hookup->add_date($date_time))
+					if (!$this->hookup->add_date($date_time, $text))
 					{
-						$hookup_errors[] = sprintf($this->user->lang['DATE_ALREADY_ADDED'], $this->user->format_date($date_time));
+						$hookup_errors[] = sprintf($this->user->lang['DATE_ALREADY_ADDED'], $this->user->format_date($date_time, $text));
 					}
 					else
 					{
@@ -683,67 +860,29 @@ class viewtopic implements EventSubscriberInterface
 					}
 				}
 			}
-		}
+		};
 
 		if ($date_added)
 		{
-			//notify members about new dates
-			if ($this->messenger == null)
-			{
-				include_once($this->phpbb_root_path . 'includes/functions_messenger.' . $this->phpEx);
-				$this->messenger = new \messenger();
-			}
-			$messenger = $this->messenger;
-			$notify_users = array();
-			$notified_userids = array();
+			// Notification
+			$notify_data = array(
+				'user_id' 		=> $this->user->data['user_id'],
+				'topic_title' 	=> $event['topic_data']['topic_title'],
+				'topic_id' 		=> $event['topic_id'],
+				'forum_id'		=> $event['forum_id'],
+			);
 
-			// Fetch users to be notified:
-			foreach ($this->hookup->hookup_users as $user_id => $user)
-			{
-				if ($user['notify_status'] == 0)
-				{
-					$notify_users[$user_id] = $user;
-				}
-			}
-
-			if (!empty($notify_users))
-			{
-				$sql = 'SELECT u.user_id, u.username, u.user_lang, u.user_email, u.user_jabber, u.user_notify_type
-					FROM ' . USERS_TABLE . ' u
-					WHERE ' . $this->db->sql_in_set('u.user_id', array_keys($notify_users));
-
-				$result = $this->db->sql_query($sql);
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					// TODO: Messenger ersetzen durch notification?
-					// https://www.phpbb.com/community/viewtopic.php?f=461&t=2259916#p13718356
-					$messenger->template('@gn36_hookup/hookup_dates_added', $row['user_lang']);
-					$messenger->to($row['user_email'], $row['username']);
-					$messenger->im($row['user_jabber'], $row['username']);
-					$messenger->assign_vars(array(
-						'USERNAME' 		=> $row['username'],
-						'TOPIC_TITLE'	=> $event['topic_data']['topic_title'],
-						'U_TOPIC'		=> generate_board_url() . "/viewtopic.{$this->phpEx}?f={$event['forum_id']}&t={$event['topic_id']}"
-								));
-					$messenger->send($row['user_notify_type']);
-
-					$notified_userids[] = $row['user_id'];
-				}
-				$this->db->sql_freeresult($result);
-
-				$messenger->save_queue();
-
-				//set notify status
-				foreach ($notified_userids as $user_id)
-				{
-					$this->hookup->hookup_users[$user_id]['notify_status'] = 1;
-				}
-			}
+			$this->notification_manager->update_notifications('gn36.hookup.notification.type.date_added', $notify_data);
 		}
 
 		return $hookup_errors;
 	}
 
+	/**
+	 * Process status changes
+	 * @param \phpbb\event\data $event
+	 * @param bool $is_member
+	 */
 	protected function process_status($event, $is_member)
 	{
 		$availables = $this->request->variable('available', array(0 => 0));
@@ -780,7 +919,7 @@ class viewtopic implements EventSubscriberInterface
 	 * Processes all submitted data in viewtopic into the hookup object without sending changes to database
 	 * Don't forget to run $this->hookup->submit() afterwards!
 	 *
-	 * @param unknown $event
+	 * @param \phpbb\event\data $event
 	 * @return array errors
 	 */
 	protected function process_submit($event)

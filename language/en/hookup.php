@@ -4,7 +4,6 @@
 * hookup mod [English]
 *
 * @package language
-* @version $Id: hookup.php 1 2009-04-24 23:56:57Z joas $
 * @copyright (c) 2006-2008 Pyramide (Frank Dreyer), (c) 2008-2015 gn#36 (Martin Beckmann)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -40,7 +39,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_ADD_USERS'		=> 'Invite users',
 	'HOOKUP_ADD_GROUPS'		=> 'Invite groups',
 	'HOOKUP_ADD_DATES'		=> 'Propose new dates',
-	'HOOKUP_ADD_DATES_EXPLAIN'=> 'Here you can propose new dates. Enter one date per line in DD.MM.YYYY hh:mm or YYYY-MM-DD hh:mm format.',
+	'HOOKUP_ADD_DATES_EXPLAIN'=> 'Here you can propose new dates or options with descriptive text. Enter one date per line in DD.MM.YYYY hh:mm, YYYY-MM-DD hh:mm format or prepend a # to enter an option in text format.',
 	'HOOKUP_ADD_DATEFORMAT'	=> ' (yyyy-mm-dd hh:mm)', //shown only for non js users (js users use the calendar)
 	'CLEAR'					=> 'Clear',
 	'CLEAR_TITLE'			=> 'Clears the selected date(s)',
@@ -54,7 +53,7 @@ $lang = array_merge($lang, array(
 	'SHOW_ALL_DATES'		=> 'Show all dates',
 	'HIDE_ALL_DATES'		=> 'Hide date list',
 	'NO_DATE'				=> 'Date does not exist!',
-	'INVALID_DATE'			=> 'Invalid date. Please enter date in DD.MM.YYYY HH:MM or YYYY-MM-DD HH:MM format.',
+	'INVALID_DATE'			=> 'Invalid date/option. Please enter date in DD.MM.YYYY HH:MM, YYYY-MM-DD HH:MM or prepend a # to enter an option in text format.',
 	'CANNOT_ADD_PAST'		=> 'Cannot add a date in the past',
 	'SUM'					=> 'Sum',
 	'HOOKUP_NO_DATES'		=> 'No dates have been added yet.',
@@ -68,7 +67,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_DELETE_EXPLAIN'	=> 'Here you can delete individual users, dates or the whole meeting planner',
 	'DELETE_HOOKUP'			=> 'Delete meeting planner',
 	'DELETE_WHOLE_HOOKUP'	=> 'Delete whole meeting planner',
-	'DELETE_HOOKUP_NO'		=> 'Don\'t delete anything',
+	'DELETE_HOOKUP_NO'		=> 'Don’t delete anything',
 	'DELETE_HOOKUP_DISABLE'	=> 'Disable only',
 	'DELETE_HOOKUP_DISABLE_EXPLAIN' => 'The meeting planner will not be displayed in the topic anymore, but the data (users, dates, available information) will be kept in the database.',
 	'DELETE_HOOKUP_DISABLE_CONFIRM'	=> 'Do you really want to disable the meeting planner? The data (users, dates, available information) will be kept in the database and the meeting planner can be reactivated anytime',
@@ -93,7 +92,7 @@ $lang = array_merge($lang, array(
 	),
 	//'ADDED_AT_BY'			=> 'added at %1s by %2s',
 	'OPEN_CALENDAR'			=> 'Open calendar',
-	'USER_CANNOT_READ_FORUM'=> 'The user %s doesn\'t have the permission to read this forum',
+	'USER_CANNOT_READ_FORUM'=> 'The user %s doesn’t have the permission to read this forum',
 	'SET_ACTIVE_TITLE_PREFIX'=>'Prepend topic title with active date',
 	'SET_ACTIVE_SEND_EMAIL'	=> 'Notify members of the meeting planner via e-mail about the active date',
 	'SET_ACTIVE_POST_REPLY'	=> 'Add a reply with a notice about the active date to this topic',
@@ -107,11 +106,12 @@ $lang = array_merge($lang, array(
 	'HOOKUP_INVITE_SELF_EXPLAIN_GUEST' => 'This is an open meeting planner, anyone who is interested may add themselves as member. You need to login first if you want to use this feature.',
 	'HOOKUP_INVITE_SELF_LEAVE'	=> 'Cancel membership',
 	'HOOKUP_INVITE_SELF_LEAVE_DESC'	=> 'Click here to cancel your membership in this meeting planner.',
-	'HOOKUP_INVITE_SELF_LEAVE_EXPLAIN' => 'You are currently a member of this meeting planner. Use the following button if you don\'t want to participate anymore.',
+	'HOOKUP_INVITE_SELF_LEAVE_EXPLAIN' => 'You are currently a member of this meeting planner. Use the following button if you don’t want to participate anymore.',
 	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Do you really want to cancel your membership in this meeting planner?',
 	'HOOKUP_INVITE_MYSELF'	=> 'Invite myself',
 	'COMMENT'				=> 'Comment',
 	'HOOKUP_AUTORESET'		=> 'Weekly reset',
 	'HOOKUP_AUTORESET_DESC'	=> 'With this setup you can set the meeting planner to automatically reset once a week.<br /> By doing this, the first entry of the planner is repeated every week and old dates are automatically deleted.',
+	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'This meeting planner will add new dates automatically each week. The oldest dates are deleted.',
 	'RUN'					=> 'Execute',
 ));

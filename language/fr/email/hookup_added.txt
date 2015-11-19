@@ -1,0 +1,10 @@
+Subject: Invitation à participer à un événement
+
+Bonjour {USERNAME},
+
+Vous avez été invité à participer l’événement planifié sur le sujet « {TOPIC_TITLE} » sur « {SITENAME} ». Consultez-le et complétez-le dès que vous le pourrez.
+
+Pour consulter le sujet et l’événement associé, cliquez sur le lien suivant :
+{U_TOPIC}
+
+{EMAIL_SIG}
