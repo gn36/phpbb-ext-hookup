@@ -74,7 +74,7 @@ class invited extends base
 	public function get_email_template_variables()
 	{
 		$vars = parent::get_email_template_variables();
-		$vars['USERNAME'] = $this->get_data('invited_user');
+		$vars['USERNAME'] = $this->user_loader->get_username($this->get_data('invited_user'), 'username');
 		return $vars;
 	}
 
