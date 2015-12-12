@@ -626,9 +626,14 @@ class viewtopic implements EventSubscriberInterface
 			foreach ($userids_to_add as $key => $user_id)
 			{
 				$user_auth->acl($new_users[$user_id]);
-				if (!$user_auth->acl_get('f_read', $event['forum_id']) || !$user_auth->acl_get('f_hookup', $event['forum_id']))
+				if (!$user_auth->acl_get('f_read', $event['forum_id']))
 				{
 					$hookup_errors[] = sprintf($this->user->lang['USER_CANNOT_READ_FORUM'], $new_users[$user_id]['username']);
+					unset($userids_to_add[$key]);
+				}
+				else if (!$user_auth->acl_get('f_hookup', $event['forum_id']))
+				{
+					$hookup_errors[] = sprintf($this->user->lang['USER_CANNOT_HOOKUP'], $new_users[$user_id]['username']);
 					unset($userids_to_add[$key]);
 				}
 			}
