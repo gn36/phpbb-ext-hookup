@@ -23,6 +23,7 @@ class mcp_events implements EventSubscriberInterface
 	{
 		return array(
 			'core.delete_topics_after_query' => 'delete_topic',
+			'core.move_posts_after' => 'move_posts',
 		);
 	}
 
@@ -47,5 +48,16 @@ class mcp_events implements EventSubscriberInterface
 	public function delete_topic($event)
 	{
 		$this->hookup->delete_in_db($event['topic_ids'], false);
+	}
+
+	/**
+	 * Move the hookup to a new topic if necessary or merge it if one already exists
+	 *
+	 * @param unknown $event
+	 */
+	public function move_posts($event)
+	{
+		// parameters: src_topic_ids, dest_topic_ids
+		$this->hookup->merge_in_db($event['topic_ids'], $event['topic_id']);
 	}
 }
