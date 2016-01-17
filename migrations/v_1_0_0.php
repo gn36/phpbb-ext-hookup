@@ -38,10 +38,10 @@ class v_1_0_0 extends \phpbb\db\migration\migration
 	{
 		// Insert a notification for each user out there
 		$sqlary = array(
-			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.active_date_set', 0, 'notification.method.email', 1, user_id FROM phpbb_users WHERE user_type IN (0,3);",
-			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.active_date_reset', 0, 'notification.method.email', 1, user_id FROM phpbb_users WHERE user_type IN (0,3);",
-			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.date_added', 0, 'notification.method.email', 1, user_id FROM phpbb_users WHERE user_type IN (0,3);",
-			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.invited', 0, 'notification.method.email', 1, user_id FROM phpbb_users WHERE user_type IN (0,3);",
+			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.active_date_set', 0, 'notification.method.email', 1, user_id FROM " . USERS_TABLE . " WHERE user_type IN (0,3);",
+			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.active_date_reset', 0, 'notification.method.email', 1, user_id FROM " . USERS_TABLE . " WHERE user_type IN (0,3);",
+			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.date_added', 0, 'notification.method.email', 1, user_id FROM " . USERS_TABLE . " WHERE user_type IN (0,3);",
+			"INSERT INTO " . USER_NOTIFICATIONS_TABLE . " (item_type, item_id, method, notify, user_id) SELECT 'gn36.hookup.notification.type.invited', 0, 'notification.method.email', 1, user_id FROM " . USERS_TABLE . " WHERE user_type IN (0,3);",
 		);
 		//$this->db->sql_return_on_error(true);
 		foreach ($sqlary as $sql)
