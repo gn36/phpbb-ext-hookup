@@ -1,0 +1,10 @@
+Subject: Neue Benutzer zum Terminplaner hinzugefügt
+
+Hallo {USERNAME},
+
+Sie erhalten diese Nachricht um Sie zu informieren, dass neue Benutzer zum "{TOPIC_TITLE}" Terminplaner auf "{SITENAME}" hinzugefügt wurden.
+
+Sie können das Thema und den Terminplaner hier aufrufen:
+{U_TOPIC}
+
+{EMAIL_SIG}

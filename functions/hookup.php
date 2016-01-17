@@ -534,4 +534,132 @@ class hookup
 			$this->db->sql_query($sql);
 		}
 	}
+
+	/**
+	 * Merge hookup on topic merge.
+	 *
+	 * By default, only empty topics are merged.
+	 *
+	 * @param array|int $src_topic_ids
+	 * @param array|int $dest_topic_ids
+	 * @param bool $force_move
+	 */
+	public function merge_in_db($src_topic_ids, $dest_topic_ids, $force_move = false)
+	{
+		if (!is_array($src_topic_ids))
+		{
+			$src_topic_ids = array($src_topic_ids);
+		}
+
+		if (!$force_move)
+		{
+			$sql = 'SELECT topic_id
+				FROM ' . POSTS_TABLE . '
+				WHERE ' . $this->db->sql_in_set('topic_id', $src_topic_ids);
+			$result = $this->db->sql_query($sql);
+
+			// We don't merge topics that have posts left
+			$dont_merge = array();
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$dont_merge[] = $row['topic_id'];
+			}
+			$merge = array_diff($src_topic_ids, $dont_merge);
+			$this->db->sql_freeresult($result);
+		}
+		else
+		{
+			$merge = $src_topic_ids;
+		}
+
+		if (is_array($dest_topic_ids))
+		{
+			// There must be exactly one destination for each src
+			if (count($src_topic_ids) != count($dest_topic_ids))
+			{
+				throw new \phpbb\exception\runtime_exception('ILLEGAL_MERGE_COUNT');
+			}
+
+			foreach ($dest_topic_ids as $index => $destination)
+			{
+				if (in_array($src_topic_ids[$index], $merge))
+				{
+					$src_hookup = new hookup($this->db, $this->hookup_members_table, $this->hookup_dates_table, $this->hookup_available_table);
+					if ($src_hookup->load_hookup($src_topic_ids[$index]))
+					{
+						$src_hookup->merge($destination);
+					}
+				}
+			}
+			return;
+		}
+
+		// hopefully, we never merge a huge number of topics at once:
+		foreach ($merge as $src)
+		{
+			$src_hookup = new hookup($this->db, $this->hookup_members_table, $this->hookup_dates_table, $this->hookup_available_table);
+			if ($src_hookup->load_hookup($src))
+			{
+				$src_hookup->merge($dest_topic_ids);
+			}
+		}
+
+	}
+
+	/**
+	 * Merge hookup into different topic
+	 *
+	 * @param int $to_topic_id
+	 */
+	public function merge($to_topic_id)
+	{
+		if ($this->topic_id == $to_topic_id && $to_topic_id != 0)
+		{
+			return true;
+		}
+
+		if ($to_topic_id == 0)
+		{
+			$this->delete();
+		}
+
+		// Load destination hookup first:
+		$dest = new hookup($this->db, $this->hookup_members_table, $this->hookup_dates_table, $this->hookup_available_table);
+
+		// Only do this if the topic exists
+		if ($dest->load_hookup($to_topic_id))
+		{
+			$dest->hookup_enabled = ($dest->hookup_enabled || $this->hookup_enabled);
+			$dest->hookup_active_date = ($dest->hookup_active_date ? $dest->hookup_active_date : $this->hookup_active_date);
+			$dest->hookup_autoreset = ($dest->hookup_enabled ? $dest->hookup_autoreset : $this->hookup_autoreset);
+			$dest->hookup_self_invite = ($dest->hookup_enabled ? $dest->hookup_self_invite : $this->hookup_self_invite);
+			foreach ($this->hookup_dates as $date)
+			{
+				$dest->add_date($date['date_time'], $date['text']);
+			}
+			foreach ($this->hookup_users as $user)
+			{
+				$dest->add_user($user['user_id'], $user['comment'], $user['notify_status']);
+			}
+			// We need to store and reload to ensure to have date ids
+			$dest->submit();
+
+			foreach ($this->hookup_availables as $user => $availables)
+			{
+				foreach ($availables as $date => $available)
+				{
+					$dest->set_user_date($user, $dest->get_date_id($this->hookup_dates[$date]['date_time']), $available);
+				}
+			}
+
+			$this->delete();
+			$dest->submit(false);
+			$this->load_hookup($to_topic_id);
+
+			return true;
+		}
+
+		return false;
+	}
+
 }

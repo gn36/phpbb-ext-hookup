@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* hookup mod [English]
+* hookup mod [US English]
 *
 * @package language
 * @copyright (c) 2006-2008 Pyramide (Frank Dreyer), (c) 2008-2015 gn#36 (Martin Beckmann)
@@ -33,8 +33,8 @@ $lang = array_merge($lang, array(
 	'ADD_HOOKUP_REACTIVATE_EXPLAIN' => 'Data of a previously disabled meeting planner is available. If you reactivate it, the previously added dates and users will be available again.',
 	'HOOKUP_STATUS'			=> array(\gn36\hookup\functions\hookup::HOOKUP_YES => 'Yes', \gn36\hookup\functions\hookup::HOOKUP_NO => 'No', \gn36\hookup\functions\hookup::HOOKUP_MAYBE => 'Maybe', \gn36\hookup\functions\hookup::HOOKUP_UNSET => '-'),
 	'HOOKUP_DATEFORMAT'		=> 'd M H:i', //d M h:i a // this is used for the column headings so it should be short
-	'HOOKUP_DATEFORMAT_TITLE' => 'd.m.Y H:i', //this is used for the topic title
-	'HOOKUP_DATEFORMAT_POST' => 'l, d.m.Y H:i', //this is used for the post when the active date is set
+	'HOOKUP_DATEFORMAT_TITLE' => 'm/d/Y H:i', //this is used for the topic title
+	'HOOKUP_DATEFORMAT_POST' => 'l, m/d/Y H:i', //this is used for the post when the active date is set
 	'HOOKUP_DATEFORMAT_CALENDAR' => '%Y-%m-%d %H:%M',
 	'HOOKUP_ADD_USERS'		=> 'Invite users',
 	'HOOKUP_ADD_GROUPS'		=> 'Invite groups',

@@ -84,6 +84,12 @@ div.unset-bg, td.unset-bg, select.unset-bg, option.unset-bg {
 	display: block;
 }
 
+@media all and (min-width: 700px) {
+	#hookup-table-scrollwrapper {
+		overflow: auto;
+	}
+}
+
 @media all and (max-width: 700px), all and (max-device-width: 700px) {
 	.hookup_hidemobile {
 		display:none;

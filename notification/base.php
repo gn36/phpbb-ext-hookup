@@ -142,6 +142,8 @@ class base extends \phpbb\notification\type\base
 			'TOPIC_TITLE' => $this->get_data('topic_title'),
 			'SITENAME' => $this->config['sitename'],
 			'U_TOPIC' => generate_board_url() . "/viewtopic.{$this->php_ext}?t={$this->get_data('topic_id')}",
+			//TODO: How to actually personalize this?
+			'ACTIVE_DATE' => $this->get_data('date') ? $this->user->format_date($this->get_data('date')) : '',
 		);
 	}
 
