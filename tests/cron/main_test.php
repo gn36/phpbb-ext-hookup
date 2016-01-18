@@ -24,6 +24,8 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 	{
 		parent::setUp();
 
+		$this->db = $this->new_dbal();
+
 		$this->cache = $this->getMockBuilder('\phpbb\cache\service')->disableOriginalConstructor()->getMock();
 		$this->log = $this->getMockBuilder('\phpbb\log\log')->disableOriginalConstructor()->getMock();
 	}
@@ -61,8 +63,8 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 	private function get_task($last_run = 0)
 	{
 		global $phpbb_root_path, $phpEx;
-		$pastebin_path = dirname(__FILE__) . '/../../';
-		$db = $this->new_dbal();
+		//$pastebin_path = dirname(__FILE__) . '/../../';
+		//$db = $this->new_dbal();
 		$this->db = $db;
 
 		$this->config = new \phpbb\config\config(array(
