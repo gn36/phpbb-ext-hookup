@@ -10,13 +10,15 @@
 #set -x
 
 echo "Running language tests"
+retval=true
 # we should be in phpBB3, so we need to go up one level into the langtest dir:
 cd ../langtest ; 
 
 for i in $(ls language/)
 do 
-	php vendor/bin/PhpbbTranslationValidator.php validate --language-dir=language $i
+	retval= php vendor/bin/PhpbbTranslationValidator.php validate --language-dir=language $i & retval
 	echo ""; 
 done;
 
 cd ../phpBB3
+return $retval
