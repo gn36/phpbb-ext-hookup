@@ -24,10 +24,76 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 	{
 		parent::setUp();
 
-		$this->db = $this->new_dbal();
+		//$this->db = $this->new_dbal();
 
 		$this->cache = $this->getMockBuilder('\phpbb\cache\service')->disableOriginalConstructor()->getMock();
 		$this->log = $this->getMockBuilder('\phpbb\log\log')->disableOriginalConstructor()->getMock();
+	}
+
+	public function runProvider()
+	{
+		$now = time();
+		$old_time = 1;
+		do
+		{
+			$new_time = $old_time + 604800;
+			//Daylight savings time adjustments:
+			if ((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+			{
+				$dst_add = 0;
+			}
+			else if (date('I', $new_time))
+			{
+				//New time is in DST, but old is not
+				//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
+				$dst_add = -3600;
+			}
+			else
+			{
+				//New time not in DST, but old is
+				//Since from DST to winter, there is a gain of an hour, that needs to be added:
+				$dst_add = 3600;
+			}
+			$old_time = $new_time;
+		} while ($new_time < $now);
+
+		$old_time = $new_time + $dst_add;
+		$new_time = $old_time + 604800;
+
+		// Second date is one week from first, unless DST messes us up again
+		if ((date('I', $new_time) && date('I', $old_time)) || (!date('I', $new_time) && !date('I', $old_time)))
+		{
+			$dst_add = 0;
+		}
+		else if (date('I', $new_time))
+		{
+			//New time is in DST, but old is not
+			//Since from Winter to DST there is a loss of an hour, that needs to be subtracted:
+			$dst_add = -3600;
+		}
+		else
+		{
+			//New time not in DST, but old is
+			//Since from DST to winter, there is a gain of an hour, that needs to be added:
+			$dst_add = 3600;
+		}
+
+		return array(
+			// This should stay the same
+			array(1, array(array('date_id' => 1, 'date_time' => 1))),
+			// Here, the oldest should be replaced by the newest date + whatever
+			array(2, array(
+				array('date_id' => 4, 'date_time' => 2),
+				array('date_id' => 5, 'date_time' => 3),
+				array('date_id' => 6, 'date_time' => $old_time + 2),
+			)),
+			// Here, we should fill up to 3:
+			array(3, array(
+				array('date_id' => 2, 'date_time' => 1),
+				array('date_id' => 7, 'date_time' => $old_time),
+				array('date_id' => 8, 'date_time' => $new_time + $dst_add),
+			)),
+		);
 	}
 
 	public function test_construct()
@@ -53,18 +119,24 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 		$this->assertTrue(!$task->should_run());
 	}
 
-	public function test_run()
+	/**
+	 * @dataProvider runProvider
+	 */
+	public function test_run($topic_id, $expected)
 	{
 		$task = $this->get_task();
 		$task->run();
-		//TODO
+
+		// Make sure, the first date is still there:
+		$sql = "SELECT date_id, date_time FROM phpbb_hookup_dates WHERE topic_id = $topic_id";
+		$this->assertSqlResultEquals($expected, $sql);
 	}
 
 	private function get_task($last_run = 0)
 	{
 		global $phpbb_root_path, $phpEx;
-		//$pastebin_path = dirname(__FILE__) . '/../../';
-		//$db = $this->new_dbal();
+
+		$db = $this->new_dbal();
 		$this->db = $db;
 
 		$this->config = new \phpbb\config\config(array(

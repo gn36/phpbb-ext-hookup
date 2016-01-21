@@ -27,7 +27,7 @@ class hookup
 	protected $hookup_dates_table;
 	protected $hookup_available_table;
 
-	var $topic_id;
+	var $topic_id = 0;
 	var $hookup_enabled = 0;
 	var $hookup_active_date = 0;
 	var $hookup_self_invite = 0;
@@ -60,7 +60,6 @@ class hookup
 	{
 		$db = $this->db;
 
-		$this->topic_id = $topic_id;
 		$this->hookup_dates = array();
 		$this->hookup_users = array();
 		$this->hookup_availables = array();
@@ -72,6 +71,7 @@ class hookup
 			//Thema existiert nicht:
 			return false;
 		}
+		$this->topic_id = $topic_id;
 		$this->hookup_active_date = $row['hookup_active_date'];
 		$this->hookup_enabled = $row['hookup_enabled'];
 		$this->hookup_self_invite = $row['hookup_self_invite'];
@@ -187,6 +187,11 @@ class hookup
 	 */
 	public function add_date($date, $text = null)
 	{
+		if (!$date && !$text)
+		{
+			return false;
+		}
+
 		foreach ($this->hookup_dates as $key => $entry)
 		{
 			if (($text == null && $entry['date_time'] == $date) || ($date == '0' && $entry['text'] == $text))
@@ -214,6 +219,11 @@ class hookup
 		if (!$this->hookup_dates)
 		{
 			return null;
+		}
+
+		if (!$date)
+		{
+			return false;
 		}
 
 		foreach ($this->hookup_dates as $key => $entry)
@@ -323,7 +333,7 @@ class hookup
 				if ($entry['date_time'] == $date || $entry['text'] == $date)
 				{
 					//This entry needs to be removed
-					$this->_remove_date_from_userlist($entry['date_id']);
+					$this->_remove_date_from_userlist($key);
 					unset($this->hookup_dates[$key]);
 				}
 			}

@@ -158,13 +158,7 @@ class weekly_reset extends \phpbb\cron\task\base
 				$date_array[] = $new_time + $dst_add;
 				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
 			}
-			for ($i = count($text_array[$topic_id]); $i < 3; $i++)
-			{
-				$hookup->hookup_dates[] = array(
-					'date_time'	=> '0',
-					'text'		=> $text_array[$topic_id][$i],
-					);
-			}
+
 			$hookup->submit();
 		}
 

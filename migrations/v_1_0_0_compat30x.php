@@ -14,7 +14,11 @@ class v_1_0_0_compat30x extends \phpbb\db\migration\migration
 {
 	static public function depends_on()
 	{
-		return array();
+		return array(
+			'\phpbb\db\migration\data\v30x\release_3_0_0',
+			'\phpbb\db\migration\data\v31x\v311',
+			'\phpbb\db\migration\data\v310\dev'
+		);
 	}
 
 	public function effectively_installed()
@@ -68,7 +72,7 @@ class v_1_0_0_compat30x extends \phpbb\db\migration\migration
 			),
 
 			'add_columns' => array(
-				TOPICS_TABLE => array(
+				$this->table('topics') => array(
 					'hookup_enabled' 		=> array('UINT:1', 0),
 					'hookup_active_date' 	=> array('UINT:11', null),
 					'hookup_self_invite' 	=> array('UINT:1', 0),
@@ -87,7 +91,7 @@ class v_1_0_0_compat30x extends \phpbb\db\migration\migration
 				$this->table('hookup_members'),
 			),
 			'drop_columns' => array(
-				TOPICS_TABLE => array(
+				$this->table('topics') => array(
 					'hookup_enabled',
 					'hookup_active_date',
 					'hookup_self_invite',
