@@ -128,7 +128,7 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 		$task->run();
 
 		// Make sure, the first date is still there:
-		$sql = "SELECT date_id, date_time FROM phpbb_hookup_dates WHERE topic_id = $topic_id";
+		$sql = "SELECT date_id, date_time FROM phpbb_hookup_dates WHERE topic_id = $topic_id ORDER BY date_id ASC";
 		$this->assertSqlResultEquals($expected, $sql);
 	}
 
