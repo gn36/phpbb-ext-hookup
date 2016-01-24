@@ -451,11 +451,11 @@ class gn36_hookup_hookup_test extends phpbb_database_test_case
 
 	/**
 	 * @dataProvider removeUserProvider
-	 * @param unknown $user_id
-	 * @param unknown $users_before
-	 * @param unknown $users_after
-	 * @param unknown $availables_before
-	 * @param unknown $availables_after
+	 * @param int $user_id
+	 * @param array $users_before
+	 * @param array $users_after
+	 * @param array $availables_before
+	 * @param array $availables_after
 	 */
 	public function test_remove_user($user_id, $users_before, $users_after, $availables_before, $availables_after)
 	{
@@ -504,26 +504,30 @@ class gn36_hookup_hookup_test extends phpbb_database_test_case
 	public function test_submit($topic_id, $returnvalue, $data, $parameters)
 	{
 		$hookup = $this->get_hookup();
+		// This only tests whether the function actually runs
+		$hookup->submit();
 
 		//$hookup->load_hookup($topic_id);
 		//TODO
-		//TODO: Besides submit, also delete, delete_in_db and merge must be tested
-
+		$this->markTestIncomplete();
 	}
 
 	public function test_delete()
 	{
 		//TODO
+		$this->markTestIncomplete();
 	}
 
 	public function test_delete_in_db()
 	{
 		//TODO
+		$this->markTestIncomplete();
 	}
 
 	public function test_merge()
 	{
 		//TODO
+		$this->markTestIncomplete();
 	}
 
 	private function get_hookup()

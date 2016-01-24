@@ -165,7 +165,6 @@ class use_test extends \phpbb_functional_test_case
 			$this->assertNotContains('invite_self', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
 			$this->assertNotContains('part of this meeting planner', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
 		}
-
 	}
 
 	/**
