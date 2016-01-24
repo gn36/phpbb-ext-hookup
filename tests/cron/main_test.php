@@ -80,18 +80,18 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 
 		return array(
 			// This should stay the same
-			array(1, array(array('date_id' => 1, 'date_time' => 1))),
+			array(1, array(array('date_time' => 1))),
 			// Here, the oldest should be replaced by the newest date + whatever
 			array(2, array(
-				array('date_id' => 4, 'date_time' => 2),
-				array('date_id' => 5, 'date_time' => 3),
-				array('date_id' => 6, 'date_time' => $old_time + 2),
+				array('date_time' => 2),
+				array('date_time' => 3),
+				array('date_time' => $old_time + 2),
 			)),
 			// Here, we should fill up to 3:
 			array(3, array(
-				array('date_id' => 2, 'date_time' => 1),
-				array('date_id' => 7, 'date_time' => $old_time),
-				array('date_id' => 8, 'date_time' => $new_time + $dst_add),
+				array('date_time' => 1),
+				array('date_time' => $old_time),
+				array('date_time' => $new_time + $dst_add),
 			)),
 		);
 	}
@@ -128,7 +128,7 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 		$task->run();
 
 		// Make sure, the first date is still there:
-		$sql = "SELECT date_id, date_time FROM phpbb_hookup_dates WHERE topic_id = $topic_id ORDER BY date_id ASC";
+		$sql = "SELECT date_time FROM phpbb_hookup_dates WHERE topic_id = $topic_id ORDER BY date_time ASC";
 		$this->assertSqlResultEquals($expected, $sql);
 	}
 
