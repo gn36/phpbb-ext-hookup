@@ -16,9 +16,16 @@ cd ../langtest ;
 
 for i in $(ls language/)
 do 
-	retval= php vendor/bin/PhpbbTranslationValidator.php validate --language-dir=language $i & retval
+	php vendor/bin/PhpbbTranslationValidator.php validate --language-dir=language $i
+	if [ ! $? -eq 0 ]; then
+		retval=false
+	fi
 	echo ""; 
 done;
 
 cd ../phpBB3
-return $retval
+if [ "$retval" = true ]; then
+	exit 0
+fi
+exit 1
+
