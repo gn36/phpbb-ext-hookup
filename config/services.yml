@@ -5,48 +5,48 @@ services:
     gn36.hookup.functions.hookup:
         class: gn36\hookup\functions\hookup
         arguments:
-            - @dbal.conn
-            - %tables.gn36.hookup.members%
-            - %tables.gn36.hookup.dates%
-            - %tables.gn36.hookup.available%
+            - '@dbal.conn'
+            - '%tables.gn36.hookup.members%'
+            - '%tables.gn36.hookup.dates%'
+            - '%tables.gn36.hookup.available%'
     gn36.hookup.events.posting:
         class: gn36\hookup\event\posting
         arguments:
-            - @gn36.hookup.functions.hookup
-            - @template
-            - @dbal.conn
-            - @user
-            - @auth
-            - @request
+            - '@gn36.hookup.functions.hookup'
+            - '@template'
+            - '@dbal.conn'
+            - '@user'
+            - '@auth'
+            - '@request'
         tags:
             - { name: event.listener }
     gn36.hookup.events.viewtopic:
         class: gn36\hookup\event\viewtopic
         arguments:
-            - @gn36.hookup.functions.hookup
-            - @template
-            - @dbal.conn
-            - @user
-            - @auth
-            - @request
-            - @dispatcher
-            - @notification_manager
-            - %core.root_path%
-            - %core.php_ext%
-            - %gn36.hookup.path%
+            - '@gn36.hookup.functions.hookup'
+            - '@template'
+            - '@dbal.conn'
+            - '@user'
+            - '@auth'
+            - '@request'
+            - '@dispatcher'
+            - '@notification_manager'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%gn36.hookup.path%'
         tags:
             - { name: event.listener }
     gn36.hookup.events.global_events:
         class: gn36\hookup\event\global_events
         arguments:
-            - @user
-            - @notification_manager
+            - '@user'
+            - '@notification_manager'
         tags:
             - { name: event.listener }
     gn36.hookup.events.mcp_events:
         class: gn36\hookup\event\mcp_events
         arguments:
-            - @gn36.hookup.functions.hookup
+            - '@gn36.hookup.functions.hookup'
         tags:
             - { name: event.listener }
     gn36.hookup.events.acp_events:
@@ -56,15 +56,15 @@ services:
     gn36.hookup.cron.weekly_reset:
         class: gn36\hookup\cron\weekly_reset
         arguments:
-            - @cache
-            - @config
-            - @dbal.conn
-            - @log
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.gn36.hookup.dates%
-            - %gn36.hookup.reset.run_interval%
+            - '@cache'
+            - '@config'
+            - '@dbal.conn'
+            - '@log'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.gn36.hookup.dates%'
+            - '%gn36.hookup.reset.run_interval%'
         calls:
             - [set_name, [gn36.hookup.cron.weekly_reset]]
         tags:
@@ -73,107 +73,107 @@ services:
         class: gn36\hookup\notification\base
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }
     gn36.hookup.notification.type.active_date_set:
         class: gn36\hookup\notification\active_date_set
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }
     gn36.hookup.notification.type.active_date_reset:
         class: gn36\hookup\notification\active_date_reset
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }
     gn36.hookup.notification.type.date_added:
         class: gn36\hookup\notification\date_added
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }
     gn36.hookup.notification.type.user_added:
         class: gn36\hookup\notification\user_added
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }
     gn36.hookup.notification.type.invited:
         class: gn36\hookup\notification\invited
         scope: prototype
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @gn36.hookup.functions.hookup
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@user_loader'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@gn36.hookup.functions.hookup'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+            - '%tables.user_notifications%'
         tags:
             - { name: notification.type }

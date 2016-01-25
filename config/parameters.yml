@@ -1,6 +1,6 @@
 parameters:
-    gn36.hookup.path: %core.root_path%ext/gn36/hookup/
-    gn36.hookup.reset.run_interval: 86400
-    tables.gn36.hookup.members: %core.table_prefix%hookup_members
-    tables.gn36.hookup.dates: %core.table_prefix%hookup_dates
-    tables.gn36.hookup.available: %core.table_prefix%hookup_available
+    gn36.hookup.path: '%core.root_path%ext/gn36/hookup/'
+    gn36.hookup.reset.run_interval: '86400'
+    tables.gn36.hookup.members: '%core.table_prefix%hookup_members'
+    tables.gn36.hookup.dates: '%core.table_prefix%hookup_dates'
+    tables.gn36.hookup.available: '%core.table_prefix%hookup_available'
