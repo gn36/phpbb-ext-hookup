@@ -62,7 +62,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_NO_USERS'		=> 'Aucun membre n’a été invité.',
 	'HOOKUP_USER_EXISTS'	=> '%s est déjà membre de cet événement.',
 	'HOOKUP_USERS_EXIST'	=> 'Les membres sélectionnés ont déjà été ajoutés à cet événement.',
-	'USERNAMES_EXPLAIN'		=> 'Depuis cet onglet, vous pouvez ajouter de nouveaux membres à la liste des participants. Vous pouvez ajouter plusieurs membres en une fois, en saisissant chaque nom sur une nouvelle ligne. Utilisez la fonction <span style="text-decoration: underline;">Rechercher un membre</span> pour en ajouter automatiquement un ou plusieurs.',
+	'USERNAMES_EXPLAIN'		=> 'Depuis cet onglet, vous pouvez ajouter de nouveaux membres à la liste des participants. Vous pouvez ajouter plusieurs membres en une fois, en saisissant chaque nom sur une nouvelle ligne.',
 	'HOOKUP_ADD_GROUPS_EXPLAIN'=> 'Ici, vous pouvez ajouter des groupes d’utilisateurs à la liste. De multiples groupes peuvent être ajoutés, Tous les membres des groupes sélectionnés seront individuellement ajoutés à la liste des participants.',
 	'HOOKUP_OVERVIEW'		=> 'Vue d’ensemble de la planification',
 	'DATE_ALREADY_ADDED'	=> 'La date %1s a déjà été ajoutée à cette planification.',
@@ -115,5 +115,6 @@ $lang = array_merge($lang, array(
 	'COMMENT'				=> 'Commentaire',
 	'HOOKUP_AUTORESET'		=> 'Réinitialiser chaque semaine',
 	'HOOKUP_AUTORESET_DESC'	=> 'En activant cette option, la planification de l’événement sera automatiquement réinitialisée chaque semaine.<br />La première date proposée sera automatiquement reportée à la semaine suivante et toutes les autres dates seront automatiquement supprimées.',
+    'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Ce planificateur d’événement ajoutera automatiquement de nouvelle date chaque semaine. Les anciennes dates seront effacées.',
 	'RUN'					=> 'Exécuter',
 ));
