@@ -115,6 +115,6 @@ $lang = array_merge($lang, array(
 	'COMMENT'				=> 'Commentaire',
 	'HOOKUP_AUTORESET'		=> 'Réinitialiser chaque semaine',
 	'HOOKUP_AUTORESET_DESC'	=> 'En activant cette option, la planification de l’événement sera automatiquement réinitialisée chaque semaine.<br />La première date proposée sera automatiquement reportée à la semaine suivante et toutes les autres dates seront automatiquement supprimées.',
-    'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Ce planificateur d’événement ajoutera automatiquement de nouvelle date chaque semaine. Les anciennes dates seront effacées.',
+	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Ce planificateur d’événement ajoutera automatiquement de nouvelle date chaque semaine. Les anciennes dates seront effacées.',
 	'RUN'					=> 'Exécuter',
 ));
