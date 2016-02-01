@@ -1,39 +1,44 @@
 {
-	"name": "gn36/hookup",
-	"type": "phpbb-extension",
-	"description": "This Extension adds the possibility of scheduling meetings with multiple people to your topics. Use this for finding the right date for a meeting very easy or for getting feedback on availability of users on certain dates.",
-	"homepage": "https://github.com/gn36/phpbb-ext-hookup/",
-	"version": "1.0.0-dev",
-	"time": "2015-01-03",
-	"license": "GPL-2.0",
-	"authors": [
-		{
-			"name": "Martin Beckmann",
-			"email": "gn#36@phpbb.de",
-			"homepage": "https://www.phpbb.de/",
-			"role": "Lead Developer"
-		},
-		{
-			"name": "Kilian Röhner",
-			"email": "kilian@mirdan.de",
-			"role": "Developer"
+	"name" : "gn36/hookup",
+	"type" : "phpbb-extension",
+	"description" : "This Extension adds the possibility of scheduling meetings with multiple people to your topics. Use this for finding the right date for a meeting very easy or for getting feedback on availability of users on certain dates.",
+	"homepage" : "https://github.com/gn36/phpbb-ext-hookup/",
+	"version" : "1.0.0-dev",
+	"time" : "2015-01-03",
+	"license" : "GPL-2.0",
+	"authors" : [{
+			"name" : "Martin Beckmann",
+			"email" : "gn#36@phpbb.de",
+			"homepage" : "https://www.phpbb.de/",
+			"role" : "Lead Developer"
+		}, {
+			"name" : "Kilian Röhner",
+			"email" : "kilian@mirdan.de",
+			"role" : "Developer"
 		}
 	],
-	"require": {
-		"php": ">=5.3.3"
+	"require" : {
+		"php" : ">=5.3.3"
 	},
-	"require-dev": {
-		"phpbb/epv": "dev-master"
+	"require-dev" : {
+		"phpbb/epv" : "dev-master",
+		"phpbb/translation-validator" : "1.3.*"
 	},
-	"extra": {
-		"display-name": "Hookup",
-		"soft-require": {
-			"phpbb/phpbb": ">=3.1.2,<3.2.*@dev"
+	"extra" : {
+		"display-name" : "Hookup",
+		"soft-require" : {
+			"phpbb/phpbb" : ">=3.1.2,<3.2.*@dev"
 		},
-		"version-check": {
-			"host": "phpbb.gn36.de",
-			"directory": "/extensions/vinfo",
-			"filename": "phpbb-ext-hookup.json"
+		"version-check" : {
+			"host" : "phpbb.gn36.de",
+			"directory" : "/extensions/vinfo",
+			"filename" : "phpbb-ext-hookup.json"
+		}
+	},
+	"autoload" : {
+		"psr-4" : {
+			"gn36\\hookup\\" : "",
+			"gn36\\hookup\\functions\\" : "functions/"
 		}
 	}
 }
