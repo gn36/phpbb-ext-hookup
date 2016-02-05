@@ -27,7 +27,7 @@
 	"extra" : {
 		"display-name" : "Hookup",
 		"soft-require" : {
-			"phpbb/phpbb" : ">=3.1.2,<3.2.*@dev"
+			"phpbb/phpbb" : ">=3.1.2,<3.2@dev"
 		},
 		"version-check" : {
 			"host" : "phpbb.gn36.de",

@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
 
 services:
+    # ------- HELPER/FUNCTIONS ------
     gn36.hookup.functions.hookup:
         class: gn36\hookup\functions\hookup
         arguments:
@@ -9,6 +10,7 @@ services:
             - '%tables.gn36.hookup.members%'
             - '%tables.gn36.hookup.dates%'
             - '%tables.gn36.hookup.available%'
+    # ------- EVENTS ------
     gn36.hookup.events.posting:
         class: gn36\hookup\event\posting
         arguments:
@@ -53,8 +55,9 @@ services:
         class: gn36\hookup\event\acp_events
         tags:
             - { name: event.listener }
-    gn36.hookup.cron.weekly_reset:
-        class: gn36\hookup\cron\weekly_reset
+    # ------- CRON ------
+    gn36.hookup.cron.hookup_weekly_reset:
+        class: gn36\hookup\cron\hookup_weekly_reset
         arguments:
             - '@cache'
             - '@config'
@@ -64,11 +67,11 @@ services:
             - '%core.root_path%'
             - '%core.php_ext%'
             - '%tables.gn36.hookup.dates%'
-            - '%gn36.hookup.reset.run_interval%'
         calls:
-            - [set_name, [gn36.hookup.cron.weekly_reset]]
+            - [set_name, [gn36.hookup.cron.hookup_weekly_reset]]
         tags:
             - { name: cron.task }
+    # ------- NOTIFICATIONS ------
     gn36.hookup.notification.type.base:
         class: gn36\hookup\notification\base
         scope: prototype

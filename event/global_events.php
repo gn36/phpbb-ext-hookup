@@ -41,7 +41,12 @@ class global_events implements EventSubscriberInterface
 
 	public function load_global_lang($event)
 	{
-		$this->user->add_lang_ext('gn36/hookup', 'global');
+		$lang_ary = $event['lang_set_ext'];
+		$lang_ary[] = array(
+			'ext_name' 	=> 'gn36/hookup',
+			'lang_set'	=> 'global',
+		);
+		$event['lang_set_ext'] = $lang_ary;
 	}
 
 	public function notification_add($event)

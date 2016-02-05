@@ -11,7 +11,7 @@
 namespace gn36\hookup\cron;
 
 //TODO
-class weekly_reset extends \phpbb\cron\task\base
+class hookup_weekly_reset extends \phpbb\cron\task\base
 {
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
@@ -40,7 +40,7 @@ class weekly_reset extends \phpbb\cron\task\base
 	/** @var int */
 	protected $run_interval;
 
-	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\hookup\functions\hookup $hookup, $root_path, $php_ext, $hookup_dates_table, $hookup_run_interval)
+	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\hookup\functions\hookup $hookup, $root_path, $php_ext, $hookup_dates_table)
 	{
 		$this->cache = $cache;
 		$this->config = $config;
@@ -50,7 +50,7 @@ class weekly_reset extends \phpbb\cron\task\base
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 		$this->dates_table = $hookup_dates_table;
-		$this->run_interval = intval($hookup_run_interval);
+		$this->run_interval = $config['hookup_weekly_reset_gc'];
 	}
 
 	/**
@@ -162,7 +162,7 @@ class weekly_reset extends \phpbb\cron\task\base
 			$hookup->submit();
 		}
 
-		$this->config->set('gn36_hookup_reset_last_run', $now, true);
+		$this->config->set('hookup_weekly_reset_last_gc', $now, true);
 	}
 
 	/**
@@ -172,7 +172,7 @@ class weekly_reset extends \phpbb\cron\task\base
 	 */
 	public function is_runnable()
 	{
-		return isset($this->config['gn36_hookup_reset_last_run']);
+		return isset($this->config['hookup_weekly_reset_last_gc']);
 	}
 
 	/**
@@ -185,7 +185,7 @@ class weekly_reset extends \phpbb\cron\task\base
 		$now = time();
 
 		// Run at most every day
-		return $now > $this->config['gn36_hookup_reset_last_run'] + $this->run_interval;
+		return $now > $this->config['hookup_weekly_reset_last_gc'] + $this->run_interval;
 	}
 
 }

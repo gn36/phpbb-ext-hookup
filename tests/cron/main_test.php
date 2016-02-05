@@ -140,12 +140,13 @@ class gn36_hookup_main_test extends phpbb_database_test_case
 		$this->db = $db;
 
 		$this->config = new \phpbb\config\config(array(
-			'gn36_hookup_reset_last_run' => $last_run,
+			'hookup_weekly_reset_last_gc' => $last_run,
+			'hookup_weekly_reset_gc' => 86400,
 		));
 
 		//TODO: Replace by mock
 		$hookup = new \gn36\hookup\functions\hookup($db, 'phpbb_hookup_members', 'phpbb_hookup_dates', 'phpbb_hookup_available');
 
-		return new \gn36\hookup\cron\weekly_reset($this->cache, $this->config, $db, $this->log, $hookup, $phpbb_root_path, $phpEx, 'phpbb_hookup_dates', 84600);
+		return new \gn36\hookup\cron\hookup_weekly_reset($this->cache, $this->config, $db, $this->log, $hookup, $phpbb_root_path, $phpEx, 'phpbb_hookup_dates', 84600);
 	}
 }
