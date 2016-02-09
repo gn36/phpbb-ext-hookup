@@ -1,0 +1,10 @@
+Subject: New users added to meeting planner
+
+Hello {USERNAME},
+
+You are receiving this message to inform you that new users have been added to the "{TOPIC_TITLE}" meeting planner on "{SITENAME}".
+
+You can view the topic and meeting planner here:
+{U_TOPIC}
+
+{EMAIL_SIG}

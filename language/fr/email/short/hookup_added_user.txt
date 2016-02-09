@@ -1,0 +1,10 @@
+Subject: Ajout d'un nouveau participant à l'événement planifié
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification car un nouveau participant a été ajouté à l'événement "{TOPIC_TITLE}" auquel vous participez sur le site "{SITENAME}".
+
+Veuillez cliquer sur le lien suivant pour acceder au sujet et l’événement associé :
+{U_TOPIC}
+
+{EMAIL_SIG}

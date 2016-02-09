@@ -1,0 +1,14 @@
+Subject: Aktives Datum wurde festgelegt: {ACTIVE_DATE_SHORT} — „{TOPIC_TITLE}“
+
+Hallo {USERNAME},
+
+Sie erhalten diese Benachrichtigung, weil Sie Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ sind. Der aktive Termin dieses Terminplaners wurde festgelegt auf den:
+
+{ACTIVE_DATE}
+
+
+Sie können den folgenden Link benutzen, um das Thema und den Terminplaner anzusehen:
+
+{U_TOPIC}
+
+{EMAIL_SIG}

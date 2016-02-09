@@ -1,0 +1,13 @@
+Subject: Aktives Datum zurückgesetzt: "{TOPIC_TITLE}"
+
+Hallo {USERNAME},
+
+Du erhältst diese Benachrichtigung, weil du ein Teilnehmer des Terminplaners, "{TOPIC_TITLE}" auf "{SITENAME}" bist. Das aktive Datum für diesen Terminplaner wurde zurückgesetzt und es wird ein neuer Termin gesucht.
+
+Bitte besuche den Terminplaner erneut um deinen Status zu aktualisieren, so dass ein neuer Termin gefunden werden kann.
+
+Du kannst den folgenden Link verwenden um das Thema und den Terminplaner zu besuchen:
+
+{U_TOPIC}
+
+{EMAIL_SIG}

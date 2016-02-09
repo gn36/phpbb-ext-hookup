@@ -1,0 +1,13 @@
+Subject: Evenement Modifié: "{TOPIC_TITLE}"
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification car vous etes un membre inscrit à l'évenement, "{TOPIC_TITLE}" sur "{SITENAME}". La date précédemment définie de cet evenement a été réinitialisée.
+
+Merci de visiter a nouveau le sujet correspondant pour actualiser votre présence en fonction des nouvelles dates qui vous seront proposées.
+
+Veuillez cliquer sur le lien suivant pour acceder au sujet et l’événement associé :
+
+{U_TOPIC}
+
+{EMAIL_SIG}

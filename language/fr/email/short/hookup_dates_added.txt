@@ -1,0 +1,9 @@
+Subject: Notification de nouvelle date - « {TOPIC_TITLE} »
+
+Bonjour {USERNAME},
+
+Vous recevez cette notification car vous participez à un événement planifié dans le sujet « {TOPIC_TITLE} » sur « {SITENAME} ». Depuis votre dernière visite, cet événement a reçu de nouvelles dates. Vous pouvez utiliser le lien suivant pour voir le sujet et l’événement planifié, aucune autre notification ne vous sera envoyée jusqu’à votre prochaine visite sur ce sujet.
+
+{U_TOPIC}
+
+{EMAIL_SIG}

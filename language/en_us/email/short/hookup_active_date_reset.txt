@@ -1,0 +1,13 @@
+Subject: Active date reset: "{TOPIC_TITLE}"
+
+Hello {USERNAME},
+
+You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}". The active date for this meeting planner has been reset.
+
+Please visit the meeting planner again to update your status so a new date can be found.
+
+You can use the following link to view the topic and the meeting planner:
+
+{U_TOPIC}
+
+{EMAIL_SIG}
