@@ -44,9 +44,10 @@ class ext extends \phpbb\extension\base
 			return false;
 		}
 
-		$ret['version']  = $matches[2];
-		$ret['operator'] = $matches[1];
-		$ret['operator'] = str_replace(array('gt;', 'lt;'), array('>', '<'), $ret['operator']);
+		$ret = array(
+			'version' => $matches[2],
+			'operator' => str_replace(array('gt;', 'lt;'), array('>', '<'), $matches[1]),
+		);
 
 		return $ret;
 	}
@@ -88,7 +89,6 @@ class ext extends \phpbb\extension\base
 				case 'php':
 					if (!phpbb_version_compare(PHP_VERSION, $info['version'], $info['operator']))
 					{
-						echo "PHP VERSION FAILED";
 						return false;
 					}
 					break;
@@ -96,15 +96,12 @@ class ext extends \phpbb\extension\base
 				case 'phpbb/phpbb':
 					if (phpbb_version_compare($config['version'], $info['version'], $info['operator']))
 					{
-						// No suitable phpbb Version
-						echo "PHPBB VERSION FAILED";
 						return false;
 					}
 					break;
 				case 'gn36/phpbb-oo-posting-api':
 					if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
 					{
-						echo "Vendor dependency $key is missing.";
 						return false;
 					}
 					break;
@@ -112,7 +109,6 @@ class ext extends \phpbb\extension\base
 					// This should be an extension as a requirement
 					if (!$mgr->is_enabled($key))
 					{
-						echo "EXTENSION $key IS MISSING";
 						return false;
 					}
 
@@ -122,10 +118,8 @@ class ext extends \phpbb\extension\base
 
 					if (!phpbb_version_compare($ext_version, $info['version'], $info['operator']))
 					{
-						echo "EXTENSION $key HAS INCOMPATIBLE VERSION";
 						return false;
 					}
-
 			}
 		}
 
