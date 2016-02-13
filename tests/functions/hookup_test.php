@@ -512,19 +512,253 @@ class gn36_hookup_hookup_test extends phpbb_database_test_case
 		$this->markTestIncomplete();
 	}
 
-	public function test_delete()
+	public function deleteProvider()
 	{
-		//TODO
-		$this->markTestIncomplete();
+		$topic_data_base = array(
+			array(
+				'topic_id' => 1,
+				'hookup_enabled' => 1,
+				'hookup_autoreset' => 0,
+				'hookup_active_date' => 0,
+				'hookup_self_invite' => 0
+			),
+			array(
+				'topic_id' => 2,
+				'hookup_enabled' => 1,
+				'hookup_autoreset' => 1,
+				'hookup_active_date' => 0,
+				'hookup_self_invite' => 0
+			),
+			array(
+				'topic_id' => 3,
+				'hookup_enabled' => 1,
+				'hookup_autoreset' => 1,
+				'hookup_active_date' => 0,
+				'hookup_self_invite' => 0
+			),
+			array(
+				'topic_id' => 4,
+				'hookup_enabled' => 1,
+				'hookup_autoreset' => 1,
+				'hookup_active_date' => 0,
+				'hookup_self_invite' => 0
+			),
+			array(
+				'topic_id' => 5,
+				'hookup_enabled' => 0,
+				'hookup_autoreset' => 0,
+				'hookup_active_date' => 0,
+				'hookup_self_invite' => 0
+			),
+		);
+
+		$topic_data = array(
+			'full' => $topic_data_base,
+			'enabled_and_date' => $topic_data_base,
+			'disabled' => $topic_data_base,
+			'nonexistent' => $topic_data_base,
+		);
+		$topic_data['full'][2] = array(
+			'topic_id' => 3,
+			'hookup_enabled' => 0,
+			'hookup_autoreset' => 0,
+			'hookup_active_date' => 0,
+			'hookup_self_invite' => 0
+		);
+		$topic_data['enabled_and_date'][0] = array(
+			'topic_id' => 1,
+			'hookup_enabled' => 0,
+			'hookup_autoreset' => 0,
+			'hookup_active_date' => 0,
+			'hookup_self_invite' => 0
+		);
+		$topic_data['disabled'][4] = array(
+			'topic_id' => 5,
+			'hookup_enabled' => 0,
+			'hookup_autoreset' => 0,
+			'hookup_active_date' => 0,
+			'hookup_self_invite' => 0
+		);
+
+		$dates_data_base = array(
+			array(
+				'topic_id' 	=> 1,
+				'date_id'	=> 1,
+				'date_time'	=> 1,
+			),
+			array(
+				'topic_id' 	=> 3,
+				'date_id'	=> 2,
+				'date_time'	=> 0,
+			),
+		);
+		$dates_data = array(
+			'full' => array(
+				array(
+					'topic_id' 	=> 1,
+					'date_id'	=> 1,
+					'date_time'	=> 1,
+				)
+			),
+			'enabled_and_date' => array(
+				array(
+					'topic_id' 	=> 3,
+					'date_id'	=> 2,
+					'date_time'	=> 0,
+				),
+			),
+			'disabled' => $dates_data_base,
+			'nonexistent' => $dates_data_base,
+		);
+
+		$members_data_base = array(
+			array(
+				'topic_id' 	=> 3,
+				'user_id' 	=> 2,
+				'comment'	=> 'commentdata',
+				'notify_status' => 0,
+			),
+		);
+
+		$members_data = array(
+			'full' => array(),
+			'enabled_and_date' => $members_data_base,
+			'disabled' => $members_data_base,
+			'nonexistent' => $members_data_base,
+		);
+
+		$entries_data_base = array(
+			array(
+				'topic_id'	=> 3,
+				'date_id'	=> 2,
+				'user_id'	=> 2,
+				'available'	=> 1,
+			),
+		);
+
+		$entries_data = array(
+			'full' => array(),
+			'enabled_and_date' => $entries_data_base,
+			'disabled' => $entries_data_base,
+			'nonexistent' => $entries_data_base,
+		);
+		return array(
+			'full' => array(3, true,
+				// Topic data
+				$topic_data['full'],
+				// Dates date => (date, date_time, text)
+				$dates_data['full'],
+				// Members (user, comment, notify)
+				$members_data['full'],
+				// Entries user => (date => available)
+				$entries_data['full'],
+				// original topic data
+				$topic_data_base,
+			),
+			'enabled_and_date' => array(1, true,
+				$topic_data['enabled_and_date'],
+				$dates_data['enabled_and_date'],
+				$members_data['enabled_and_date'],
+				$entries_data['enabled_and_date'],
+				$topic_data_base,
+			),
+			'disabled' => array(5, true,
+				$topic_data['disabled'],
+				$dates_data['disabled'],
+				$members_data['disabled'],
+				$entries_data['disabled'],
+				$topic_data_base,
+			),
+			'nonexistent' => array(10, true,
+				$topic_data['nonexistent'],
+				$dates_data['nonexistent'],
+				$members_data['nonexistent'],
+				$entries_data['nonexistent'],
+				$topic_data_base,
+			),
+		);
 	}
 
-	public function test_delete_in_db()
+	/**
+	 * @dataProvider deleteProvider
+	 */
+	public function test_delete($topic_id, $returnvalue, $topicdata, $datedata, $memberdata, $entriesdata)
 	{
-		//TODO
-		$this->markTestIncomplete();
+		$hookup = $this->get_hookup();
+
+		$hookup->load_hookup($topic_id);
+		$this->assertEquals($returnvalue, $hookup->delete());
+
+		// Attributes
+		$this->assertAttributeEmpty('hookup_availables', $hookup);
+		$this->assertAttributeEmpty('hookup_dates', $hookup);
+		$this->assertAttributeEmpty('hookup_users', $hookup);
+		$this->assertAttributeEmpty('hookup_available_sums', $hookup);
+		$this->assertFalse($hookup->hookup_enabled);
+		$this->assertFalse($hookup->hookup_autoreset);
+		$this->assertFalse($hookup->hookup_self_invite);
+		$this->assertEquals(0, $hookup->hookup_active_date);
+
+		// Database
+		$sql = 'SELECT topic_id, hookup_enabled, hookup_autoreset, hookup_self_invite, hookup_active_date FROM phpbb_topics ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($topicdata, $sql);
+		$sql = 'SELECT topic_id, date_id, date_time FROM phpbb_hookup_dates ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($datedata, $sql);
+		$sql = 'SELECT topic_id, user_id, comment, notify_status FROM phpbb_hookup_members ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($memberdata, $sql);
+		$sql = 'SELECT topic_id, date_id, user_id, available FROM phpbb_hookup_available ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($entriesdata, $sql);
+	}
+
+	/**
+	 * Check the case of changed topics table
+	 * @dataProvider deleteProvider
+	 */
+	public function test_delete_in_db_1($topic_id, $returnvalue, $topicdata, $datedata, $memberdata, $entriesdata)
+	{
+		$hookup = $this->get_hookup();
+
+		$hookup->delete_in_db($topic_id);
+
+		// Database
+		$sql = 'SELECT topic_id, hookup_enabled, hookup_autoreset, hookup_self_invite, hookup_active_date FROM phpbb_topics ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($topicdata, $sql);
+		$sql = 'SELECT topic_id, date_id, date_time FROM phpbb_hookup_dates ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($datedata, $sql);
+		$sql = 'SELECT topic_id, user_id, comment, notify_status FROM phpbb_hookup_members ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($memberdata, $sql);
+		$sql = 'SELECT topic_id, date_id, user_id, available FROM phpbb_hookup_available ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($entriesdata, $sql);
+	}
+
+	/**
+	 * Check the case of unchanged topics table
+	 * @dataProvider deleteProvider
+	 */
+	public function test_delete_in_db_2($topic_id, $returnvalue, $topicdata, $datedata, $memberdata, $entriesdata, $topicdata_base)
+	{
+		$hookup = $this->get_hookup();
+
+		$hookup->delete_in_db($topic_id, false);
+
+		// Database
+		$sql = 'SELECT topic_id, hookup_enabled, hookup_autoreset, hookup_self_invite, hookup_active_date FROM phpbb_topics ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($topicdata_base, $sql);
+		$sql = 'SELECT topic_id, date_id, date_time FROM phpbb_hookup_dates ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($datedata, $sql);
+		$sql = 'SELECT topic_id, user_id, comment, notify_status FROM phpbb_hookup_members ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($memberdata, $sql);
+		$sql = 'SELECT topic_id, date_id, user_id, available FROM phpbb_hookup_available ORDER BY topic_id ASC';
+		$this->assertSqlResultEquals($entriesdata, $sql);
 	}
 
 	public function test_merge()
+	{
+		//TODO
+		$this->markTestIncomplete();
+	}
+
+	public function test_merge_in_db()
 	{
 		//TODO
 		$this->markTestIncomplete();

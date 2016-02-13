@@ -150,7 +150,6 @@ class hookup
 				AND ug.user_pending = 0';
 		$result = $db->sql_query($sql);
 
-		$new_users = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
 			if (!isset($this->hookup_users[$row['user_id']]))
@@ -192,7 +191,7 @@ class hookup
 			return false;
 		}
 
-		foreach ($this->hookup_dates as $key => $entry)
+		foreach ($this->hookup_dates as $entry)
 		{
 			if (($text == null && $entry['date_time'] == $date) || ($date == '0' && $entry['text'] == $text))
 			{
@@ -247,12 +246,13 @@ class hookup
 	{
 		$this->hookup_available_sums = array();
 
-		foreach ($this->hookup_dates as $date_id => $data)
+		$date_ids = array_keys($this->hookup_dates);
+		foreach ($date_ids as $date_id)
 		{
 			$this->hookup_available_sums[$date_id] = array(hookup::HOOKUP_YES=>0, hookup::HOOKUP_MAYBE=>0, hookup::HOOKUP_NO=>0);
 		}
 
-		foreach ($this->hookup_availables as $user_id => $date_list)
+		foreach ($this->hookup_availables as $date_list)
 		{
 			foreach ($date_list as $date_id => $availability)
 			{
@@ -470,6 +470,7 @@ class hookup
 		$db->sql_query($sql);
 		if ($this->hookup_availables)
 		{
+			$rows = array();
 			foreach ($this->hookup_availables as $user_id => $availables)
 			{
 				foreach ($availables as $date_id => $available)
@@ -512,6 +513,7 @@ class hookup
 		$this->hookup_available_sums = array();
 		$this->hookup_autoreset = false;
 		$this->hookup_self_invite = false;
+		$this->hookup_active_date = 0;
 
 		// This deletes the data (and also works if the topic does not exist anymore :)
 		return $this->submit(false, false, true);
@@ -540,7 +542,7 @@ class hookup
 
 		if ($update_topics)
 		{
-			$sql = "UPDATE " . TOPICS_TABLE . " SET hookup_enabled = 0 WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
+			$sql = "UPDATE " . TOPICS_TABLE . " SET hookup_enabled = 0, hookup_autoreset = 0, hookup_active_date = 0, hookup_self_invite = 0 WHERE " . $this->db->sql_in_set('topic_id', $topic_ids);
 			$this->db->sql_query($sql);
 		}
 	}
