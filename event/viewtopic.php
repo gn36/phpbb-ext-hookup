@@ -25,7 +25,8 @@ class viewtopic implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.viewtopic_assign_template_vars_before'	=> 'show_hookup_viewtopic',
+			// We need reduced priority to ensure this is called after gn36/hjw_bridge
+			'core.viewtopic_assign_template_vars_before'	=> array('show_hookup_viewtopic', -1),
 		);
 	}
 
@@ -902,6 +903,35 @@ class viewtopic implements EventSubscriberInterface
 			return array($this->user->lang('NO_HOOKUP_MEMBER'));
 		}
 
+		// Don't remove, used in the event!
+		$error = array();
+		$topic_id = $this->hookup->topic_id;
+		$topic_data = $event['topic_data'];
+		$active_date = $this->hookup->hookup_active_date;
+		$comment = $this->request->variable('comment', '', true);
+
+		/**
+		 * Perform additional actions when a user changes his status
+		 *
+		 * @event gn36.hookup.viewtopic.process_status
+		 * @var array	availables	Available data unfiltered directly from browser (rw)
+		 * @var array	error		empty error array for returning error messages (rw)
+		 * @var string	comment		User comment raw from browser (rw)
+		 * @var int		topic_id	ID of the topic, the hookup belongs to (ro)
+		 * @var array 	topic_data	data of the topic (first_post_id, etc.) (ro)
+		 * @var int		active_date	Contains the date_id of the active date or 0 if none is set (ro)
+		 * @since 1.0.0-a3
+		 */
+		$vars = array(
+			'availables',
+			'error',
+			'comment',
+			'topic_id',
+			'topic_data',
+			'active_date',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('gn36.hookup.viewtopic.process_status', compact($vars)));
+
 		foreach ($availables as $date_id => $available)
 		{
 			//ignore HOOKUP_UNSET and other invalid values
@@ -915,9 +945,9 @@ class viewtopic implements EventSubscriberInterface
 
 		$this->hookup->update_available_sums();
 
-		$this->hookup->set_user_data($this->user->data['user_id'], 0, $this->request->variable('comment', '', true));
+		$this->hookup->set_user_data($this->user->data['user_id'], 0, $comment);
 
-		return array();
+		return $error;
 	}
 
 	/**
