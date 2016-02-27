@@ -7,8 +7,9 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
+namespace gn36\hookup\tests\cron;
 
-class gn36_hookup_main_test extends phpbb_database_test_case
+class gn36_hookup_main_test extends \phpbb_database_test_case
 {
 	static protected function setup_extensions()
 	{

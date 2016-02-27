@@ -7,10 +7,11 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
+namespace gn36\hookup\tests\functions;
 
 use \gn36\hookup\functions\hookup;
 
-class gn36_hookup_hookup_test extends phpbb_database_test_case
+class gn36_hookup_hookup_test extends \phpbb_database_test_case
 {
 	static protected function setup_extensions()
 	{
