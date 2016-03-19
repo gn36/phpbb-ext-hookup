@@ -80,6 +80,10 @@ class ext extends \phpbb\extension\base
 
 		$require = array_merge($require, $this->extra_dependencies());
 
+		/** @var $user \phpbb\user */
+		$user = $this->container->get('user');
+		$user->add_lang_ext($this->extension_name, 'install');
+
 		foreach ($require as $key => $value)
 		{
 			$info = $this->split_version_info($value);
@@ -89,6 +93,7 @@ class ext extends \phpbb\extension\base
 				case 'php':
 					if (!phpbb_version_compare(PHP_VERSION, $info['version'], $info['operator']))
 					{
+						trigger_error($user->lang('WRONG_PHP_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 						return false;
 					}
 					break;
@@ -96,12 +101,14 @@ class ext extends \phpbb\extension\base
 				case 'phpbb/phpbb':
 					if (phpbb_version_compare($config['version'], $info['version'], $info['operator']))
 					{
+						trigger_error($user->lang('WRONG_PHPBB_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 						return false;
 					}
 					break;
 				case 'gn36/phpbb-oo-posting-api':
 					if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
 					{
+						trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 						return false;
 					}
 					break;
@@ -109,6 +116,7 @@ class ext extends \phpbb\extension\base
 					// This should be an extension as a requirement
 					if (!$mgr->is_enabled($key))
 					{
+						trigger_error($user->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 						return false;
 					}
 
@@ -118,6 +126,7 @@ class ext extends \phpbb\extension\base
 
 					if (!phpbb_version_compare($ext_version, $info['version'], $info['operator']))
 					{
+						trigger_error($user->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 						return false;
 					}
 			}
