@@ -407,6 +407,18 @@ class gn36_hookup_hookup_test extends \phpbb_database_test_case
 		$hookup->remove_date($date, $date_id);
 		$this->assertEquals($dates_after, $hookup->hookup_dates);
 		$this->assertEquals($availables_after, $hookup->hookup_availables);
+
+		if ($date_id)
+		{
+			// Active date reset?
+			$hookup->hookup_dates = $dates_before;
+			$hookup->hookup_active_date = $date_id;
+			$hookup->hookup_availables = $availables_before;
+			$hookup->remove_date($date, $date_id);
+			$this->assertEquals($dates_after, $hookup->hookup_dates);
+			$this->assertEquals($availables_after, $hookup->hookup_availables);
+			$this->assertEquals(0, $hookup->hookup_active_date);
+		}
 	}
 
 	public function removeUserProvider()

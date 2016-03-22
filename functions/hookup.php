@@ -350,6 +350,11 @@ class hookup
 				unset($this->hookup_dates[$date_id]);
 			}
 		}
+
+		if ($this->hookup_active_date == $date_id)
+		{
+			$this->hookup_active_date = 0;
+		}
 	}
 
 	/**
