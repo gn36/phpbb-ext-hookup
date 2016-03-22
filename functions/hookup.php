@@ -335,6 +335,10 @@ class hookup
 					//This entry needs to be removed
 					$this->_remove_date_from_userlist($key);
 					unset($this->hookup_dates[$key]);
+					if ($key == $this->hookup_active_date)
+					{
+						$this->hookup_active_date = 0;
+					}
 				}
 			}
 		}

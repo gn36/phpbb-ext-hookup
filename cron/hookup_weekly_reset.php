@@ -156,7 +156,7 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 				} while ($new_time < $now);
 
 				$date_array[] = $new_time + $dst_add;
-				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add);
+				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add, 'text' => null);
 			}
 
 			$hookup->submit();
