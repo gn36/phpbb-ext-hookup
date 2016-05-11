@@ -1,0 +1,9 @@
+Subject: New dates notification- "{TOPIC_TITLE}"
+
+Hello {USERNAME},
+
+You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}". New dates were created automatically for this meeting planner. You can use the following link to view the topic and the meeting planner, no more notifications will be sent until you visit the topic.
+
+{U_TOPIC}
+
+{EMAIL_SIG}

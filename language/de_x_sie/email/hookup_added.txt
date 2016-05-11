@@ -2,7 +2,7 @@ Subject: Sie wurden zu einem Terminplaner eingeladen
 
 Hallo {USERNAME},
 
-Sie wurden zum Terminplaner „{TOPIC_TITLE}“ auf „{SITENAME}“ eingeladen. Bitte tragen Sie dort ein, an welchem der genannten Termine Sie Zeit haben.
+Sie wurden von {ACTING_USER} zum Terminplaner „{TOPIC_TITLE}“ auf „{SITENAME}“ eingeladen. Bitte tragen Sie dort ein, an welchem der genannten Termine Sie Zeit haben.
 
 Sie können das Thema und den Terminplaner hier anzeigen:
 {U_TOPIC}

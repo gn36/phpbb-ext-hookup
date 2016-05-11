@@ -14,6 +14,7 @@ class ext extends \phpbb\extension\base
 		'gn36.hookup.notification.type.active_date_reset',
 		'gn36.hookup.notification.type.active_date_set',
 		'gn36.hookup.notification.type.date_added',
+		'gn36.hookup.notification.type.date_added_rotation',
 		'gn36.hookup.notification.type.invited',
 		'gn36.hookup.notification.type.user_added',
 	);

@@ -2,7 +2,7 @@ Subject: Neue Benutzer zum Terminplaner hinzugefügt
 
 Hallo {USERNAME},
 
-Du erhältst diese Nachricht um dich zu informieren, dass neue Benutzer zum "{TOPIC_TITLE}" Terminplaner auf "{SITENAME}".
+Du erhältst diese Nachricht um dich zu informieren, dass neue Benutzer zum "{TOPIC_TITLE}" Terminplaner auf "{SITENAME}" hinzugefügt wurden.
 
 Du kannst das Thema und den Terminplaner hier aufrufen:
 {U_TOPIC}

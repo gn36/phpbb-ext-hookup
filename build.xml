@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="gn36/hookup" default="rebuild-archive">
+	<property name="buildfolder" value="./build/" />
+	<property name="extvendor" value="gn36" />
+	<property name="extname" value="hookup" />
+
+	<!-- AUTO CONFIG from here on -->
+	<property name="dir" value="${buildfolder}data/${extvendor}/${extname}/" />
+	<property name="zipfolder" value="${buildfolder}zip/" />
+	
+	<exec dir="${project.basedir}"
+			command='php -r "\$j = json_decode(file_get_contents(\"composer.json\")); echo \$j->version;"'
+			checkreturn="true"
+			outputProperty='version' />
+	
+	<!-- ======== FILESETS ========= -->
+	<fileset dir="${project.basedir}" id="extfiles">
+		<include name="**/*.php" />
+		<include name="**/*.yml" />
+		<include name="composer.json" />
+		<include name="license.txt" />
+		<include name="README.md" />
+		<include name="**/*.jpg" />
+		<include name="**/*.jpeg" />
+		<include name="**/*.gif" />
+		<include name="**/*.png" />
+		<include name="**/*.css" />
+		<include name="**/*.html" />
+		<include name="**/*.js" />
+		<exclude name=".travis.yml" />
+		<exclude name="tests/**" />
+		<exclude name="travis/**" />
+		<exclude name=".git/**" />
+		<exclude name="build/**" />
+	</fileset>
+
+	<!-- ============================================== -->
+	<!-- ======== TARGETS ============================= -->
+	<!-- ============================================== -->
+
+	<!-- ======== PREPARE ========== -->
+	<target name="prepare">
+		<echo msg="creating build directory" />
+		<mkdir dir="${buildfolder}" />
+		<mkdir dir="${dir}" />
+		<mkdir dir="${zipfolder}" />	
+	</target>
+	
+	<!-- ======== BUILD ============= -->
+	<target name="build" depends="prepare">
+		<echo msg="copying files to build dir" />
+		<copy todir="${dir}">
+			<fileset refid="extfiles" />
+		</copy>
+		
+		
+		<!-- Install composer dependencies, if there are any. -->
+		<exec dir="${dir}"
+			command='php -r "\$j = json_decode(file_get_contents(\"composer.json\"), true); if (isset(\$j[\"require\"][\"php\"])) {unset(\$j[\"require\"][\"php\"]);} echo (count(\$j[\"require\"]));"'
+			checkreturn="true"
+			outputProperty='composer-has-dependencies' />
+		<if>
+			<equals arg1="${composer-has-dependencies}" arg2="1" trim="true" />
+			<then>
+				<!-- We have non-dev composer dependencies -->
+				<exec dir="."
+					command="git ls-tree ${revision} composer.phar"
+					checkreturn="true"
+					outputProperty='composer-ls-tree-output' />
+				<if>
+					<equals arg1="${composer-ls-tree-output}" arg2="" trim="true" />
+					<then>
+						<fail message="There are composer dependencies, but composer.phar is missing." />
+					</then>
+					<else>
+						<!-- Export the phar, install dependencies, delete phar. -->
+						<exec dir="."
+							command="git archive ${revision} composer.phar | tar -xf - -C ${dir}"
+							checkreturn="true" />
+						<exec dir="${dir}"
+							command="php composer.phar install --no-dev --optimize-autoloader"
+							checkreturn="true"
+							passthru="true" />
+						<delete file="${dir}/composer.phar" />
+					</else>
+				</if>
+			</then>
+			<else>
+				<!-- We do not have composer dependencies, do not ship composer files -->
+				<delete file="${dir}/composer.lock" />
+				<delete file="${dir}/composer.phar" />
+			</else>
+		</if>
+		
+	</target>
+	
+	<!-- ======= ARCHIVE ========== -->
+	<target name="archive" depends="build">
+		<zip destfile="${zipfolder}/${extvendor}-${extname}-${version}.zip" includeemptydirs="true" basedir="${dir}" />
+	</target>
+	
+	<!-- ======= REBUILD ========== -->
+	<target name="rebuild">
+		<delete dir="${buildfolder}/data" />
+		<phingcall target="build" />
+	</target>
+	
+	<!-- ======= REBUILD-ARCHIVE == -->
+	<target name="rebuild-archive">
+		<delete dir="${buildfolder}/data" />
+		<delete file="${zipfolder}/${extvendor}-${extname}-${version}.zip" />
+		<phingcall target="archive" />
+	</target>
+	
+
+</project>

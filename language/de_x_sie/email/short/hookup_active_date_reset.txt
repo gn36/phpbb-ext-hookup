@@ -2,7 +2,7 @@ Subject: Aktives Datum zurückgesetzt: "{TOPIC_TITLE}"
 
 Hallo {USERNAME},
 
-Sie erhalten diese Benachrichtigung, weil Sie ein Teilnehmer des Terminplaners, "{TOPIC_TITLE}" auf "{SITENAME}" sind. Das aktive Datum für diesen Terminplaner wurde zurückgesetzt und es wird ein neuer Termin gesucht.
+Sie erhalten diese Benachrichtigung, weil Sie ein Teilnehmer des Terminplaners, "{TOPIC_TITLE}" auf "{SITENAME}" sind. Das aktive Datum für diesen Terminplaner wurde von {ACTING_USER} zurückgesetzt und es wird ein neuer Termin gesucht.
 
 Bitte besuchen Sie den Terminplaner erneut um Ihren Status zu aktualisieren, so dass ein neuer Termin gefunden werden kann.
 

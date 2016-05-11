@@ -1,0 +1,9 @@
+Subject: Benachrichtigung über neue Datumsvorschläge — „{TOPIC_TITLE}“
+
+Hallo {USERNAME},
+
+Sie erhalten diese Benachrichtigung, weil Sie Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ sind. Zu diesem Terminplaner wurden automatisch neue Datumsvorschläge hinzugefügt. Du kannst den folgenden Link benutzen, um das Thema und den Terminplaner anzusehen. Sie erhalten keine weitere Benachrichtigung, bis Sie das Thema besucht haben.
+
+{U_TOPIC}
+
+{EMAIL_SIG}

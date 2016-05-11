@@ -28,6 +28,12 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 	/** @var \gn36\hookup\functions\hookup */
 	protected $hookup;
 
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
+
+	/** @var \phpbb\event\dispatcher_interface */
+	protected $dispatcher;
+
 	/** @var string phpBB root path */
 	protected $root_path;
 
@@ -40,13 +46,15 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 	/** @var int */
 	protected $run_interval;
 
-	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\hookup\functions\hookup $hookup, $root_path, $php_ext, $hookup_dates_table)
+	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log_interface $log, \gn36\hookup\functions\hookup $hookup, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $root_path, $php_ext, $hookup_dates_table)
 	{
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
 		$this->log = $log;
 		$this->hookup = $hookup;
+		$this->notification_manager = $notification_manager;
+		$this->dispatcher = $phpbb_dispatcher;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 		$this->dates_table = $hookup_dates_table;
@@ -61,11 +69,12 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 	{
 		$now = time();
 
-		$sql = 'SELECT t.topic_id, d.date_time, d.text FROM ' . TOPICS_TABLE . ' t, ' . $this->dates_table . ' d  WHERE t.topic_id = d.topic_id AND t.hookup_autoreset = 1 AND t.hookup_enabled = 1';
+		$sql = 'SELECT t.topic_id, t.forum_id, t.topic_title, d.date_time, d.text FROM ' . TOPICS_TABLE . ' t, ' . $this->dates_table . ' d  WHERE t.topic_id = d.topic_id AND t.hookup_autoreset = 1 AND t.hookup_enabled = 1';
 		$result = $this->db->sql_query($sql);
 
 		$date_list = array();
 		$text_list = array();
+		$topic_data = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			if ($row['text'] == null)
@@ -76,6 +85,11 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 			{
 				$text_list[$row['topic_id']][] = $row['text'];
 			}
+			$topic_data[$row['topic_id']] = array(
+				'topic_title' 	=> $row['topic_title'],
+				'topic_id'		=> $row['topic_id'],
+				'forum_id'		=> $row['forum_id'],
+			);
 		}
 
 		$hookup = $this->hookup;
@@ -84,6 +98,7 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 			sort($date_array);
 
 			$hookup->load_hookup($topic_id);
+			$dates_added = 0;
 
 			if (count($date_array) < 3)
 			{
@@ -121,6 +136,7 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 						'date_time'	=> $new_time + $dst_add,
 						'text'		=> null,
 						);
+					$dates_added++;
 				}
 			}
 
@@ -157,9 +173,14 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 
 				$date_array[] = $new_time + $dst_add;
 				$hookup->hookup_dates[] = array('date_time' => $new_time + $dst_add, 'text' => null);
+				$dates_added++;
 			}
 
 			$hookup->submit();
+			if ($dates_added)
+			{
+				$this->notification_manager->add_notifications('gn36.hookup.notification.type.date_added_rotation', $topic_data[$topic_id]);
+			}
 		}
 
 		$this->config->set('hookup_weekly_reset_last_gc', $now, true);

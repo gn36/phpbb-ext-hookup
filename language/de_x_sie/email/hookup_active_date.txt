@@ -2,7 +2,7 @@ Subject: Aktives Datum wurde festgelegt: {ACTIVE_DATE_SHORT} — „{TOPIC_TITLE
 
 Hallo {USERNAME},
 
-Sie erhalten diese Benachrichtigung, weil Sie Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ sind. Der aktive Termin dieses Terminplaners wurde festgelegt auf den:
+Sie erhalten diese Benachrichtigung, weil Sie Mitglied des Terminplaners „{TOPIC_TITLE}“ auf „{SITENAME}“ sind. Der aktive Termin dieses Terminplaners wurde von {ACTING_USER} festgelegt auf den:
 
 {ACTIVE_DATE}
 

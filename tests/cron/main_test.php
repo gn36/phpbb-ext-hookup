@@ -145,9 +145,19 @@ class gn36_hookup_main_test extends \phpbb_database_test_case
 			'hookup_weekly_reset_gc' => 86400,
 		));
 
+		$event_dispatcher = $this->getMockBuilder('\phpbb\event\dispatcher')
+			->disableOriginalConstructor()
+			->setMethods(array())
+			->getMock();
+
+		$notification_manager = $this->getMockBuilder('\phpbb\notification\manager')
+			->disableOriginalConstructor()
+			->setMethods(array('add_notifications'))
+			->getMock();
+
 		//TODO: Replace by mock
 		$hookup = new \gn36\hookup\functions\hookup($db, 'phpbb_hookup_members', 'phpbb_hookup_dates', 'phpbb_hookup_available');
 
-		return new \gn36\hookup\cron\hookup_weekly_reset($this->cache, $this->config, $db, $this->log, $hookup, $phpbb_root_path, $phpEx, 'phpbb_hookup_dates', 84600);
+		return new \gn36\hookup\cron\hookup_weekly_reset($this->cache, $this->config, $db, $this->log, $hookup, $event_dispatcher, $notification_manager, $phpbb_root_path, $phpEx, 'phpbb_hookup_dates', 84600);
 	}
 }

@@ -29,6 +29,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_NOTIFY_ACTIVE_DATE_SET'		=> 'The <strong>active date</strong> was set to <strong>%3$s</strong> for %2$s by %1$s (%4$s yes, %5$s no, %6$s maybe).',
 	'HOOKUP_NOTIFY_ACTIVE_DATE_RESET'	=> 'The <strong>active date</strong> for %2$s was <strong>reset</strong> by %1$s.',
 	'HOOKUP_NOTIFY_DATE_ADDED'			=> 'New date options have been added to %2$s by %1$s.',
+	'HOOKUP_NOTIFY_DATE_ADDED_ROTATION'	=> 'New weekly date options have been added to %1$s.',
 	'HOOKUP_NOTIFY_USER_ADDED'			=> 'A new user %1$s has been added to %2$s.',
 	'HOOKUP_NOTIFY_INVITED'				=> 'You have been <strong>invited</strong> to participate in %2$s by %1$s.'
 ));
