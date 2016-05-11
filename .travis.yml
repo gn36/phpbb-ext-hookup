@@ -45,8 +45,8 @@ branches:
     - /^dev\/.*$/
 
 install:
-  - if [ "${TRAVIS_PHP_VERSION}" = "5.3.3" ]; then composer config -g -- disable-tls true ; fi
-  - if [ "${TRAVIS_PHP_VERSION}" = '5.3.3' ]; then composer config -g -- secure-http false; fi;
+  - if [ "${TRAVIS_PHP_VERSION}" = "5.3.3" ]; then composer config disable-tls true ; fi
+  - if [ "${TRAVIS_PHP_VERSION}" = '5.3.3' ]; then composer config secure-http false; fi;
   - composer install --dev --no-interaction --prefer-source
   - chmod +x travis/prepare-phpbb.sh
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
