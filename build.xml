@@ -18,6 +18,7 @@
 	<fileset dir="${project.basedir}" id="extfiles">
 		<include name="**/*.php" />
 		<include name="**/*.yml" />
+		<include name="language/**/*.txt" />
 		<include name="composer.json" />
 		<include name="license.txt" />
 		<include name="README.md" />
