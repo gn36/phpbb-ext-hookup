@@ -35,20 +35,19 @@ class ext extends \phpbb\extension\base
 	 */
 	protected function split_version_info($string)
 	{
-		//$pattern = '#(>=|>|ge|gt|==?|eq|!=|<>|ne|<=|<|le|lt)([0-9._*-PLAHBETRCDV]*?)$#is';
-		$pattern = '#(>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*-PLAHBETRCDV]+?)$#is';
+		$pattern = '#(>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*-PLAHBETRCDV]+?)(?:$|,)#is';
 
 		$matches = null;
-		preg_match($pattern, $string, $matches);
+		preg_match_all($pattern, $string, $matches);
 		if (!$matches)
 		{
 			return false;
 		}
 
-		$ret = array(
-			'version' => $matches[2],
-			'operator' => str_replace(array('gt;', 'lt;'), array('>', '<'), $matches[1]),
-		);
+		$ret = array();
+		$ret['version']  = $matches[2];
+		$ret['operator'] = $matches[1];
+		$ret['operator'] = str_replace(array('gt;', 'lt;'), array('>', '<'), $ret['operator']);
 
 		return $ret;
 	}
@@ -89,47 +88,50 @@ class ext extends \phpbb\extension\base
 		{
 			$info = $this->split_version_info($value);
 
-			switch (strtolower($key))
+			foreach ($info['version'] as $vkey => $version)
 			{
-				case 'php':
-					if (!phpbb_version_compare(PHP_VERSION, $info['version'], $info['operator']))
-					{
-						trigger_error($user->lang('WRONG_PHP_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-						return false;
-					}
-					break;
-				case 'phpbb':
-				case 'phpbb/phpbb':
-					if (phpbb_version_compare($config['version'], $info['version'], $info['operator']))
-					{
-						trigger_error($user->lang('WRONG_PHPBB_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-						return false;
-					}
-					break;
-				case 'gn36/phpbb-oo-posting-api':
-					if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
-					{
-						trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-						return false;
-					}
-					break;
-				default:
-					// This should be an extension as a requirement
-					if (!$mgr->is_enabled($key))
-					{
-						trigger_error($user->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-						return false;
-					}
+				switch (strtolower($key))
+				{
+					case 'php':
+						if (!phpbb_version_compare(PHP_VERSION, $version, $info['operator'][$vkey]))
+						{
+							trigger_error($user->lang('WRONG_PHP_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						break;
+					case 'phpbb':
+					case 'phpbb/phpbb':
+						if (!phpbb_version_compare($config['version'], $version, $info['operator'][$vkey]))
+						{
+							trigger_error($user->lang('WRONG_PHPBB_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						break;
+					case 'gn36/phpbb-oo-posting-api':
+						if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
+						{
+							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						break;
+					default:
+						// This should be an extension as a requirement
+						if (!$mgr->is_enabled($key))
+						{
+							trigger_error($user->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
 
-					$ext_meta_mgr	= $mgr->create_extension_metadata_manager($key, $template);
-					$ext_meta 		= $ext_meta_mgr->get_metadata();
-					$ext_version 	= $ext_meta['version'];
+						$ext_meta_mgr	= $mgr->create_extension_metadata_manager($key, $template);
+						$ext_meta 		= $ext_meta_mgr->get_metadata();
+						$ext_version 	= $ext_meta['version'];
 
-					if (!phpbb_version_compare($ext_version, $info['version'], $info['operator']))
-					{
-						trigger_error($user->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-						return false;
-					}
+						if (!phpbb_version_compare($ext_version, $version, $info['operator'][$vkey]))
+						{
+							trigger_error($user->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+				}
 			}
 		}
 
