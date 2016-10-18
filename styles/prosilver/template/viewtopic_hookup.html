@@ -1,40 +1,12 @@
 <div style="clear:both"></div>
 <!-- IF S_ACTIVE_DATE -->
 <div class="panel" id="hookup-active-date">
-<div class="inner"><span class="corners-top"><span></span></span>
-	<style type="text/css">
-	#hookup-table, #tabs-boundary{
-		display: none;
-	}
-	</style>
-	<script>
-	function toggle_hookup_table() {
-		if(document.getElementById('hookup-table').style.display == 'block') {
-			var link_text = '{L_SHOW_ALL_DATES}';
-			var set_display = 'none';
-		}
-		else {
-			var link_text = '{L_HIDE_ALL_DATES}';
-			var set_display = 'block';
-		}
-		document.getElementById('show-all-dates-link').innerHTML = link_text;
-		
-		document.getElementById('hookup-table').style.display = set_display;
-		if(document.getElementById('hookup-add-date')) document.getElementById('hookup-add-date').style.display = set_display;
-		if(document.getElementById('hookup-add-users')) document.getElementById('hookup-add-users').style.display = set_display;
-		if(document.getElementById('hookup-add-groups')) document.getElementById('hookup-add-groups').style.display = set_display;
-		if(document.getElementById('hookup-submit')) document.getElementById('hookup-submit').style.display = set_display;
-		if(document.getElementById('tabs-boundary')) document.getElementById('tabs-boundary').style.display = set_display;
-	}
-	</script>
+	
 	<h2><b>{L_ACTIVE_DATE}{L_COLON}</b> {ACTIVE_DATE_DATE}</h2>
 	<!-- IF S_IS_HOOKUP_OWNER --><a class="genmed" href="{U_UNSET_ACTIVE}">{L_UNSET_ACTIVE}</a> | <!-- ENDIF --><a class="genmed" id="show-all-dates-link" href="#" onclick="toggle_hookup_table()">{L_SHOW_ALL_DATES}</a>
-<span class="corners-bottom"><span></span></span></div>
+
 </div>
 <!-- ENDIF -->
-
-
-
 
 <div id="tabs-boundary">
 <div id="tabs" class="sub-panels" role="tablist" data-show-panel="overview-panel">
@@ -55,7 +27,6 @@
 </div>
 
 <div class="panel bg3" id="overview-panel">
-<div class="inner"><span class="corners-top"><span></span></span>
 <h2>{L_HOOKUP}</h2>
 <p class="author">{L_HOOKUP_DESC}</p>
 
@@ -172,12 +143,11 @@
 		</form>
 	</fieldset>
 <!-- ENDIF -->
-	<span class="corners-bottom"><span></span></span></div>
+	
 </div>
 
 <!-- IF S_IS_HOOKUP_OWNER or S_IS_HOOKUP_MEMBER -->
 <div class="panel bg3" id="add-date-panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
 
 	<p>{L_HOOKUP_ADD_DATES_EXPLAIN}</p>
 	
@@ -197,34 +167,22 @@
 			<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
 		</fieldset>
 
-		<script type="text/javascript" src="{S_EXT_PATH}styles/prosilver/template/calendar.js"></script>
-		<script type="text/javascript" src="{S_EXT_PATH}styles/prosilver/template/calendar-setup.js"></script>
-		<script type="text/javascript" src="{S_EXT_PATH}language/{S_LANG_NAME}/calendar-lang.js"></script>
-		<script type="text/javascript">
-		function appendDate(cal) {
-			var formatted_date = cal.date.print(cal.params.ifFormat);
-			var textarea = document.getElementById('add_date');
-			textarea.value += formatted_date + "\n";
-			textarea.scrollTop = textarea.scrollHeight;
-			//cal.hide();
-		}
+		<!-- INCLUDEJS {S_EXT_PATH}vendor/moment/moment/moment.js -->
+		<!-- INCLUDEJS {S_EXT_PATH}vendor/eonasdan/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js -->
+		<!-- INCLUDEJS {S_EXT_PATH}styles/prosilver/template/cal-settings.js -->
 		
-		var cal = Calendar.setup({
-			//inputField	: "add_date",
-			ifFormat	: "{L_HOOKUP_DATEFORMAT_CALENDAR}",
-			button		: "add_date_button",
-			showsTime	: true,
-			onUpdate	: appendDate,
-			electric	: false,
-			cache		: true
-		});
-		//document.getElementById('add_date').readOnly = true;
-		</script>
+		<div class="form-group">
+	        <div class="row">
+	            <div class="col-md-8">
+	                <div id="hookup_datetimepicker"></div>
+	            </div>
+	        </div>
+	    </div>
+		    
 		
 		</form>
 	</fieldset>
 
-	<span class="corners-bottom"><span></span></span></div>
 </div>
 <!-- ENDIF -->
 
@@ -256,14 +214,13 @@
 		<p>{L_HOOKUP_INVITE_SELF_EXPLAIN_GUEST}</p>
 	<!-- ENDIF -->
 
-	<span class="corners-bottom"><span></span></span></div>
+	
 </div>
 <!-- ENDIF -->
 
 <!-- IF S_IS_HOOKUP_OWNER -->
 <div class="panel bg3" id="add-user-panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
-
+	
 	<p>{L_USERNAMES_EXPLAIN}</p>
 	
 	<fieldset class="fields2">
@@ -281,11 +238,9 @@
 		</form>
 	</fieldset>
 
-	<span class="corners-bottom"><span></span></span></div>
 </div>
 
 <div class="panel bg3" id="add-group-panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
 	
 	<p>{L_HOOKUP_ADD_GROUPS_EXPLAIN}</p>
 	
@@ -301,11 +256,9 @@
 		</form>
 	</fieldset>
 
-	<span class="corners-bottom"><span></span></span></div>
 </div>
 
 <div class="panel bg3" id="delete-panel">
-	<div class="inner"><span class="corners-top"><span></span></span>
 
 	<!-- IF S_HAS_USERS or S_HAS_DATES -->
 	<p>{L_HOOKUP_DELETE_EXPLAIN}</p>
@@ -386,7 +339,6 @@
 		</form>
 	</fieldset>
 
-	<span class="corners-bottom"><span></span></span></div>
 </div>
 <!-- ENDIF -->
 

@@ -119,3 +119,8 @@ div.unset-bg, td.unset-bg, select.unset-bg, option.unset-bg {
 		display:inline;
 	}
 }
+
+#hookup-table, #tabs-boundary, #hookup_datetimepicker {
+	display: none;
+}
+/* TODO: Style Calendar */

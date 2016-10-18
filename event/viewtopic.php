@@ -145,13 +145,12 @@ class viewtopic implements EventSubscriberInterface
 		$this->hookup->submit();
 
 		// Some frequently used data:
-		$forum_id = $event['forum_id'];
-		$topic_id = $event['topic_id'];
+		$forum_id = (int) $event['forum_id'];
+		$topic_id = (int) $event['topic_id'];
 		$is_owner  = $event['topic_data']['topic_poster'] == $this->user->data['user_id'] || $this->auth->acl_get('m_edit', $event['forum_id']);
 		$is_member = isset($this->hookup->hookup_users[$this->user->data['user_id']]);
-		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id");
+		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&amp;t=$topic_id");
 
-		// TODO: populate lists for adding groups, deleting dates and users
 		if ($is_owner)
 		{
 			// Populate group list
@@ -204,7 +203,6 @@ class viewtopic implements EventSubscriberInterface
 			'S_NUM_DATES_PLUS_1'=> count($this->hookup->hookup_dates) + 1,
 			'U_UNSET_ACTIVE'	=> $viewtopic_url . '&amp;set_active=0',
 			'U_FIND_USERNAME'	=> append_sid("{$this->phpbb_root_path}memberlist.{$this->phpEx}", 'mode=searchuser&amp;form=ucp&amp;field=usernames'),
-			'UA_FIND_USERNAME'	=> append_sid("{$this->phpbb_root_path}memberlist.{$this->phpEx}", 'mode=searchuser&form=ucp&field=usernames', false),
 			'USER_COMMENT'		=> isset($this->hookup->hookup_users[$this->user->data['user_id']])? $this->hookup->hookup_users[$this->user->data['user_id']]['comment'] : '',
 			'HOOKUP_ERRORS'		=> (count($hookup_errors) > 0) ? implode('<br />', $hookup_errors) : false,
 			'HOOKUP_YES'		=> hookup::HOOKUP_YES,
@@ -355,9 +353,9 @@ class viewtopic implements EventSubscriberInterface
 				$active_date_formatted = $this->hookup->hookup_dates[$set_active]['text'];
 			}
 		}
-		$topic_id = $event['topic_id'];
-		$forum_id = $event['forum_id'];
-		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&t=$topic_id");
+		$topic_id = (int) $event['topic_id'];
+		$forum_id = (int) $event['forum_id'];
+		$viewtopic_url = append_sid("{$this->phpbb_root_path}viewtopic.{$this->phpEx}?f=$forum_id&amp;t=$topic_id");
 
 		if (confirm_box(true))
 		{
@@ -414,12 +412,12 @@ class viewtopic implements EventSubscriberInterface
 				$sql = 'UPDATE ' . TOPICS_TABLE . '
 						SET hookup_active_date = ' . (int) $set_active . ",
 							topic_title = '" . $this->db->sql_escape($new_title) . "'
-									WHERE topic_id = $topic_id";
+									WHERE topic_id = " . (int) $topic_id;
 				$this->db->sql_query($sql);
 
 				$sql = "UPDATE " . POSTS_TABLE . "
 						SET post_subject='" . $this->db->sql_escape($new_title) . "'
-								WHERE post_id = {$event['topic_data']['topic_first_post_id']}";
+								WHERE post_id = " . (int) $event['topic_data']['topic_first_post_id'];
 				$this->db->sql_query($sql);
 			}
 			else
@@ -427,7 +425,7 @@ class viewtopic implements EventSubscriberInterface
 				//only set hookup_active_date
 				$sql = 'UPDATE ' . TOPICS_TABLE . '
 						SET hookup_active_date = ' . (int) $set_active . "
-								WHERE topic_id = $topic_id";
+								WHERE topic_id = " . (int) $topic_id;
 				$this->db->sql_query($sql);
 			}
 

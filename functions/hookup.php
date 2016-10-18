@@ -64,7 +64,7 @@ class hookup
 		$this->hookup_users = array();
 		$this->hookup_availables = array();
 
-		$sql = 'SELECT hookup_enabled, hookup_active_date, hookup_self_invite, hookup_autoreset FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . $topic_id;
+		$sql = 'SELECT hookup_enabled, hookup_active_date, hookup_self_invite, hookup_autoreset FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . (int) $topic_id;
 		$result = $db->sql_query($sql);
 		if (!$row = $db->sql_fetchrow($result))
 		{
@@ -80,7 +80,7 @@ class hookup
 		//load users
 		$sql = 'SELECT user_id, notify_status, comment
 				FROM ' . $this->hookup_members_table . '
-				WHERE topic_id=' . $topic_id;
+				WHERE topic_id=' . (int) $topic_id;
 		$result = $db->sql_query($sql);
 		//associative array user_id => user_row
 		$this->hookup_users = array();
@@ -92,7 +92,7 @@ class hookup
 		//load dates for this hookup
 		$sql = 'SELECT date_id, date_time, text
 				FROM ' . $this->hookup_dates_table . '
-				WHERE topic_id=' . $topic_id . '
+				WHERE topic_id=' . (int) $topic_id . '
 				ORDER BY date_time ASC';
 		$result = $db->sql_query($sql);
 		//associative array date_id => date_row
@@ -111,7 +111,7 @@ class hookup
 
 		$sql = 'SELECT date_id, user_id, available
 				FROM ' . $this->hookup_available_table . '
-				WHERE topic_id=' . $topic_id;
+				WHERE topic_id=' . (int) $topic_id;
 		$result = $db->sql_query($sql);
 		$this->hookup_availables = array();
 		while ($row = $db->sql_fetchrow($result))
@@ -400,7 +400,7 @@ class hookup
 	{
 		$db = $this->db;
 		$changed = array();
-		$topic_id = $this->topic_id;
+		$topic_id = (int) $this->topic_id;
 
 		//For checking for differences, just load the old version from database:
 		if ($return_changes)
@@ -430,14 +430,14 @@ class hookup
 			'hookup_active_date' => $this->hookup_active_date,
 			'hookup_autoreset' => $this->hookup_autoreset,
 			);
-		$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $row) . " WHERE topic_id = $topic_id";
+		$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $row) . " WHERE topic_id = " . (int) $topic_id;
 
 		// This might fail if the topic does not exist anymore
 		$db->sql_query($sql);
 		if (!$db->sql_affectedrows() && !$force_run)
 		{
 			//the topic does not exist?
-			$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . $topic_id;
+			$sql = 'SELECT topic_id FROM ' . TOPICS_TABLE . ' WHERE topic_id = ' . (int) $topic_id;
 			$result = $db->sql_query($sql);
 			if (!$db->sql_fetchrow($result))
 			{
@@ -447,7 +447,7 @@ class hookup
 		}
 
 		//Now update the users
-		$sql = 'DELETE FROM ' . $this->hookup_members_table . " WHERE topic_id = $topic_id";
+		$sql = 'DELETE FROM ' . $this->hookup_members_table . " WHERE topic_id = " . (int) $topic_id;
 		$db->sql_query($sql);
 		foreach ($this->hookup_users as $user_id => $user)
 		{
@@ -458,7 +458,7 @@ class hookup
 		}
 
 		//Update the dates:
-		$sql = 'DELETE FROM ' . $this->hookup_dates_table . " WHERE topic_id = $topic_id";
+		$sql = 'DELETE FROM ' . $this->hookup_dates_table . " WHERE topic_id = " . (int) $topic_id;
 		$db->sql_query($sql);
 
 		foreach ($this->hookup_dates as $date_id => $date)
@@ -475,7 +475,7 @@ class hookup
 		}
 
 		//Update the entries for availability:
-		$sql = 'DELETE FROM ' . $this->hookup_available_table . " WHERE topic_id = $topic_id";
+		$sql = 'DELETE FROM ' . $this->hookup_available_table . " WHERE topic_id = " . (int) $topic_id;
 		$db->sql_query($sql);
 		if ($this->hookup_availables)
 		{
