@@ -120,7 +120,94 @@ div.unset-bg, td.unset-bg, select.unset-bg, option.unset-bg {
 	}
 }
 
-#hookup-table, #tabs-boundary, #hookup_datetimepicker {
+/*#hookup-table, #tabs-boundary, #hookup_datetimepicker {
 	display: none;
+}*/
+
+/* Style Calendar */
+.hookup_datetimepicker {
+	background-color:white;
 }
-/* TODO: Style Calendar */
+
+th.prev:before {
+	content: "<";
+}
+
+th.next:before {
+	content: ">";
+}
+
+th.prev:hover, th.next:hover {
+	background-color:white;
+	color:red;
+}
+
+td.day, td.hour, td.minute, span.month, span.year {
+	padding:2px;
+	border-bottom: dashed 1px black;
+	text-align:center;
+	padding-left:5px;
+	padding-right:5px;
+}
+
+td.day:hover, td.hour:hover, td.minute:hover, span.month:hover, span.year:hover {
+	color:red;
+}
+
+td.new, td.old {
+	color:gray;
+}
+
+#hookup_datetimepicker {
+	border: solid 1px;
+	border-radius: 15px;
+	padding:2px;
+	display:block;
+	background-color:white;
+	position:absolute;
+	z-index:5;
+	padding:5px;
+	font-size:12pt;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	text-align:center;
+}
+
+span.timepicker-hour:hover, span.timepicker-minute:hover, .picker-switch:hover {
+	color:red;
+}
+
+.timepicker-minutes table {
+	margin-top: 5px;
+}
+.picker-switch {
+	background-color: #CCCCCC;
+	border-radius: 5px;
+	margin-bottom:5px;
+}
+
+#hookup_datetimepicker button.btn {
+	display:none;
+}
+
+.timepicker-picker {
+	text-align:center;
+	width:100%;
+	margin:10px;
+}
+
+#hookup_datetimepicker .disabled {
+	color: #CCCCCC;
+}
+#hookup_datetimepicker .disabled:hover {
+	color: #CCCCCC;
+}
+#hookup_datetimepicker .today {
+	background-color: #CCCCCC;
+}
+#hookup_datetimepicker .active {
+	background-color: red;
+}
+
+#hookup_datetimepicker .active:hover {
+	background-color: transparent;
+}

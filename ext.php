@@ -114,6 +114,25 @@ class ext extends \phpbb\extension\base
 							return false;
 						}
 						break;
+					case 'eonasdan/bootstrap-datetimepicker':
+						if (!file_exists(__DIR__ . '/vendor/eonasdan/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js'))
+						{
+							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						if (!file_exists(__DIR__ . '/vendor/moment/moment/moment.js'))
+						{
+							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						break;
+					case 'components/bootstrap':
+						if (!file_exists(__DIR__ . '/vendor/components/bootstrap/css/bootstrap.min.css'))
+						{
+							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							return false;
+						}
+						break;
 					default:
 						// This should be an extension as a requirement
 						if (!$mgr->is_enabled($key))

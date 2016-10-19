@@ -22,6 +22,7 @@ if (empty($lang) || !is_array($lang))
 
 // Define categories and permission types
 $lang = array_merge($lang, array(
+	'LOCALE'				=> 'de',
 	'HOOKUP'				=> 'Terminplaner',
 	'HOOKUP_DESC'			=> 'Dieses Thema enthält einen Terminplaner, der dazu verwendet werden kann einen Termin mit anderen Usern abzusprechen.',
 	'ADD_HOOKUP'			=> 'Terminplaner',

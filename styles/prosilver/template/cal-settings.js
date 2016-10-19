@@ -2,23 +2,44 @@
 $(function () {
     $('#hookup_datetimepicker').datetimepicker({
         inline: true,
-        sideBySide: true
+        sideBySide: true,
+        minDate: "now"
     });
+    // Load moment script
+    $.getScript($('#hookup_datetimepicker').data('localepath'))
+     .success(function(){
+    	 // Set locale
+    	 $('#hookup_datetimepicker').data('DateTimePicker').locale($('#hookup_datetimepicker').data("locale"));
+     });
+    
+    // Set some initial data:
+    $('#hookup_datetimepicker').data('lastval', $('#hookup_datetimepicker').data('DateTimePicker').date().format('HH:mm'));
+    
+    // Hide the picker
     $('#hookup_datetimepicker').hide();
+    
+    // Set up event handler for button
+    $(document).on("dp.change", '#hookup_datetimepicker', function() {
+    	// Check what was changed
+    	if ($('#hookup_datetimepicker').data('lastval') != $("#hookup_datetimepicker").data('DateTimePicker').date().format('HH:mm'))
+		{
+    		// Store new current value
+        	$('#hookup_datetimepicker').data('lastval', $('#hookup_datetimepicker').data('DateTimePicker').date().format('HH:mm'));
+    		return;
+		}
+        
+    	// Add date to list
+		$("#add_date").val(
+			$("#add_date").val() + "\n" + 
+			$("#hookup_datetimepicker").data('DateTimePicker').date().format('D.M.YYYY HH:mm')
+		);
+	});
+    
 });
 
 $("#add_date_button").click(function(){
-	//TODO: Uhrzeitänderungen ignorieren
-	
-	//$("#hookup_datetimepicker").css("display", "block");
-	$("#hookup_datetimepicker").data('DateTimePicker').format('D.M.YYYY HH:mm:ss');
+	// Toggle visibility
 	$("#hookup_datetimepicker").toggle();
-	$(document).on("dp.change", '#hookup_datetimepicker', function() {
-		$("#add_date").val(
-			$("#add_date").val() + "\n" + 
-			$("#hookup_datetimepicker").data('DateTimePicker').date().format('D.M.YYYY HH:mm:ss')
-		);
-	})
 });
 
 
