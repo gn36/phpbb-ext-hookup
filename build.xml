@@ -6,7 +6,8 @@
 	<property name="extname" value="hookup" />
 
 	<!-- AUTO CONFIG from here on -->
-	<property name="dir" value="${buildfolder}data/${extvendor}/${extname}/" />
+	<property name="datadir" value="${buildfolder}data/" />
+	<property name="dir" value="${datadir}${extvendor}/${extname}/" />
 	<property name="zipfolder" value="${buildfolder}zip/" />
 	
 	<exec dir="${project.basedir}"
@@ -34,6 +35,29 @@
 		<exclude name="travis/**" />
 		<exclude name=".git/**" />
 		<exclude name="build/**" />
+		<exclude name="components/**" />
+		<exclude name="vendor/moment/moment/src/**" />
+		<exclude name="vendor/moment/moment/benchmarks/**" />
+		<exclude name="vendor/moment/moment/scripts/**" />
+		<exclude name="vendor/moment/moment/templates/**" />
+		<exclude name="vendor/moment/moment/meteor/**" />
+		<exclude name="vendor/moment/moment/tasks/**" />
+		<exclude name="vendor/moment/moment/min/tests.js" />
+		<exclude name="vendor/moment/moment/*.js" />
+		<exclude name="vendor/moment/moment/*.yml" />
+		<exclude name="vendor/components/**" />
+		<exclude name="vendor/composer/**" />
+		<exclude name="vendor/kriswallsmith/**" />
+		<exclude name="vendor/robloach/**" />
+		<exclude name="vendor/symfony/**" />
+		<exclude name="vendor/autoload.php" />
+		<include name="vendor/moment/moment/LICENSE" />
+		<include name="vendor/eonasdan/bootstrap-datetimepicker/LICENSE" />
+		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/test/**" />
+		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/tasks/**" />
+		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/*.yml" />
+		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/Gruntfile.js" />
+		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/src/**" />
 	</fileset>
 
 	<!-- ============================================== -->
@@ -50,55 +74,39 @@
 	
 	<!-- ======== BUILD ============= -->
 	<target name="build" depends="prepare">
-		<echo msg="copying files to build dir" />
-		<copy todir="${dir}">
-			<fileset refid="extfiles" />
-		</copy>
-		
-		
+				
 		<!-- Install composer dependencies, if there are any. -->
-		<exec dir="${dir}"
+		<echo msg="install composer dependencies (only non-dev)" />
+		<exec dir="${project.basedir}"
 			command='php -r "\$j = json_decode(file_get_contents(\"composer.json\"), true); if (isset(\$j[\"require\"][\"php\"])) {unset(\$j[\"require\"][\"php\"]);} echo (count(\$j[\"require\"]));"'
 			checkreturn="true"
 			outputProperty='composer-has-dependencies' />
 		<if>
-			<equals arg1="${composer-has-dependencies}" arg2="1" trim="true" />
+			<!-- We want a >= compare here, but since that does not exist, simply use versioncompare... -->
+			<equals arg1="${composer-has-dependencies}" arg2="0" trim="" />
 			<then>
-				<!-- We have non-dev composer dependencies -->
-				<exec dir="."
-					command="git ls-tree ${revision} composer.phar"
-					checkreturn="true"
-					outputProperty='composer-ls-tree-output' />
-				<if>
-					<equals arg1="${composer-ls-tree-output}" arg2="" trim="true" />
-					<then>
-						<fail message="There are composer dependencies, but composer.phar is missing." />
-					</then>
-					<else>
-						<!-- Export the phar, install dependencies, delete phar. -->
-						<exec dir="."
-							command="git archive ${revision} composer.phar | tar -xf - -C ${dir}"
-							checkreturn="true" />
-						<exec dir="${dir}"
-							command="php composer.phar install --no-dev --optimize-autoloader"
-							checkreturn="true"
-							passthru="true" />
-						<delete file="${dir}/composer.phar" />
-					</else>
-				</if>
+				<!-- We do not have composer dependencies, do not ship composer files -->
+				<echo msg="No composer dependencies, skipping..." />
 			</then>
 			<else>
-				<!-- We do not have composer dependencies, do not ship composer files -->
-				<delete file="${dir}/composer.lock" />
+				<!-- We have non-dev composer dependencies -->
+				<exec dir="${project.basedir}"
+					command="php composer.phar install --no-dev --optimize-autoloader"
+					checkreturn="true"
+					passthru="true" />
 				<delete file="${dir}/composer.phar" />
 			</else>
 		</if>
-		
+
+		<echo msg="copying files to build dir" />
+		<copy todir="${dir}">
+			<fileset refid="extfiles" />
+		</copy>
 	</target>
 	
 	<!-- ======= ARCHIVE ========== -->
 	<target name="archive" depends="build">
-		<zip destfile="${zipfolder}/${extvendor}-${extname}-${version}.zip" includeemptydirs="true" basedir="${dir}" />
+		<zip destfile="${zipfolder}/${extvendor}-${extname}-${version}.zip" includeemptydirs="true" basedir="${datadir}" />
 	</target>
 	
 	<!-- ======= REBUILD ========== -->

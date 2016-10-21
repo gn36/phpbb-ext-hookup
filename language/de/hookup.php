@@ -90,6 +90,7 @@ $lang = array_merge($lang, array(
 	),
 	//'ADDED_AT_BY'			=> 'hinzugefügt am %1s von %2s',
 	'OPEN_CALENDAR'			=> 'Kalender öffnen',
+	'CLOSE_CALENDAR'		=> 'Kalender schließen',
 	'USER_CANNOT_READ_FORUM'=> 'Der Benutzer %s hat keine Leseberechtigung für dieses Forum.',
 	'USER_CANNOT_HOOKUP'	=> 'Der Benutzer %s darf keine Terminplaner in diesem Forum verwenden.',
 	'SET_ACTIVE_TITLE_PREFIX'=>'Aktives Datum dem Thementitel voranstellen',

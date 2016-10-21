@@ -93,6 +93,7 @@ $lang = array_merge($lang, array(
 	),
 	//'ADDED_AT_BY'			=> 'added at %1s by %2s',
 	'OPEN_CALENDAR'			=> 'Open calendar',
+	'CLOSE_CALENDAR'		=> 'Close calendar',
 	'USER_CANNOT_READ_FORUM'=> 'The user %s doesn’t have the permission to read this forum.',
 	'USER_CANNOT_HOOKUP'	=> 'The user %s is not permitted to use meeting planners in this forum.',
 	'SET_ACTIVE_TITLE_PREFIX'=>'Prepend topic title with active date',

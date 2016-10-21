@@ -35,48 +35,63 @@ $(function () {
 		);
 	});
     
+    //Hide list if activedate is set:
+    if ($("#show-all-dates-link").length != 0)
+	{
+    	$("#hookup-table").hide();
+    	$("#hookup-add-date").hide();
+    	$("#hookup-add-users").hide();
+    	$("#hookup-add-groups").hide();
+    	$("#hookup-submit").hide();
+    	$("#tabs-boundary").hide();
+	}
 });
 
-$("#add_date_button").click(function(){
-	// Toggle visibility
-	$("#hookup_datetimepicker").toggle();
-});
-
-
-
-
+if ($("#add_date_button").length != 0)
+{
+	$("#add_date_button").click(function(){
+		// Toggle visibility
+		$("#hookup_datetimepicker").toggle();
+		if ($('#hookup_datetimepicker').css('display') == 'block') 
+		{
+			$("#add_date_button").prop("value", $('#add_date_button').data('lhide'));
+		}
+		else
+		{
+			$("#add_date_button").prop("value", $('#add_date_button').data('lshow'));
+		}
+	});
+}
 
 // Activedate
 function toggle_hookup_table() {
-	if(document.getElementById('hookup-table').style.display == 'block') {
-		var link_text = '{LA_SHOW_ALL_DATES}';
-		var set_display = 'none';
+	if($('#hookup-table').css('display') == 'block') {
+		var link_text = $("#show-all-dates-link").data('lshow');
 	}
 	else {
-		var link_text = '{LA_HIDE_ALL_DATES}';
-		var set_display = 'block';
+		var link_text = $("#show-all-dates-link").data('lhide');
 	}
-	document.getElementById('show-all-dates-link').innerHTML = link_text;
+	$('#show-all-dates-link').html(link_text);
 	
-	document.getElementById('hookup-table').style.display = set_display;
-	if(document.getElementById('hookup-add-date')) 
+	$('#hookup-table').toggle();
+	if($('#hookup-add-date').length != 0) 
 	{
-		document.getElementById('hookup-add-date').style.display = set_display;
+		$('#hookup-add-date').toggle();
 	}
-	if(document.getElementById('hookup-add-users'))
+	if($('#hookup-add-users').length != 0)
 	{
-		document.getElementById('hookup-add-users').style.display = set_display;
+		$('#hookup-add-users').toggle();
 	}
-	if(document.getElementById('hookup-add-groups'))
+	if($('#hookup-add-groups').length != 0)
 	{
-		document.getElementById('hookup-add-groups').style.display = set_display;
+		$('#hookup-add-groups').toggle();
 	}
-	if(document.getElementById('hookup-submit'))
+	if($('#hookup-submit').length != 0)
 	{
-		document.getElementById('hookup-submit').style.display = set_display;
+		$('#hookup-submit').toggle();
 	}
-	if(document.getElementById('tabs-boundary'))
+	if($('#tabs-boundary').length != 0)
 	{
-		document.getElementById('tabs-boundary').style.display = set_display;
+		$('#tabs-boundary').toggle();
 	}
 }

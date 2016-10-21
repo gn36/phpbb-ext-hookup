@@ -95,6 +95,7 @@ $lang = array_merge($lang, array(
 	),
 	//'ADDED_AT_BY'			=> 'Ajouté le %1s par %2s',
 	'OPEN_CALENDAR'			=> 'Ouvrir le calendrier',
+	'CLOSE_CALENDAR'		=> 'Fermé le calendrier',
 	'USER_CANNOT_READ_FORUM'=> '%s n’est pas autorisé à lire ce forum.',
 	'USER_CANNOT_HOOKUP'	=> '%s n’est pas autorisé à utiliser les planificateurs d’événement de ce forum.',
 	'SET_ACTIVE_TITLE_PREFIX'=>'Ajouter cette date devant le titre du sujet.',
