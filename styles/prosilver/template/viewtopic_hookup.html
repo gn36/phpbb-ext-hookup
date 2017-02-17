@@ -120,13 +120,19 @@
 		</table>
 		</div><!--scrollwrapper ende-->
 		<!-- IF S_IS_HOOKUP_MEMBER -->
-		<p>
-			{L_COMMENT}{L_COLON}<br />
-			<input type="text" name="comment" class="inputbox" value="{USER_COMMENT}" />
-		</p>
-		<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
-		<!-- ELSEIF S_IS_SELF_INVITE -->
-			
+		<fieldset>
+			<dl>
+				<dt>
+					<label for="comment">{L_COMMENT}{L_COLON}</label>
+					<br />
+					<span>{L_COMMENT_EXPLAIN}</span>
+				</dt>
+				<dd>
+					<input type="text" name="comment" class="inputbox" value="{USER_COMMENT}" />
+				</dd>
+			</dl>
+			<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
+		</fieldset>
 		<!-- ENDIF -->
 	</div>
 	</form>

@@ -113,6 +113,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Do you really want to cancel your membership in this meeting planner?',
 	'HOOKUP_INVITE_MYSELF'	=> 'Invite myself',
 	'COMMENT'				=> 'Comment',
+	'COMMENT_EXPLAIN'		=> 'You can optionally enter a comment which clarifies your entries in the list above. This is especially useful for "maybe" entries. If you enter a comment, a comment symbol will be shown behind your username in the list and a popup will show your message.',
 	'HOOKUP_AUTORESET'		=> 'Weekly reset',
 	'HOOKUP_AUTORESET_DESC'	=> 'With this setup you can set the meeting planner to automatically reset once a week.<br /> By doing this, the first entry of the planner is repeated every week and old dates are automatically deleted.',
 	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'This meeting planner will add new dates automatically each week. The oldest dates are deleted.',

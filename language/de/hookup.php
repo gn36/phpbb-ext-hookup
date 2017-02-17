@@ -110,6 +110,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_INVITE_SELF_LEAVE_CONFIRM' => 'Möchtest du deine Teilnahme an diesem Terminplaner wirklich beenden?',
 	'HOOKUP_INVITE_MYSELF'	=> 'Mich selbst einladen',
 	'COMMENT'				=> 'Kommentar',
+	'COMMENT_EXPLAIN'		=> 'Du kannst optional einen Kommentar angeben, der deine Angaben oben in der Liste erläutert. Das ist besonders beim Eintrag „evtl.“ nützlich. Der Kommentar erscheint dann als Popup unter einem Kommentarsymbol hinter deinem Benutzernamen.',
 	'HOOKUP_AUTORESET'		=> 'Wöchentliches Rücksetzen',
 	'HOOKUP_AUTORESET_DESC'	=> 'Mit dieser Einstellung kannst du den Terminplaner so einstellen, dass er sich automatisch wöchentlich aktualisiert.<br /> Durch diese Einstellung wird der erste eingetragene Termin wöchentlich wiederholt.',
 	'HOOKUP_AUTORESET_ACTIVE_DESC' => 'Dieser Terminplaner fügt jede Woche automatisch neue Termine hinzu. Die ältesten Termine werden dabei gelöscht.',
