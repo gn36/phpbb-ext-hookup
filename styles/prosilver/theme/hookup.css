@@ -129,14 +129,6 @@ div.unset-bg, td.unset-bg, select.unset-bg, option.unset-bg {
 	background-color:white;
 }
 
-th.prev:before {
-	content: "<";
-}
-
-th.next:before {
-	content: ">";
-}
-
 th.prev:hover, th.next:hover {
 	background-color:white;
 	color:red;
@@ -189,12 +181,6 @@ span.timepicker-hour:hover, span.timepicker-minute:hover, .picker-switch:hover {
 	display:none;
 }
 
-.timepicker-picker {
-	text-align:center;
-	width:100%;
-	margin:10px;
-}
-
 #hookup_datetimepicker .disabled {
 	color: #CCCCCC;
 }
@@ -211,3 +197,59 @@ span.timepicker-hour:hover, span.timepicker-minute:hover, .picker-switch:hover {
 #hookup_datetimepicker .active:hover {
 	background-color: transparent;
 }
+
+@font-face {
+	font-family:'FontAwesome';
+	src:url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.eot?v=4.4.0');
+	src:url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'),url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2'),url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.woff?v=4.4.0') format('woff'),url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.ttf?v=4.4.0') format('truetype'),url('../../../vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
+	font-weight:normal;
+	font-style:normal
+}
+
+.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.glyphicon-chevron-up:before {
+    content: "\f077";
+	font-size: 18pt;
+}
+
+.glyphicon-chevron-down:before {
+    content: "\f078";
+	font-size: 18pt;
+}
+
+.glyphicon-chevron-left:before {
+    content: "\f053";
+}
+
+.glyphicon-chevron-right:before {
+    content: "\f054";
+}
+
+.timepicker:before {
+    content: "\f017";
+	font-family: 'FontAwesome';
+	font-size: 18pt;
+}
+
+.timepicker {
+	margin-top: 5px;
+}
+
+.timepicker-picker table {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+}
+

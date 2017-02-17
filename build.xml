@@ -58,6 +58,15 @@
 		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/*.yml" />
 		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/Gruntfile.js" />
 		<exclude name="vendor/eonasdan/bootstrap-datetimepicker/src/**" />
+		<include name="vendor/fortawesome/font-awesome/README.md" />
+		<include name="vendor/fortawesome/font-awesome/fonts/*" />
+		<exclude name="vendor/fortawesome/font-awesome/src/**" />
+		<exclude name="vendor/fortawesome/font-awesome/css/**" />
+		<exclude name="vendor/fortawesome/font-awesome/less/**" />
+		<exclude name="vendor/fortawesome/font-awesome/scss/**" />
+		<exclude name="vendor/fortawesome/font-awesome/*.json" />
+		<exclude name="vendor/fortawesome/font-awesome/*.yml" />
+		<exclude name="vendor/fortawesome/font-awesome/Gemfile*" />
 	</fileset>
 
 	<!-- ============================================== -->

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6e4a046d020f189c9fded8ea96a9b185",
-    "content-hash": "b4a1556d6f5efbbad690a0a3cc631b09",
+    "hash": "38a63487b6f995a38ed224fd1ff7566e",
+    "content-hash": "293d503e4402b3ba45c9ae5190bad4e5",
     "packages": [
         {
             "name": "components/jquery",
@@ -49,21 +49,21 @@
         },
         {
             "name": "eonasdan/bootstrap-datetimepicker",
-            "version": "4.17.37",
+            "version": "4.17.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Eonasdan/bootstrap-datetimepicker.git",
-                "reference": "fd8bd86dd78f789fb742798b7d49aba0a957af62"
+                "reference": "bf88bcc394223787a3a874f572c2f231742e174e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Eonasdan/bootstrap-datetimepicker/zipball/fd8bd86dd78f789fb742798b7d49aba0a957af62",
-                "reference": "fd8bd86dd78f789fb742798b7d49aba0a957af62",
+                "url": "https://api.github.com/repos/Eonasdan/bootstrap-datetimepicker/zipball/bf88bcc394223787a3a874f572c2f231742e174e",
+                "reference": "bf88bcc394223787a3a874f572c2f231742e174e",
                 "shasum": ""
             },
             "require": {
                 "components/jquery": ">=1.9.1",
-                "moment/moment": ">=2.8",
+                "moment/moment": ">=2.10.5",
                 "robloach/component-installer": "*"
             },
             "type": "component",
@@ -88,20 +88,68 @@
                 "DateTimePicker",
                 "bootstrap"
             ],
-            "time": "2015-09-10 19:50:15"
+            "time": "2017-01-13 19:57:40"
         },
         {
-            "name": "kriswallsmith/assetic",
-            "version": "v1.3.2",
+            "name": "fortawesome/font-awesome",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "9928f7c4ad98b234e3559d1049abd13387f86db5"
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/9928f7c4ad98b234e3559d1049abd13387f86db5",
-                "reference": "9928f7c4ad98b234e3559d1049abd13387f86db5",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "jekyll": "1.0.2",
+                "lessc": "1.4.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OFL-1.1",
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Gandy",
+                    "email": "dave@fontawesome.io",
+                    "homepage": "http://twitter.com/davegandy",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The iconic font and CSS framework",
+            "homepage": "http://fontawesome.io/",
+            "keywords": [
+                "FontAwesome",
+                "awesome",
+                "bootstrap",
+                "font",
+                "icon"
+            ],
+            "time": "2015-07-28 21:55:03"
+        },
+        {
+            "name": "kriswallsmith/assetic",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/assetic.git",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
                 "shasum": ""
             },
             "require": {
@@ -109,21 +157,21 @@
                 "symfony/process": "~2.1|~3.0"
             },
             "conflict": {
-                "twig/twig": "<1.23"
+                "twig/twig": "<1.27"
             },
             "require-dev": {
-                "cssmin/cssmin": "3.0.1",
-                "joliclic/javascript-packer": "1.1",
-                "kamicane/packager": "1.0",
                 "leafo/lessphp": "^0.3.7",
                 "leafo/scssphp": "~0.1",
-                "mrclay/minify": "~2.2",
+                "meenie/javascript-packer": "^1.1",
+                "mrclay/minify": "<2.3",
+                "natxet/cssmin": "3.0.4",
                 "patchwork/jsqueeze": "~1.0|~2.0",
-                "phpunit/phpunit": "~4.8",
+                "phpunit/phpunit": "~4.8 || ^5.6",
                 "psr/log": "~1.0",
                 "ptachoire/cssembed": "~1.0",
                 "symfony/phpunit-bridge": "~2.7|~3.0",
-                "twig/twig": "~1.8|~2.0"
+                "twig/twig": "~1.23|~2.0",
+                "yfix/packager": "dev-master"
             },
             "suggest": {
                 "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
@@ -165,20 +213,20 @@
                 "compression",
                 "minification"
             ],
-            "time": "2015-11-12 13:51:40"
+            "time": "2016-11-11 18:43:20"
         },
         {
             "name": "moment/moment",
-            "version": "2.15.1",
+            "version": "2.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment.git",
-                "reference": "986dba9497b7c173760d1d7bc85606c574ed2c44"
+                "reference": "b8a297c1f99b3918f44dd9e3d7bd59379a876ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment/zipball/986dba9497b7c173760d1d7bc85606c574ed2c44",
-                "reference": "986dba9497b7c173760d1d7bc85606c574ed2c44",
+                "url": "https://api.github.com/repos/moment/moment/zipball/b8a297c1f99b3918f44dd9e3d7bd59379a876ba6",
+                "reference": "b8a297c1f99b3918f44dd9e3d7bd59379a876ba6",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +267,7 @@
                 "time",
                 "validate"
             ],
-            "time": "2016-09-21 03:33:57"
+            "time": "2016-12-04 05:41:33"
         },
         {
             "name": "robloach/component-installer",
@@ -271,16 +319,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.12",
+            "version": "v2.8.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "024de37f8a6b9e5e8244d9eb3fcf3e467dd2a93f"
+                "reference": "0110ac49348d14eced7d3278ea7485f22196932e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/024de37f8a6b9e5e8244d9eb3fcf3e467dd2a93f",
-                "reference": "024de37f8a6b9e5e8244d9eb3fcf3e467dd2a93f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/0110ac49348d14eced7d3278ea7485f22196932e",
+                "reference": "0110ac49348d14eced7d3278ea7485f22196932e",
                 "shasum": ""
             },
             "require": {
@@ -316,7 +364,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-29 14:03:54"
+            "time": "2017-02-03 12:08:06"
         }
     ],
     "packages-dev": [
@@ -471,16 +519,16 @@
         },
         {
             "name": "phpbb/translation-validator",
-            "version": "1.3.9",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpbb/phpbb-translation-validator.git",
-                "reference": "59df1be0536f297255455aa96621fbe307bbb4eb"
+                "reference": "dee7d51d4bc93876d92e5651cd1b608f19a2a03d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpbb/phpbb-translation-validator/zipball/59df1be0536f297255455aa96621fbe307bbb4eb",
-                "reference": "59df1be0536f297255455aa96621fbe307bbb4eb",
+                "url": "https://api.github.com/repos/phpbb/phpbb-translation-validator/zipball/dee7d51d4bc93876d92e5651cd1b608f19a2a03d",
+                "reference": "dee7d51d4bc93876d92e5651cd1b608f19a2a03d",
                 "shasum": ""
             },
             "require": {
@@ -515,7 +563,7 @@
             ],
             "description": "A language package validator for phpBB language packs. Language packs are required to pass the validator when submitted to the language pack database.",
             "homepage": "https://github.com/phpbb/phpbb-translation-validator",
-            "time": "2015-11-28 11:21:17"
+            "time": "2017-01-04 23:07:21"
         },
         {
             "name": "sensiolabs/ansi-to-html",

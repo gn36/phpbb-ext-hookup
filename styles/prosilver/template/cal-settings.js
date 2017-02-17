@@ -3,7 +3,7 @@ $(function () {
     $('#hookup_datetimepicker').datetimepicker({
         inline: true,
         sideBySide: true,
-        minDate: "now"
+        minDate: moment().startOf('day')
     });
     // Load moment script
     $.getScript($('#hookup_datetimepicker').data('localepath'))
