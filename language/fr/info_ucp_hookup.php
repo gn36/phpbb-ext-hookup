@@ -30,6 +30,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_NOTIFY_ACTIVE_DATE_RESET_OPTION'	=> 'Un événement auquel vous participez a vu sa date révisée.',
 	'HOOKUP_NOTIFY_DATE_ADDED_OPTION'			=> 'De nouvelles options de date ont été proposé pour un événement auquel vous avez été invité.',
 	'HOOKUP_NOTIFY_USER_ADDED_OPTION'			=> 'Un nouveau participant a été ajouté à un événement auquel vous avez été invité.',
+	'HOOKUP_NOTIFY_DATE_ADDED_ROTATION_OPTION'	=> 'De nouvelles options automatiques de date ont été proposé pour un événement auquel vous avez été invité.',
 	'HOOKUP_NOTIFY_INVITED_OPTION'				=> 'Vous avez été invité a participer à un événement.',
 	'NOTIFICATION_GROUP_HOOKUP'					=> 'Notification d’événement.',
 ));

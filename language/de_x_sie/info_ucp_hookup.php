@@ -30,6 +30,7 @@ $lang = array_merge($lang, array(
 	'HOOKUP_NOTIFY_ACTIVE_DATE_RESET_OPTION'	=> 'Das aktive Datum eines Terminplaners an dem Sie teilnehmen wurde zurückgesetzt',
 	'HOOKUP_NOTIFY_DATE_ADDED_OPTION'			=> 'Neue Datumsoptionen wurden zu einem Terminplaner an dem Sie teilnehmen hinzugefügt',
 	'HOOKUP_NOTIFY_USER_ADDED_OPTION'			=> 'Ein neuer Benutzer wurde zu einem Terminplaner an dem Sie teilnehmen hinzugefügt',
+	'HOOKUP_NOTIFY_DATE_ADDED_ROTATION_OPTION'	=> 'Neue wöchentliche Datumsoptionen wurden zu einem Terminplaner an dem Sie teilnehmen hinzugefügt',
 	'HOOKUP_NOTIFY_INVITED_OPTION'				=> 'Sie wurden zu einem Terminplaner eingeladen',
 	'NOTIFICATION_GROUP_HOOKUP'					=> 'Hookup Benachrichtigungen',
 ));
