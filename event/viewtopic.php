@@ -285,7 +285,13 @@ class viewtopic implements EventSubscriberInterface
 			}
 
 		}
-		foreach ($this->hookup->hookup_users as $hookup_user)
+		$sorted_hookup_users = array();
+		foreach ($this->hookup->hookup_users as $user_id => $hookup_user)
+		{
+			$sorted_hookup_users[$user_details[$user_id]['username']] = $hookup_user;
+		}
+		ksort($sorted_hookup_users);
+		foreach ($sorted_hookup_users as $hookup_user)
 		{
 			$is_self = ($hookup_user['user_id'] == $this->user->data['user_id']);
 
