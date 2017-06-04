@@ -27,7 +27,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'LOCALE'				=> 'en',
 	'HOOKUP'				=> 'Meeting planner',
-	'HOOKUP_DESC'			=> 'This topic has a meeting planner attached. The planner can be used to find a time to meet.',
+	'HOOKUP_DESC'			=> 'This topic has a meeting planner attached. The planner can be used to find a time to meet. Please enter your availability next to your username into the table. The creator of the meeting planner or a moderator can then use the data to determine the active date.',
 	'ADD_HOOKUP'			=> 'Meeting',
 	'ADD_HOOKUP_DESC'		=> 'Attach a meeting to this topic',
 	'ADD_HOOKUP_REACTIVATE'	=> 'reactivate meeting',
@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'CLEAR_TITLE'			=> 'Clears the selected date(s)',
 	'UNSET_ACTIVE'			=> 'Unset active date',
 	'SET_ACTIVE'			=> 'Set active',
+	'SET_ACTIVE_EXPLAIN'	=> 'Set this date as the active date',
 	'SET_ACTIVE_CONFIRM'	=> 'Are you sure you want to make %s the active date?',
 	'UNSET_ACTIVE_CONFIRM'	=> 'Are you sure you want to unset the active date and reopen the meeting planner?',
 	'ACTIVE_DATE_SET'		=> 'The active date has been set to %s.',

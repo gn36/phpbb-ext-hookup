@@ -29,7 +29,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'LOCALE'				=> 'fr',
 	'HOOKUP'				=> 'Planificateur d’événement',
-	'HOOKUP_DESC'			=> 'Ce sujet possède un planificateur d’événement. Utilisez-le pour organiser des réunions ou toutes sortes d’événements.',
+	'HOOKUP_DESC'			=> 'Ce sujet possède un planificateur d’événement. Utilisez-le pour organiser des réunions ou toutes sortes d’événements. Entrez votre disponibilité à côté de votre nom d’utilisateur dans la table. Le créateur du planificateur d’événement ou un modérateur peut ensuite utiliser les données pour déterminer la date active.',
 	'ADD_HOOKUP'			=> 'Ajouter un événement',
 	'ADD_HOOKUP_DESC'		=> 'Attacher un planificateur d’événement à ce sujet.',
 	'ADD_HOOKUP_REACTIVATE'	=> 'Réactiver le planificateur',
@@ -48,6 +48,7 @@ $lang = array_merge($lang, array(
 	'CLEAR_TITLE'			=> 'Effacer la date sélectionnée',
 	'UNSET_ACTIVE'			=> 'Ne pas fixer de date',
 	'SET_ACTIVE'			=> 'Valider cette date',
+	'SET_ACTIVE_EXPLAIN'	=> 'Valider cette date comme date de l’événement',
 	'SET_ACTIVE_CONFIRM'	=> 'Êtes-vous sûr de vouloir choisir la date du « %s » comme date de l’événement ?',
 	'UNSET_ACTIVE_CONFIRM'	=> 'Êtes-vous sûr de vouloir annuler cette date et rouvrir le planificateur d’événement ?',
 	'ACTIVE_DATE_SET'		=> 'La date de l’événement a été fixée au %s.',

@@ -24,7 +24,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'LOCALE'				=> 'de',
 	'HOOKUP'				=> 'Terminplaner',
-	'HOOKUP_DESC'			=> 'Dieses Thema enthält einen Terminplaner, der dazu verwendet werden kann einen Termin mit anderen Usern abzusprechen.',
+	'HOOKUP_DESC'			=> 'Dieses Thema enthält einen Terminplaner, der dazu verwendet werden kann einen Termin mit anderen Usern abzusprechen. Tragen Sie Ihre Verfügbarkeit bei Ihrem Benutzernamen in die Tabelle ein. Der Ersteller des Terminplaners oder ein Moderator kann dann anhand der Daten das aktive Datum festsetzen.',
 	'ADD_HOOKUP'			=> 'Terminplaner',
 	'ADD_HOOKUP_DESC'		=> 'Diesem Thema einen Terminplaner hinzufügen',
 	'ADD_HOOKUP_REACTIVATE'	=> 'Terminplaner reaktivieren',
@@ -43,6 +43,7 @@ $lang = array_merge($lang, array(
 	'CLEAR_TITLE'			=> 'Löscht die ausgewählten Daten',
 	'UNSET_ACTIVE'			=> 'Termin neu verhandeln',
 	'SET_ACTIVE'			=> 'Festlegen',
+	'SET_ACTIVE_EXPLAIN'	=> 'Diesen Termin als aktives Datum festlegen',
 	'SET_ACTIVE_CONFIRM'	=> 'Sind Sie sicher, dass Sie %s zum aktiven Datum machen möchten?',
 	'UNSET_ACTIVE_CONFIRM'	=> 'Sind Sie sicher, dass Sie das aktive Datum zurücksetzen und den Terminplaner wiedereröffnen möchten?',
 	'ACTIVE_DATE_SET'		=> 'Das aktive Datum wurde auf %s gesetzt.',
