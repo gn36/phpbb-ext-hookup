@@ -2,7 +2,7 @@ Subject: Active date set: {ACTIVE_DATE_SHORT} - "{TOPIC_TITLE}"
 
 Hello {USERNAME},
 
-You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}". The active date for this meeting planner has been set to:
+You are receiving this notification because you are a member of the meeting planner, "{TOPIC_TITLE}" at "{SITENAME}".  {ACTING_USER} has set the active date for this meeting planner to:
 
 {ACTIVE_DATE}
 
