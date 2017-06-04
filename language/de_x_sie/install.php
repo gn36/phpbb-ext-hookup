@@ -26,4 +26,6 @@ $lang = array_merge($lang, array(
 	'WRONG_EXTENSION_VERSION' 	=> 'Die verwendete Version der Erweiterung <strong>%s</strong> ist mit dieser Erweiterung nicht kompatibel.',
 	'MISSING_DEPENDENCIES' 		=> 'Es fehlen Abhängigkeiten, die von dieser Erweiterung benötigt werden. Bitte verwenden Sie composer, um die fehlenden Abhängigkeiten zu installieren oder ein vollständiges Installationspaket.',
 	'MISSING_EXTENSION'			=> 'Damit diese Erweiterung installiert werden kann muss die Erweiterung <strong>%s</strong> installiert sein.',
+	// Overload enable message to explain the use of the extension:
+	'EXTENSION_ENABLE_SUCCESS'	=> 'Die Hookup Erweiterung wurde erfolgreich aktiviert.<br><br> Diese Erweiterung hat <strong>keine eigene Konfigurationsseite</strong> im Admin-Bereich. <br><br> Sie können mit der <strong>neuen Berechtigung</strong> »Kann Terminplaner hinzufügen« für jedes Forum steuern, ob und welche Benutzer einen Terminplaner an ein Thema hängen dürfen. <br><br> Sie können anschließend <strong>Terminplaner erstellen</strong>, indem Sie beim Erstellen eines neuen Themas das entsprechende <strong>Häkchen setzen</strong> oder nachträglich den ersten Beitrag bearbeiten.',
 ));
