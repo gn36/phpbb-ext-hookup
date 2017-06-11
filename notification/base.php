@@ -56,7 +56,7 @@ class base extends \phpbb\notification\type\base
 
 	public static function get_item_id($notification_data)
 	{
-		return $notification_data['topic_id'];
+		return (int) $notification_data['topic_id'];
 	}
 
 	public static function get_item_parent_id($notification_data)

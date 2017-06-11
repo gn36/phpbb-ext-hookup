@@ -27,14 +27,6 @@ class acp_events implements EventSubscriberInterface
 	}
 
 	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-
-	}
-
-	/**
 	* Add permissions for setting topic based posts per page settings.
 	*
 	* @param object $event The event object

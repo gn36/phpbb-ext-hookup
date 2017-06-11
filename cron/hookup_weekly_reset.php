@@ -91,6 +91,7 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 				'forum_id'		=> $row['forum_id'],
 			);
 		}
+		$this->db->sql_freeresult($result);
 
 		$hookup = $this->hookup;
 		foreach ($date_list as $topic_id => $date_array)
@@ -106,7 +107,6 @@ class hookup_weekly_reset extends \phpbb\cron\task\base
 				{
 					sort($date_array);
 					$old_time = $date_array[count($date_array) - 1];
-					$new_time = $old_time;
 
 					do
 					{

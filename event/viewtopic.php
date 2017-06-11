@@ -468,23 +468,6 @@ class viewtopic implements EventSubscriberInterface
 				}
 			}
 
-			//post reply to this topic. Again this can only be in the "active maker"s language
-			if ($set_active && $post_reply)
-			{
-				$message = $this->user->lang['SET_ACTIVE_POST_TEMPLATE'];
-				$active_date = $this->user->format_date($this->hookup->hookup_dates[$set_active]['date_time'], $this->user->lang['HOOKUP_DATEFORMAT_POST']);
-				if ($this->hookup->hookup_dates[$set_active]['text'] != null)
-				{
-					$active_date = $this->hookup->hookup_dates[$set_active]['text'];
-				}
-				$message = str_replace('{ACTIVE_DATE}', $active_date, $message);
-
-				//TODO: functions_post_oo!
-				//$post = new post($topic_id);
-				//$post->post_text = $message;
-				//$post->submit();
-			}
-
 			meta_refresh(3, $viewtopic_url);
 			$message = ($set_active != 0 ? sprintf($this->user->lang['ACTIVE_DATE_SET'], $active_date_formatted) : $this->user->lang['ACTIVE_DATE_UNSET']) . '<br /><br />' . sprintf($this->user->lang['RETURN_TOPIC'], '<a href="' . $viewtopic_url . '">', '</a>');
 			trigger_error($message);
