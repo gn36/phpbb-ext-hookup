@@ -3,7 +3,7 @@
 	"type" : "phpbb-extension",
 	"description" : "This Extension adds the possibility of scheduling meetings with multiple people to your topics. Use this for finding the right date for a meeting very easy or for getting feedback on availability of users on certain dates.",
 	"homepage" : "https://github.com/gn36/phpbb-ext-hookup/",
-	"version" : "1.1.0-dev",
+	"version" : "1.1.0-b1",
 	"time" : "2015-01-03",
 	"license" : "GPL-2.0",
 	"authors" : [{
@@ -18,7 +18,7 @@
 		}
 	],
 	"require" : {
-		"php" : ">=5.3.3",
+		"php" : ">=5.4",
 		"eonasdan/bootstrap-datetimepicker" : ">=4.17",
 		"fortawesome/font-awesome" : "~4.4.0"
 	},
@@ -29,7 +29,7 @@
 	"extra" : {
 		"display-name" : "Hookup",
 		"soft-require" : {
-			"phpbb/phpbb" : ">=3.1.2,<3.2@dev"
+			"phpbb/phpbb" : ">=3.2,<3.3@dev"
 		},
 		"version-check" : {
 			"host" : "phpbb.gn36.de",
