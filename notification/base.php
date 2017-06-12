@@ -16,31 +16,44 @@ class base extends \phpbb\notification\type\base
 	/** @var \gn36\hookup\functions\hookup */
 	protected $hookup;
 
+	/** @var \phpbb\user_loader */
+	protected $user_loader;
+
+	/** @var string */
+	protected $notification_types_table;
+
+	/** @var string */
+	protected $notifications_table;
+
+	/** @var string */
 	protected $language_key = 'HOOKUP_NOTIFY_BASE';
+
+	/** @var array */
 	public static $notification_option = array(
 		'lang' 	=> 'HOOKUP_NOTIFY_OPTION',
 		'group'	=> 'NOTIFICATION_GROUP_MISCELLANEOUS',
 	);
 
 	/**
-	 * Notification Type Base Constructor
+	 * Notification base constructor
 	 *
-	 * @param \phpbb\user_loader $user_loader
 	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\cache\driver\driver_interface $cache
+	 * @param \phpbb\language\language $language
 	 * @param \phpbb\user $user
 	 * @param \phpbb\auth\auth $auth
-	 * @param \phpbb\config\config $config
+	 * @param \gn36\hookup\functions\hookup $hookup
 	 * @param string $phpbb_root_path
 	 * @param string $php_ext
-	 * @param string $notification_types_table
-	 * @param string $notifications_table
 	 * @param string $user_notifications_table
-	 * @return \phpbb\notification\type\base
 	 */
-	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, $user, \phpbb\auth\auth $auth, \phpbb\config\config $config, \gn36\hookup\functions\hookup $hookup, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
+	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, \gn36\hookup\functions\hookup $hookup, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
 	{
-		parent::__construct($user_loader, $db, $cache, $user, $auth, $config, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table);
+		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
+
+		$this->user_loader = $user_loader;
+		$this->notification_types_table = $notification_types_table;
+		$this->notifications_table = $notifications_table;
+
 		$this->hookup = $hookup;
 	}
 
@@ -197,7 +210,7 @@ class base extends \phpbb\notification\type\base
 		}
 		$this->set_data('topic_title', $notification_data['topic_title']);
 
-		return parent::create_insert_array($notification_data, $pre_create_data);
+		parent::create_insert_array($notification_data, $pre_create_data);
 	}
 
 	/**
