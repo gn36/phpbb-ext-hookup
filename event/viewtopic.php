@@ -276,46 +276,47 @@ class viewtopic implements EventSubscriberInterface
 		{
 			// Fetch User details
 			$sql = 'SELECT user_id, username, user_colour FROM ' . USERS_TABLE .
-				' WHERE ' . $this->db->sql_in_set('user_id', array_keys($this->hookup->hookup_users));
+				' WHERE ' . $this->db->sql_in_set('user_id', array_keys($this->hookup->hookup_users)) .
+				' ORDER BY username_clean ASC';
 			$result = $this->db->sql_query($sql);
 			$user_details = array();
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$user_details[$row['user_id']] = $row;
+				$all_user_details[$row['user_id']] = $row;
 			}
 
-		}
-		foreach ($this->hookup->hookup_users as $hookup_user)
-		{
-			$is_self = ($hookup_user['user_id'] == $this->user->data['user_id']);
-
-			$this->template->assign_block_vars('user', array(
-				'ID'		=> $hookup_user['user_id'],
-				'NAME'		=> $user_details[$hookup_user['user_id']]['username'],
-				'COMMENT'	=> isset($hookup_user['comment']) ? $hookup_user['comment'] : '',
-				'USERNAME_FULL'	=> get_username_string('full', $hookup_user['user_id'], $user_details[$hookup_user['user_id']]['username'], $user_details[$hookup_user['user_id']]['user_colour']),
-				'IS_SELF'	=> $is_self
-			));
-
-			foreach ($this->hookup->hookup_dates as $hookup_date)
+			foreach ($all_user_details as $hookup_user_id => $user_details)
 			{
-				$available = isset($this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']])
-				? $this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']]
-				: hookup::HOOKUP_UNSET;
+				$hookup_user = $this->hookup->hookup_users[$hookup_user_id];
+				$is_self = ($hookup_user['user_id'] == $this->user->data['user_id']);
 
-				$this->template->assign_block_vars('user.date', array(
-					'ID'				=> $hookup_date['date_id'],
-					'AVAILABLE'			=> $this->user->lang['HOOKUP_STATUS'][$available],
-					'STATUS_YES'		=> ($available == hookup::HOOKUP_YES),
-					'STATUS_NO'			=> ($available == hookup::HOOKUP_NO),
-					'STATUS_MAYBE'		=> ($available == hookup::HOOKUP_MAYBE),
-					'STATUS_UNSET'		=> ($available == hookup::HOOKUP_UNSET),
-					'S_SELECT_NAME'		=> 'available['.$hookup_date['date_id'].']',
-					'S_IS_ACTIVE'		=> $hookup_date['date_id'] == $this->hookup->hookup_active_date,
+				$this->template->assign_block_vars('user', array(
+					'ID'		=> $hookup_user['user_id'],
+					'NAME'		=> $user_details['username'],
+					'COMMENT'	=> isset($hookup_user['comment']) ? $hookup_user['comment'] : '',
+					'USERNAME_FULL'	=> get_username_string('full', $hookup_user['user_id'], $user_details['username'], $user_details['user_colour']),
+					'IS_SELF'	=> $is_self
 				));
+
+				foreach ($this->hookup->hookup_dates as $hookup_date)
+				{
+					$available = isset($this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']])
+					? $this->hookup->hookup_availables[$hookup_user['user_id']][$hookup_date['date_id']]
+					: hookup::HOOKUP_UNSET;
+
+					$this->template->assign_block_vars('user.date', array(
+						'ID'				=> $hookup_date['date_id'],
+						'AVAILABLE'			=> $this->user->lang['HOOKUP_STATUS'][$available],
+						'STATUS_YES'		=> ($available == hookup::HOOKUP_YES),
+						'STATUS_NO'			=> ($available == hookup::HOOKUP_NO),
+						'STATUS_MAYBE'		=> ($available == hookup::HOOKUP_MAYBE),
+						'STATUS_UNSET'		=> ($available == hookup::HOOKUP_UNSET),
+						'S_SELECT_NAME'		=> 'available['.$hookup_date['date_id'].']',
+						'S_IS_ACTIVE'		=> $hookup_date['date_id'] == $this->hookup->hookup_active_date,
+					));
+				}
 			}
 		}
-
 	}
 
 	/**
