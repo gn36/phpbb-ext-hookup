@@ -93,7 +93,7 @@ class hookup
 		$sql = 'SELECT date_id, date_time, text
 				FROM ' . $this->hookup_dates_table . '
 				WHERE topic_id=' . (int) $topic_id . '
-				ORDER BY date_time ASC';
+				ORDER BY date_time ASC, date_id ASC';
 		$result = $db->sql_query($sql);
 		//associative array date_id => date_row
 		$this->hookup_dates = array();
