@@ -1,6 +1,6 @@
 language: php
 sudo: required
-dist: precise
+dist: xenial
 
 matrix:
   include:
@@ -8,8 +8,6 @@ matrix:
       env: DB=mysqli # MyISAM
     - php: 7.4
       env: DB=mysqli
-    - php: 7.4
-      env: DB=mysql
     - php: 7.4
       env: DB=mariadb
     - php: 7.4
