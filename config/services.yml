@@ -76,11 +76,11 @@ services:
     # ------- NOTIFICATIONS ------
     gn36.hookup.notification.type.base:
         class: gn36\hookup\notification\base
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -94,11 +94,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.active_date_set:
         class: gn36\hookup\notification\active_date_set
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -112,11 +112,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.active_date_reset:
         class: gn36\hookup\notification\active_date_reset
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -130,11 +130,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.date_added:
         class: gn36\hookup\notification\date_added
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -148,11 +148,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.date_added_rotation:
         class: gn36\hookup\notification\date_added_rotation
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -166,11 +166,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.user_added:
         class: gn36\hookup\notification\user_added
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'
@@ -184,11 +184,11 @@ services:
             - { name: notification.type }
     gn36.hookup.notification.type.invited:
         class: gn36\hookup\notification\invited
-        scope: prototype
+        shared: false
         arguments:
             - '@user_loader'
             - '@dbal.conn'
-            - '@cache.driver'
+            - '@language'
             - '@user'
             - '@auth'
             - '@config'

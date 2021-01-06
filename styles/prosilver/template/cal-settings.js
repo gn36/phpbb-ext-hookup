@@ -6,8 +6,7 @@ $(function () {
         minDate: moment().startOf('day')
     });
     // Load moment script
-    $.getScript($('#hookup_datetimepicker').data('localepath'))
-     .success(function(){
+    $.getScript($('#hookup_datetimepicker').data('localepath'), function(){
     	 // Set locale
     	 $('#hookup_datetimepicker').data('DateTimePicker').locale($('#hookup_datetimepicker').data("locale"));
      });

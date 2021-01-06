@@ -21,7 +21,7 @@ class gn36_hookup_main_test extends \phpbb_database_test_case
 		return $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/hookup_entries.xml');
 	}
 
-	public function setUp()
+	protected function setUp() : void
 	{
 		parent::setUp();
 

@@ -8,8 +8,6 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="true"
-         strict="true"
          verbose="true"
          bootstrap="../../../../tests/bootstrap.php"
 >
@@ -24,9 +22,6 @@
 	</testsuites>
 
 	<filter>
-		<blacklist>
-			<directory>./tests/</directory>
-		</blacklist>
 		<whitelist processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">./</directory>
 			<exclude>

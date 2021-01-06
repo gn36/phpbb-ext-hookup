@@ -2,13 +2,13 @@
 <!-- IF S_ACTIVE_DATE -->
 <div class="panel" id="hookup-active-date">
 	<h2><b>{L_ACTIVE_DATE}{L_COLON}</b> {ACTIVE_DATE_DATE}</h2>
-	<!-- IF S_IS_HOOKUP_OWNER --><a class="genmed" href="{U_UNSET_ACTIVE}">{L_UNSET_ACTIVE}</a> | <!-- ENDIF --><a class="genmed" id="show-all-dates-link" data-lshow="{LA_SHOW_ALL_DATES}" data-lhide="{LA_HIDE_ALL_DATES}" href="#" onclick="toggle_hookup_table()">{L_SHOW_ALL_DATES}</a>
+	<!-- IF S_IS_HOOKUP_OWNER --><a class="genmed" href="{U_UNSET_ACTIVE}">{L_UNSET_ACTIVE}</a> | <!-- ENDIF --><a class="genmed" id="show-all-dates-link" data-lshow="{L_SHOW_ALL_DATES}" data-lhide="{L_HIDE_ALL_DATES}" href="#" onclick="toggle_hookup_table()">{L_SHOW_ALL_DATES}</a>
 
 </div>
 <!-- ENDIF -->
 
 <div id="tabs-boundary">
-<div id="tabs" class="sub-panels" role="tablist" data-show-panel="overview-panel">
+<div id="tabs" class="tabs sub-panels" role="tablist" data-show-panel="overview-panel">
 	<ul>
 		<li id="overview-panel-tab" class="tab activetab"><a href="#tabs" aria-controls="overview-panel" role="tab" data-subpanel="overview-panel"><span>{L_HOOKUP_OVERVIEW}</span></a></li>
 		<!-- IF S_IS_HOOKUP_OWNER or S_IS_HOOKUP_MEMBER -->
@@ -164,7 +164,7 @@
 			<textarea class="inputbox autowidth" cols="30" rows="5" name="add_date" id="add_date"></textarea>
 		</p>
 		<fieldset>
-			<input class="button2" type="button" id="add_date_button" data-lshow="{LA_OPEN_CALENDAR}" data-lhide="{LA_CLOSE_CALENDAR}" value="{LA_OPEN_CALENDAR}"/>
+			<input class="button2" type="button" id="add_date_button" data-lshow="{L_OPEN_CALENDAR}" data-lhide="{L_CLOSE_CALENDAR}" value="{L_OPEN_CALENDAR}"/>
 			<input class="button1" type="submit" name="post" value="{L_SUBMIT}" />
 		</fieldset>
 
@@ -176,7 +176,7 @@
 		<div class="form-group">
 	        <div class="row">
 	            <div class="col-md-8">
-	                <div id="hookup_datetimepicker" data-localepath="{S_EXT_PATH}vendor/moment/moment/locale/{LA_LOCALE}.js" data-locale="{LA_LOCALE}" data-lang_add="{LA_ADD}"></div>
+	                <div id="hookup_datetimepicker" data-localepath="{S_EXT_PATH}vendor/moment/moment/locale/{LA_LOCALE}.js" data-locale="{L_LOCALE}" data-lang_add="{L_ADD}"></div>
 	            </div>
 	        </div>
 	    </div>
@@ -337,10 +337,6 @@
 
 </div>
 
-<script type="text/javascript">
-<!--
-	subPanels(show_panel);
--->
-</script>
+
 
 <hr/>

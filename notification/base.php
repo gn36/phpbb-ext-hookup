@@ -21,6 +21,18 @@ class base extends \phpbb\notification\type\base
 		'lang' 	=> 'HOOKUP_NOTIFY_OPTION',
 		'group'	=> 'NOTIFICATION_GROUP_MISCELLANEOUS',
 	);
+	
+	/** @var \phpbb\user_loader */
+	protected $user_loader;
+	
+	/** @var \phpbb\config\config */
+	protected $config;
+	
+	/** @var string */
+	protected $notification_types_table;
+
+	/** @var string */
+	protected $notifications_table;
 
 	/**
 	 * Notification Type Base Constructor
@@ -38,10 +50,14 @@ class base extends \phpbb\notification\type\base
 	 * @param string $user_notifications_table
 	 * @return \phpbb\notification\type\base
 	 */
-	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, $user, \phpbb\auth\auth $auth, \phpbb\config\config $config, \gn36\hookup\functions\hookup $hookup, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
+	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, $user, \phpbb\auth\auth $auth, \phpbb\config\config $config, \gn36\hookup\functions\hookup $hookup, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
 	{
-		parent::__construct($user_loader, $db, $cache, $user, $auth, $config, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table);
+		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
 		$this->hookup = $hookup;
+		$this->user_loader = $user_loader;
+		$this->config = $config;
+		$this->notification_types_table = $notification_types_table;
+		$this->notifications_table = $notifications_table;
 	}
 
 	public function get_type()
