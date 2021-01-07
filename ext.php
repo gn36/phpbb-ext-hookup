@@ -35,7 +35,7 @@ class ext extends \phpbb\extension\base
 	 */
 	protected function split_version_info($string)
 	{
-		$pattern = '#(>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*-PLAHBETRCDV]+?)(?:$|,)#is';
+		$pattern = '#(\^|~|>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*-PLAHBETRCDV]+?)(?:$|,)#is';
 
 		$matches = null;
 		preg_match_all($pattern, $string, $matches);
@@ -84,10 +84,12 @@ class ext extends \phpbb\extension\base
 		$user = $this->container->get('user');
 		$user->add_lang_ext($this->extension_name, 'install');
 
+		$dep_files_to_search = array();
+
 		foreach ($require as $key => $value)
 		{
 			$info = $this->split_version_info($value);
-
+			
 			foreach ($info['version'] as $vkey => $version)
 			{
 				switch (strtolower($key))
@@ -108,33 +110,32 @@ class ext extends \phpbb\extension\base
 						}
 						break;
 					case 'gn36/phpbb-oo-posting-api':
-						if (!file_exists(__DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php'))
-						{
-							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-							return false;
-						}
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/gn36/phpbb-oo-posting-api/src/Gn36/OoPostingApi/post.php';
 						break;
 					case 'eonasdan/bootstrap-datetimepicker':
-						if (!file_exists(__DIR__ . '/vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'))
-						{
-							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-							return false;
-						}
-						if (!file_exists(__DIR__ . '/vendor/moment/moment/min/moment.min.js'))
-						{
-							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-							return false;
-						}
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js';
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/moment/moment/min/moment.min.js';
 						break;
 					case 'components/bootstrap':
-						if (!file_exists(__DIR__ . '/vendor/components/bootstrap/css/bootstrap.min.css'))
-						{
-							trigger_error($user->lang('MISSING_DEPENDENCIES') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
-							return false;
-						}
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/components/bootstrap/css/bootstrap.min.css';
+						break;
+					case 'fortawesome/font-awesome':
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.eot';
+						break;
+					case 'composer/package-versions-deprecated':
+					case 'ocramius/proxy-manager':
+						// Fallback case for correct error message
+						$dep_files_to_search[$key] = __DIR__ . '/vendor/' . $key . '/composer.json';
 						break;
 					default:
-						// This should be an extension as a requirement
+						// First check if this is a dependency in the vendor dir that we missed above
+						if (file_exists(__DIR__ . '/vendor/' . $key . '/composer.json'))
+						{
+							// Assume installed for simplicity
+							break;
+						}
+						
+						// Apparently not a vendor dir. This should be an extension as a requirement
 						if (!$mgr->is_enabled($key))
 						{
 							trigger_error($user->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
@@ -150,7 +151,18 @@ class ext extends \phpbb\extension\base
 							trigger_error($user->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 							return false;
 						}
+						break;
 				}
+			}
+		}
+		
+		// Now check the files to search for:
+		foreach ($dep_files_to_search as $key => $file)
+		{
+			if (!file_exists($file))
+			{
+				trigger_error($user->lang('MISSING_DEPENDENCIES', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+				return false;
 			}
 		}
 
