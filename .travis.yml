@@ -42,8 +42,8 @@ branches:
 
 install:
   - if [ "${TRAVIS_PHP_VERSION}" = "5.3.3" ]; then cat composer.json | sed 's/"version"/"config":{\n\t\t"disable-tls":true,\n\t\t"secure-http":false\n\t},\n\t"version"/' > composer.tmp.json ; mv composer.tmp.json composer.json ; fi
-  - composer.phar self-update --1 # Enforce composer version 1 for now
-  - composer.phar install --dev --no-interaction --prefer-source
+  - composer self-update --1 # Enforce composer version 1 for now
+  - composer install --dev --no-interaction --prefer-source
   - chmod +x travis/prepare-phpbb.sh
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
   - travis/prepare-langtest.sh $EXTNAME $PHPBB_BRANCH
