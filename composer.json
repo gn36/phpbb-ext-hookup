@@ -20,9 +20,7 @@
 	"require" : {
 		"php" : ">=5.3.3",
 		"eonasdan/bootstrap-datetimepicker" : ">=4.17",
-		"fortawesome/font-awesome" : "~4.4.0",
-		"composer/package-versions-deprecated": "^1.11.99",
-		"ocramius/proxy-manager": "~2.1.1"
+		"fortawesome/font-awesome" : "~4.4.0"
 	},
 	"require-dev" : {
 		"phpbb/epv" : "dev-master",
