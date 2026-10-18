@@ -1,0 +1,24 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  # phpBB 3.3.x: gemeinsamer Workflow der phpBB-Extension-Entwickler (Sniffer, EPV, Unit- und Funktionstests auf allen DBs)
+  # Der Branch 3.3.x des Frameworks zielt auf phpBB 3.3.x (master zielt auf phpBB 4)
+  phpbb-3-3:
+    name: phpBB 3.3
+    uses: phpbb-extensions/test-framework/.github/workflows/tests.yml@3.3.x
+    with:
+      EXTNAME: gn36/hookup
+      PHPBB_BRANCH: 3.3.x
+      # Die Funktionstests benötigen die Composer-Abhängigkeiten (vendor/) der Erweiterung
+      RUN_COMPOSER_INSTALL: '1'
+
+  # phpBB 3.2.x: das Framework unterstützt nur 3.3.x, daher ein eigener, kleiner Workflow
+  phpbb-3-2:
+    name: phpBB 3.2
+    uses: ./.github/workflows/tests-3.2.yml

@@ -21,13 +21,13 @@ class base extends \phpbb\notification\type\base
 		'lang' 	=> 'HOOKUP_NOTIFY_OPTION',
 		'group'	=> 'NOTIFICATION_GROUP_MISCELLANEOUS',
 	);
-	
+
 	/** @var \phpbb\user_loader */
 	protected $user_loader;
-	
+
 	/** @var \phpbb\config\config */
 	protected $config;
-	
+
 	/** @var string */
 	protected $notification_types_table;
 
@@ -124,7 +124,7 @@ class base extends \phpbb\notification\type\base
 			$description = $this->user->format_date($this->get_data('date'));
 		}
 
-		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'), $description , $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
+		return $this->language->lang($this->language_key, $username, $this->get_data('topic_title'), $description , $this->get_data('yes'), $this->get_data('no'), $this->get_data('maybe'));
 	}
 
 	function users_to_query()

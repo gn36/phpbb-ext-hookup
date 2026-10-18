@@ -1,4 +1,4 @@
-# phpBB 3.1 Extension - Hookup
+# phpBB 3.3 Extension - Hookup
 This Extension adds the possibility of scheduling meetings with multiple people to your topics. Use this for finding the right date for a meeting very easy or for getting feedback on availability of users on certain dates.
 
 This Extension is intended to be fully backwards compatible to the existing phpBB 3.0.x Mod "Hookup" from the phpBB.de Team for Upgrades, but may include additional features.
@@ -27,6 +27,8 @@ Clone into ext/gn36/hookup:
 
     git clone https://github.com/gn36/phpbb-ext-hookup ext/gn36/hookup
 
+Requires phpBB 3.3.x and PHP 7.2 or newer (including PHP 8).
+
 Go to "ACP" > "Customise" > "Extensions" and enable the "Hookup" extension.
 
 ## Development
@@ -39,9 +41,7 @@ If you wish to contribute a translation, feel free to send a pull request. Your 
 
 ## Automated Testing
 
-We use automated unit tests including functional tests to prevent regressions. Check out our travis build below:
-
-master: [![Build Status](https://travis-ci.org/gn36/phpbb-ext-hookup.png?branch=master)](http://travis-ci.org/gn36/phpbb-ext-hookup)
+Tests run via GitHub Actions using the [phpbb-extensions test framework](https://github.com/phpbb-extensions/test-framework) (see `.github/workflows/tests.yml`).
 
 ## License
 

@@ -471,7 +471,18 @@ class hookup
 			}
 			$date['topic_id'] = $topic_id;
 			$sql = 'INSERT INTO ' . $this->hookup_dates_table . ' ' . $db->sql_build_array('INSERT', $date);
+
+			// MSSQL only accepts explicit values for the identity column date_id when told so
+			$identity_insert = isset($date['date_id']) && strpos($db->get_sql_layer(), 'mssql') === 0;
+			if ($identity_insert)
+			{
+				$db->sql_query('SET IDENTITY_INSERT ' . $this->hookup_dates_table . ' ON');
+			}
 			$db->sql_query($sql);
+			if ($identity_insert)
+			{
+				$db->sql_query('SET IDENTITY_INSERT ' . $this->hookup_dates_table . ' OFF');
+			}
 		}
 
 		//Update the entries for availability:

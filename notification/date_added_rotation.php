@@ -40,7 +40,7 @@ class date_added_rotation extends base
 
 	public function get_title()
 	{
-		return $this->user->lang($this->language_key, $this->get_data('topic_title'));
+		return $this->language->lang($this->language_key, $this->get_data('topic_title'));
 	}
 
 	public function get_email_template()
