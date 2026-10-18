@@ -133,37 +133,37 @@ class use_test extends \phpbb_functional_test_case
 
 		if ($result)
 		{
-			$this->assertContains('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
+			$this->assertStringContainsString('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
 			if ($hookup['hookup_autoreset'])
 			{
-				$this->assertContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertStringContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 			}
 			else
 			{
-				$this->assertNotContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertStringNotContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 			}
 
 			if ($hookup['hookup_self_invite'])
 			{
-				$this->assertContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-				$this->assertContains('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
-				$this->assertContains('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertStringContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertStringContainsString('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertStringContainsString('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
 			}
 			else
 			{
-				$this->assertNotContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertStringNotContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 				// This actually can still be in there because the admin has permission to invite users
-				//$this->assertNotContains('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
-				$this->assertNotContains('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				//$this->assertStringNotContainsString('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertStringNotContainsString('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
 			}
 		}
 		else
 		{
-			$this->assertNotContains('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
-			$this->assertNotContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-			$this->assertNotContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-			$this->assertNotContains('invite_self', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
-			$this->assertNotContains('part of this meeting planner', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
+			$this->assertStringNotContainsString('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
+			$this->assertStringNotContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+			$this->assertStringNotContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+			$this->assertStringNotContainsString('invite_self', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
+			$this->assertStringNotContainsString('part of this meeting planner', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
 		}
 	}
 

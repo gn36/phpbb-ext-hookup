@@ -1,0 +1,622 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5e45ba4c0da7cc979cce1a53b7e702cf",
+    "packages": [
+        {
+            "name": "components/jquery",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "594f9dd922c3b12519c8d52bde744b79fd2ca816"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/594f9dd922c3b12519c8d52bde744b79fd2ca816",
+                "reference": "594f9dd922c3b12519c8d52bde744b79fd2ca816",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "jquery.min.js",
+                        "jquery.min.map",
+                        "jquery.slim.js",
+                        "jquery.slim.min.js",
+                        "jquery.slim.min.map"
+                    ],
+                    "scripts": [
+                        "jquery.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JS Foundation and other contributors"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "support": {
+                "forum": "http://forum.jquery.com",
+                "irc": "irc://irc.freenode.org/jquery",
+                "issues": "https://github.com/jquery/jquery/issues",
+                "source": "https://github.com/jquery/jquery",
+                "wiki": "http://docs.jquery.com/"
+            },
+            "time": "2026-05-11T18:06:23+00:00"
+        },
+        {
+            "name": "composer/installers",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "12fb2dfe5e16183de69e784a7b84046c43d97e8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/12fb2dfe5e16183de69e784a7b84046c43d97e8e",
+                "reference": "12fb2dfe5e16183de69e784a7b84046c43d97e8e",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.10.27 || ^2.7",
+                "composer/semver": "^1.7.2 || ^3.4.0",
+                "phpstan/phpstan": "^1.11",
+                "phpstan/phpstan-phpunit": "^1",
+                "symfony/phpunit-bridge": "^7.1.1",
+                "symfony/process": "^5 || ^6 || ^7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-main": "2.x-dev"
+                },
+                "plugin-modifies-install-path": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "MantisBT",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Starbug",
+                "Thelia",
+                "Whmcs",
+                "WolfCMS",
+                "agl",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "concreteCMS",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "known",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "matomo",
+                "mediawiki",
+                "miaoxing",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "pantheon",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "processwire",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "sylius",
+                "tastyigniter",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v2.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-06-24T20:46:46+00:00"
+        },
+        {
+            "name": "eonasdan/bootstrap-datetimepicker",
+            "version": "4.17.49",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Eonasdan/tempus-dominus.git",
+                "reference": "5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Eonasdan/tempus-dominus/zipball/5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2",
+                "reference": "5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2",
+                "shasum": ""
+            },
+            "require": {
+                "components/jquery": ">=1.9.1",
+                "moment/moment": ">=2.10.5",
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "build/js/bootstrap-datetimepicker.min.js",
+                        "build/css/bootstrap-datetimepicker.min.css"
+                    ],
+                    "scripts": [
+                        "src/js/bootstrap-datetimepicker.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Date/time picker widget based on twitter bootstrap",
+            "homepage": "http://eonasdan.github.io/bootstrap-datetimepicker/",
+            "keywords": [
+                "DateTimePicker",
+                "bootstrap"
+            ],
+            "support": {
+                "issues": "https://github.com/Eonasdan/tempus-dominus/issues",
+                "source": "https://github.com/Eonasdan/tempus-dominus/tree/4.17.49"
+            },
+            "time": "2020-12-17T13:25:21+00:00"
+        },
+        {
+            "name": "fortawesome/font-awesome",
+            "version": "v4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FortAwesome/Font-Awesome.git",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "jekyll": "1.0.2",
+                "lessc": "1.4.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OFL-1.1",
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Gandy",
+                    "email": "dave@fontawesome.io",
+                    "homepage": "http://twitter.com/davegandy",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The iconic font and CSS framework",
+            "homepage": "http://fontawesome.io/",
+            "keywords": [
+                "FontAwesome",
+                "awesome",
+                "bootstrap",
+                "font",
+                "icon"
+            ],
+            "support": {
+                "issues": "https://github.com/FortAwesome/Font-Awesome/issues",
+                "source": "https://github.com/FortAwesome/Font-Awesome/tree/v4.4.0"
+            },
+            "time": "2015-07-28T21:55:03+00:00"
+        },
+        {
+            "name": "kriswallsmith/assetic",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/assetic.git",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.1",
+                "symfony/process": "~2.1|~3.0"
+            },
+            "conflict": {
+                "twig/twig": "<1.27"
+            },
+            "require-dev": {
+                "leafo/lessphp": "^0.3.7",
+                "leafo/scssphp": "~0.1",
+                "meenie/javascript-packer": "^1.1",
+                "mrclay/minify": "<2.3",
+                "natxet/cssmin": "3.0.4",
+                "patchwork/jsqueeze": "~1.0|~2.0",
+                "phpunit/phpunit": "~4.8 || ^5.6",
+                "psr/log": "~1.0",
+                "ptachoire/cssembed": "~1.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "twig/twig": "~1.23|~2.0",
+                "yfix/packager": "dev-master"
+            },
+            "suggest": {
+                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
+                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
+                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
+                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
+                "twig/twig": "Assetic provides the integration with the Twig templating engine"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-0": {
+                    "Assetic": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Asset Management for PHP",
+            "homepage": "https://github.com/kriswallsmith/assetic",
+            "keywords": [
+                "assets",
+                "compression",
+                "minification"
+            ],
+            "support": {
+                "issues": "https://github.com/kriswallsmith/assetic/issues",
+                "source": "https://github.com/kriswallsmith/assetic/tree/master"
+            },
+            "time": "2016-11-11T18:43:20+00:00"
+        },
+        {
+            "name": "moment/moment",
+            "version": "2.31.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moment/moment.git",
+                "reference": "15b45d48a176312e8f34143c5a800090abf4787f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moment/moment/zipball/15b45d48a176312e8f34143c5a800090abf4787f",
+                "reference": "15b45d48a176312e8f34143c5a800090abf4787f",
+                "shasum": ""
+            },
+            "require": {
+                "oomphinc/composer-installers-extender": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "files": [
+                        "min/*.js",
+                        "locale/*.js"
+                    ],
+                    "scripts": [
+                        "moment.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Wood",
+                    "email": "washwithcare@gmail.com"
+                }
+            ],
+            "description": "Parse, validate, manipulate, and display dates in JavaScript.",
+            "homepage": "https://github.com/moment/moment",
+            "keywords": [
+                "date",
+                "ender",
+                "format",
+                "i18n",
+                "l10n",
+                "moment",
+                "parse",
+                "time",
+                "validate"
+            ],
+            "support": {
+                "issues": "https://github.com/moment/moment/issues",
+                "source": "https://github.com/moment/moment/tree/2.31.0"
+            },
+            "time": "2026-09-15T00:50:55+00:00"
+        },
+        {
+            "name": "oomphinc/composer-installers-extender",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oomphinc/composer-installers-extender.git",
+                "reference": "cbf4b6f9a24153b785d09eee755b995ba87bd5f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oomphinc/composer-installers-extender/zipball/cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
+                "reference": "cbf4b6f9a24153b785d09eee755b995ba87bd5f9",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "composer/installers": "^1.0 || ^2.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "phpunit/phpunit": "^7.2",
+                "squizlabs/php_codesniffer": "^3.3"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "OomphInc\\ComposerInstallersExtender\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "OomphInc\\ComposerInstallersExtender\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Beemsterboer",
+                    "email": "stephen@oomphinc.com",
+                    "homepage": "https://github.com/balbuf"
+                },
+                {
+                    "name": "Nathan Dentzau",
+                    "email": "nate@oomphinc.com",
+                    "homepage": "http://oomph.is/ndentzau"
+                }
+            ],
+            "description": "Extend the composer/installers plugin to accept any arbitrary package type.",
+            "homepage": "http://www.oomphinc.com/",
+            "support": {
+                "issues": "https://github.com/oomphinc/composer-installers-extender/issues",
+                "source": "https://github.com/oomphinc/composer-installers-extender/tree/2.0.1"
+            },
+            "abandoned": true,
+            "time": "2021-12-15T12:32:42+00:00"
+        },
+        {
+            "name": "robloach/component-installer",
+            "version": "0.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobLoach/component-installer.git",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/1864f25db21fc173e02a359f646acd596c1b0460",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "ComponentInstaller\\Installer"
+            },
+            "autoload": {
+                "psr-0": {
+                    "ComponentInstaller": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "email": "robloach@gmail.com",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "support": {
+                "issues": "https://github.com/RobLoach/component-installer/issues",
+                "source": "https://github.com/RobLoach/component-installer/tree/master"
+            },
+            "abandoned": "oomphinc/composer-installers-extender",
+            "time": "2013-08-31T23:46:48+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v3.4.47",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "b8648cf1d5af12a44a51d07ef9bf980921f15fca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/b8648cf1d5af12a44a51d07ef9bf980921f15fca",
+                "reference": "b8648cf1d5af12a44a51d07ef9bf980921f15fca",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v3.4.47"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-10-24T10:57:07+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.2"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}

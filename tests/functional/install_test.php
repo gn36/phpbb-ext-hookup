@@ -24,12 +24,12 @@ class install_test extends \phpbb_functional_test_case
 	{
 		// Check whether we can still call posting.php in edit mode (even though login prevents any useful use)
 		$crawler = self::request('GET', 'posting.php?mode=edit&f=2&p=1');
-		$this->assertContains('Username', $crawler->filter('dt')->text());
+		$this->assertStringContainsString('Username', $crawler->filter('dt')->text());
 
 		// The same thing with login, check for hookup buttons
 		$this->login();
 		$crawler = self::request('GET', 'posting.php?mode=edit&f=2&p=1');
-		$this->assertContains('Meeting planner', $crawler->text());
+		$this->assertStringContainsString('Meeting planner', $crawler->text());
 		$this->assert_find_one_checkbox($crawler, 'hookup_enabled');
 		$this->assert_find_one_checkbox($crawler, 'hookup_self_invite');
 		$this->assert_find_one_checkbox($crawler, 'hookup_autoreset');
@@ -39,6 +39,6 @@ class install_test extends \phpbb_functional_test_case
 	{
 		// Check whether we can still call viewtopic.php without errors
 		$crawler = self::request('GET', 'viewtopic.php?f=2&p=1');
-		$this->assertContains('Welcome', $crawler->filter('h2')->text());
+		$this->assertStringContainsString('Welcome', $crawler->filter('h2')->text());
 	}
 }
