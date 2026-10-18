@@ -5,7 +5,7 @@
 	"homepage" : "https://github.com/gn36/phpbb-ext-hookup/",
 	"version" : "1.0.3",
 	"time" : "2015-01-03",
-	"license" : "GPL-2.0",
+	"license" : "GPL-2.0-only",
 	"authors" : [{
 			"name" : "Martin Beckmann",
 			"email" : "gn#36@phpbb.de",
@@ -18,18 +18,14 @@
 		}
 	],
 	"require" : {
-		"php" : ">=5.3.3",
+		"php" : ">=7.2",
 		"eonasdan/bootstrap-datetimepicker" : ">=4.17",
 		"fortawesome/font-awesome" : "~4.4.0"
-	},
-	"require-dev" : {
-		"phpbb/epv" : "dev-master",
-		"phpbb/translation-validator" : "1.*"
 	},
 	"extra" : {
 		"display-name" : "Hookup",
 		"soft-require" : {
-			"phpbb/phpbb" : ">=3.2.2,<3.4@dev"
+			"phpbb/phpbb" : ">=3.3.0,<3.4@dev"
 		},
 		"version-check" : {
 			"host" : "phpbb.gn36.de",

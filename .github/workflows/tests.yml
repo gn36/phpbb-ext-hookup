@@ -1,0 +1,18 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+      - 'modernize-*'
+  pull_request:
+
+jobs:
+  call-tests:
+    name: Extension tests
+    uses: phpbb-extensions/test-framework/.github/workflows/tests.yml@master
+    with:
+      EXTNAME: gn36/hookup
+      PHPBB_BRANCH: 3.3.x
+      PRIMARY_PHP_VERSION: '8.1'
+      PHP_VERSION_MATRIX: '["7.2", "7.4", "8.0", "8.1", "8.2", "8.3"]'

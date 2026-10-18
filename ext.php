@@ -35,7 +35,7 @@ class ext extends \phpbb\extension\base
 	 */
 	protected function split_version_info($string)
 	{
-		$pattern = '#(\^|~|>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*-PLAHBETRCDV]+?)(?:$|,)#is';
+		$pattern = '#(\^|~|>=|>|gt(?:;=?)?|ge|==?|eq|!=|<>|ne|<=|<|le|lt(?:;=?)?(?:gt;)?)([0-9._*\-PLAHBETRCDV]+?)(?:$|,)#is';
 
 		$matches = null;
 		preg_match_all($pattern, $string, $matches);
@@ -73,16 +73,16 @@ class ext extends \phpbb\extension\base
 			$require = array();
 		}
 
-		if (isset($meta['extra']['soft_require']))
+		if (isset($meta['extra']['soft-require']))
 		{
-			$require = array_merge($require, $meta['extra']['soft_require']);
+			$require = array_merge($require, $meta['extra']['soft-require']);
 		}
 
 		$require = array_merge($require, $this->extra_dependencies());
 
-		/** @var $user \phpbb\user */
-		$user = $this->container->get('user');
-		$user->add_lang_ext($this->extension_name, 'install');
+		/** @var $language \phpbb\language\language */
+		$language = $this->container->get('language');
+		$language->add_lang('install', $this->extension_name);
 
 		$dep_files_to_search = array();
 
@@ -97,7 +97,7 @@ class ext extends \phpbb\extension\base
 					case 'php':
 						if (!phpbb_version_compare(PHP_VERSION, $version, $info['operator'][$vkey]))
 						{
-							trigger_error($user->lang('WRONG_PHP_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							trigger_error($language->lang('WRONG_PHP_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 							return false;
 						}
 						break;
@@ -105,7 +105,7 @@ class ext extends \phpbb\extension\base
 					case 'phpbb/phpbb':
 						if (!phpbb_version_compare($config['version'], $version, $info['operator'][$vkey]))
 						{
-							trigger_error($user->lang('WRONG_PHPBB_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							trigger_error($language->lang('WRONG_PHPBB_VERSION') . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 							return false;
 						}
 						break;
@@ -138,7 +138,7 @@ class ext extends \phpbb\extension\base
 						// Apparently not a vendor dir. This should be an extension as a requirement
 						if (!$mgr->is_enabled($key))
 						{
-							trigger_error($user->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							trigger_error($language->lang('MISSING_EXTENSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 							return false;
 						}
 
@@ -148,7 +148,7 @@ class ext extends \phpbb\extension\base
 
 						if (!phpbb_version_compare($ext_version, $version, $info['operator'][$vkey]))
 						{
-							trigger_error($user->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+							trigger_error($language->lang('WRONG_EXTENSION_VERSION', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 							return false;
 						}
 						break;
@@ -161,7 +161,7 @@ class ext extends \phpbb\extension\base
 		{
 			if (!file_exists($file))
 			{
-				trigger_error($user->lang('MISSING_DEPENDENCIES', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
+				trigger_error($language->lang('MISSING_DEPENDENCIES', $key) . adm_back_link(append_sid('index.' . $this->container->getParameter('core.php_ext'), 'i=acp_extensions&amp;mode=main')), E_USER_WARNING);
 				return false;
 			}
 		}

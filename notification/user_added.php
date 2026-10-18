@@ -50,7 +50,7 @@ class user_added extends base
 	public function get_title()
 	{
 		$username = $this->user_loader->get_username($this->get_data('user_id'), 'no_profile');
-		return $this->user->lang($this->language_key, $username, $this->get_data('topic_title'));
+		return $this->language->lang($this->language_key, $username, $this->get_data('topic_title'));
 	}
 
 	public function get_email_template()

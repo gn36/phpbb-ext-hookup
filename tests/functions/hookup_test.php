@@ -703,10 +703,10 @@ class gn36_hookup_hookup_test extends \phpbb_database_test_case
 		$this->assertEquals($returnvalue, $hookup->delete());
 
 		// Attributes
-		$this->assertAttributeEmpty('hookup_availables', $hookup);
-		$this->assertAttributeEmpty('hookup_dates', $hookup);
-		$this->assertAttributeEmpty('hookup_users', $hookup);
-		$this->assertAttributeEmpty('hookup_available_sums', $hookup);
+		$this->assertEmpty($hookup->hookup_availables);
+		$this->assertEmpty($hookup->hookup_dates);
+		$this->assertEmpty($hookup->hookup_users);
+		$this->assertEmpty($hookup->hookup_available_sums);
 		$this->assertFalse($hookup->hookup_enabled);
 		$this->assertFalse($hookup->hookup_autoreset);
 		$this->assertFalse($hookup->hookup_self_invite);
