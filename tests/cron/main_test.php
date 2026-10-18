@@ -21,16 +21,6 @@ class gn36_hookup_main_test extends \phpbb_database_test_case
 		return $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/hookup_entries.xml');
 	}
 
-	protected function setUp() : void
-	{
-		parent::setUp();
-
-		//$this->db = $this->new_dbal();
-
-		$this->cache = $this->getMockBuilder('\phpbb\cache\service')->disableOriginalConstructor()->getMock();
-		$this->log = $this->getMockBuilder('\phpbb\log\log')->disableOriginalConstructor()->getMock();
-	}
-
 	public function runProvider()
 	{
 		$now = time();
@@ -139,6 +129,9 @@ class gn36_hookup_main_test extends \phpbb_database_test_case
 
 		$db = $this->new_dbal();
 		$this->db = $db;
+
+		$this->cache = $this->getMockBuilder('\phpbb\cache\service')->disableOriginalConstructor()->getMock();
+		$this->log = $this->getMockBuilder('\phpbb\log\log')->disableOriginalConstructor()->getMock();
 
 		$this->config = new \phpbb\config\config(array(
 			'hookup_weekly_reset_last_gc' => $last_run,
