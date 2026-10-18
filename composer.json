@@ -18,7 +18,7 @@
 		}
 	],
 	"require" : {
-		"php" : ">=7.2",
+		"php" : ">=5.4",
 		"eonasdan/bootstrap-datetimepicker" : ">=4.17",
 		"fortawesome/font-awesome" : "~4.4.0"
 	},
@@ -32,7 +32,7 @@
 	"extra" : {
 		"display-name" : "Hookup",
 		"soft-require" : {
-			"phpbb/phpbb" : ">=3.3.0,<3.4@dev"
+			"phpbb/phpbb" : ">=3.2.2,<3.4@dev"
 		},
 		"version-check" : {
 			"host" : "phpbb.gn36.de",

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Führt die Extension-Tests gegen den phpBB-Checkout aus (SQLite, ohne DB-Server).
-# Nutzung: dev/run-tests.sh [phpunit-Argumente]
+# Nutzung: develop/run-tests.sh [phpunit-Argumente]
 set -e
 EXT="$(cd "$(dirname "$0")/.." && pwd)"
 CORE="${PHPBB_DIR:-/opt/phpbb-core}"

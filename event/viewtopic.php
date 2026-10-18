@@ -30,7 +30,7 @@ class viewtopic implements EventSubscriberInterface
 		);
 	}
 
-	/** @var \gn36\hookup\functions\hookup */
+	/** @var hookup */
 	protected $hookup;
 
 	/** @var \phpbb\db\driver\driver_interface */
@@ -66,7 +66,7 @@ class viewtopic implements EventSubscriberInterface
 	/**
 	 * Constructor
 	 *
-	 * @param \gn36\hookup\functions\hookup $hookup
+	 * @param hookup $hookup
 	 * @param \phpbb\template\template $template
 	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param \phpbb\user $user
@@ -78,7 +78,7 @@ class viewtopic implements EventSubscriberInterface
 	 * @param string $phpEx
 	 * @param string $hookup_path
 	 */
-	 function __construct(\gn36\hookup\functions\hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
+	 function __construct(hookup $hookup, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\auth\auth $auth, \phpbb\request\request_interface $request, \phpbb\event\dispatcher_interface $phpbb_dispatcher, \phpbb\notification\manager $notification_manager, $phpbb_root_path, $phpEx, $hookup_path)
 	 {
 		$this->hookup = $hookup;
 		$this->template = $template;

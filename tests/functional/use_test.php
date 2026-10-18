@@ -15,6 +15,8 @@ namespace gn36\hookup\tests\functional;
 */
 class use_test extends \phpbb_functional_test_case
 {
+	use \gn36\hookup\tests\compat;
+
 	static protected function setup_extensions()
 	{
 		return array('gn36/hookup');
@@ -133,37 +135,37 @@ class use_test extends \phpbb_functional_test_case
 
 		if ($result)
 		{
-			$this->assertStringContainsString('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
+			$this->assertTextContains('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
 			if ($hookup['hookup_autoreset'])
 			{
-				$this->assertStringContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertTextContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 			}
 			else
 			{
-				$this->assertStringNotContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertTextNotContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 			}
 
 			if ($hookup['hookup_self_invite'])
 			{
-				$this->assertStringContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-				$this->assertStringContainsString('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
-				$this->assertStringContainsString('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertTextContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertTextContains('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertTextContains('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
 			}
 			else
 			{
-				$this->assertStringNotContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+				$this->assertTextNotContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
 				// This actually can still be in there because the admin has permission to invite users
-				//$this->assertStringNotContainsString('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
-				$this->assertStringNotContainsString('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				//$this->assertTextNotContains('invite_self', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
+				$this->assertTextNotContains('part of this meeting planner', implode(' ', $crawler->filter('form')->each(function($node, $i){ return $node->html();})));
 			}
 		}
 		else
 		{
-			$this->assertStringNotContainsString('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
-			$this->assertStringNotContainsString('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-			$this->assertStringNotContainsString('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
-			$this->assertStringNotContainsString('invite_self', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
-			$this->assertStringNotContainsString('part of this meeting planner', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
+			$this->assertTextNotContains('Meeting planner', implode(' ', $crawler->filter('h2')->each(function($node, $i){ return $node->text(); })));
+			$this->assertTextNotContains('Weekly reset', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+			$this->assertTextNotContains('Participate', implode(' ', $crawler->filter('h3')->each(function($node, $i){ return $node->text(); })));
+			$this->assertTextNotContains('invite_self', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
+			$this->assertTextNotContains('part of this meeting planner', implode(' ', $crawler->filter('input')->each(function($node, $i){ return $node->html();})));
 		}
 	}
 

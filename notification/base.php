@@ -21,13 +21,13 @@ class base extends \phpbb\notification\type\base
 		'lang' 	=> 'HOOKUP_NOTIFY_OPTION',
 		'group'	=> 'NOTIFICATION_GROUP_MISCELLANEOUS',
 	);
-	
+
 	/** @var \phpbb\user_loader */
 	protected $user_loader;
-	
+
 	/** @var \phpbb\config\config */
 	protected $config;
-	
+
 	/** @var string */
 	protected $notification_types_table;
 

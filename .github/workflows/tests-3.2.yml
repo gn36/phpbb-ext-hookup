@@ -1,0 +1,60 @@
+name: Tests phpBB 3.2
+
+on:
+  workflow_call:
+
+env:
+  EXTNAME: gn36/hookup
+  PHPBB_BRANCH: 3.2.x
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['5.6', '7.1', '7.3']
+
+    steps:
+      - name: Checkout phpBB
+        uses: actions/checkout@v4
+        with:
+          repository: phpbb/phpbb
+          ref: ${{ env.PHPBB_BRANCH }}
+          path: phpBB3
+
+      - name: Checkout extension
+        uses: actions/checkout@v4
+        with:
+          path: phpBB3/phpBB/ext/${{ env.EXTNAME }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, intl, gd, iconv
+          tools: composer:v2
+          coverage: none
+
+      - name: Install phpBB dependencies
+        run: composer install --dev --no-interaction --no-progress
+        working-directory: ./phpBB3/phpBB
+
+      - name: Install extension dependencies
+        run: composer install --no-interaction --no-progress
+        working-directory: ./phpBB3/phpBB/ext/${{ env.EXTNAME }}
+
+      - name: Start web server for functional tests
+        run: nohup php -S 127.0.0.1:8000 -t . > /tmp/php-server.log 2>&1 &
+        working-directory: ./phpBB3
+
+      - name: Run unit and functional tests
+        env:
+          PHPBB_TEST_DBMS: sqlite3
+          PHPBB_TEST_DBHOST: /tmp/phpbb_test.sqlite
+          PHPBB_FUNCTIONAL_URL: http://127.0.0.1:8000/phpBB/
+        run: |
+          phpBB/vendor/bin/phpunit --configuration "phpBB/ext/$EXTNAME/phpunit.xml.dist" --testsuite "Extension Test Suite"
+          phpBB/vendor/bin/phpunit --configuration "phpBB/ext/$EXTNAME/phpunit.xml.dist" --testsuite "Extension Functional Tests"
+        working-directory: ./phpBB3

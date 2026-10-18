@@ -89,7 +89,7 @@ class ext extends \phpbb\extension\base
 		foreach ($require as $key => $value)
 		{
 			$info = $this->split_version_info($value);
-			
+
 			foreach ($info['version'] as $vkey => $version)
 			{
 				switch (strtolower($key))
@@ -134,7 +134,7 @@ class ext extends \phpbb\extension\base
 							// Assume installed for simplicity
 							break;
 						}
-						
+
 						// Apparently not a vendor dir. This should be an extension as a requirement
 						if (!$mgr->is_enabled($key))
 						{
@@ -155,7 +155,7 @@ class ext extends \phpbb\extension\base
 				}
 			}
 		}
-		
+
 		// Now check the files to search for:
 		foreach ($dep_files_to_search as $key => $file)
 		{
