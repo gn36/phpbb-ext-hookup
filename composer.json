@@ -19,15 +19,13 @@
 	],
 	"require" : {
 		"php" : ">=5.4",
-		"eonasdan/bootstrap-datetimepicker" : ">=4.17",
-		"fortawesome/font-awesome" : "~4.4.0"
+		"eonasdan/bootstrap-datetimepicker" : "^4.17.49",
+		"moment/moment" : "^2.30"
 	},
-	"config" : {
-		"allow-plugins" : {
-			"composer/installers" : true,
-			"oomphinc/composer-installers-extender" : true,
-			"robloach/component-installer" : true
-		}
+	"replace" : {
+		"components/jquery" : "*",
+		"oomphinc/composer-installers-extender" : "*",
+		"robloach/component-installer" : "*"
 	},
 	"extra" : {
 		"display-name" : "Hookup",
