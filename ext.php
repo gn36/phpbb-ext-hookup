@@ -114,13 +114,9 @@ class ext extends \phpbb\extension\base
 						break;
 					case 'eonasdan/bootstrap-datetimepicker':
 						$dep_files_to_search[$key] = __DIR__ . '/vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js';
+						break;
+					case 'moment/moment':
 						$dep_files_to_search[$key] = __DIR__ . '/vendor/moment/moment/min/moment.min.js';
-						break;
-					case 'components/bootstrap':
-						$dep_files_to_search[$key] = __DIR__ . '/vendor/components/bootstrap/css/bootstrap.min.css';
-						break;
-					case 'fortawesome/font-awesome':
-						$dep_files_to_search[$key] = __DIR__ . '/vendor/fortawesome/font-awesome/fonts/fontawesome-webfont.eot';
 						break;
 					case 'composer/package-versions-deprecated':
 					case 'ocramius/proxy-manager':
